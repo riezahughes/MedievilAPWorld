@@ -96,6 +96,7 @@ class MedievilWorld(World):
             "The Entrance Hall",
             "The Time Device",
             "Zaroks Lair",
+            "Locked Items DC",
             "Locked Items CH",
             "Locked Items HM",
             "Locked Items SF"
@@ -176,10 +177,10 @@ class MedievilWorld(World):
         create_connection("The Entrance Hall", "Hall of Heroes")
         create_connection("The Time Device", "Hall of Heroes")
         
+        create_connection("Dan's Crypt", "Locked Items DC")        
         create_connection("Cemetery Hill", "Locked Items CH")
         create_connection("The Hilltop Mausoleum", "Locked Items HM")
         create_connection("Scarecrow Fields", "Locked Items SF")
-        
         create_connection("Hall of Heroes", "Map")
                                                                                                                    
     # For each region, add the associated locations retrieved from the corresponding location_table
@@ -347,7 +348,7 @@ class MedievilWorld(World):
         # Map rules
         
         set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
-        set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state) and has_weapon_required(self, "Club", state))
+        set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state) and has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
         set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
         set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state) and has_keyitem_required(self, "Skull Key" , state )) 
         set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
@@ -394,7 +395,8 @@ class MedievilWorld(World):
         
         # locked chalice items
         
-        set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state))
+        set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state))
+        set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
         set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitem_required(self, "Sheet Music", state))
         set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitem_required(self, "Harvester Parts", state))
         

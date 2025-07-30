@@ -68,6 +68,7 @@ class MedievilLocation(Location):
             "The Entrance Hall",
             "The Time Device",
             "Zaroks Lair",
+            "Locked Items DC",            
             "Locked Items CH",
             "Locked Items HM",
             "Locked Items SF"
@@ -82,7 +83,7 @@ class MedievilLocation(Location):
                 for j, location_data in enumerate(location_tables[region_name]):
                     # Assign an ID to each location within the region
                     # The ID for each location in a region will be current_region_base_id + j
-                    # print(f"{current_region_base_id + j}: {location_data.name}")
+                    print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
         return output
@@ -134,13 +135,10 @@ location_tables = {
     "Dan's Crypt": [
          MedievilLocationData("Star Rune: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Life Bottle: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Life Bottle: Dan's Crypt - Behind Wall","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Equipment: Small Sword - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Equipment: Copper Shield in Chest - DC","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Daggers - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Over the water - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Behind Wall in Crypt - Left - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Behind Wall in Crypt - Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
     ],
     
@@ -573,6 +571,11 @@ location_tables = {
          MedievilLocationData("Cleared: Zaroks Lair","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
     ],
     
+     "Locked Items DC": [
+         MedievilLocationData("Life Bottle: Dan's Crypt - Behind Wall","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gold Coins: Behind Wall in Crypt - Left - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gold Coins: Behind Wall in Crypt - Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+    ],    
     "Locked Items CH": [
          MedievilLocationData("Chalice: Cemetery Hill","Chalice of Souls",MedievilLocationCategory.CHALICE),
     ],
