@@ -83,7 +83,7 @@ class MedievilLocation(Location):
                 for j, location_data in enumerate(location_tables[region_name]):
                     # Assign an ID to each location within the region
                     # The ID for each location in a region will be current_region_base_id + j
-                    print(f"{current_region_base_id + j}: {location_data.name}")
+                    # print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
         return output
@@ -139,6 +139,7 @@ location_tables = {
          MedievilLocationData("Equipment: Copper Shield in Chest - DC","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Daggers - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Over the water - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+
          MedievilLocationData("Cleared: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
     ],
     
