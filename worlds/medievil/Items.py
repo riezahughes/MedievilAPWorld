@@ -9,9 +9,10 @@ class MedievilItemCategory(IntEnum):
     PROGRESSION = 1
     WEAPON = 2
     CHALICE = 3
-    FUN = 4
-    LEVEL_END = 5
-    SKIP = 6
+    TRAP = 4
+    FUN = 5
+    LEVEL_END = 6
+    SKIP = 7
 
 
 class MedievilItemData(NamedTuple):
@@ -288,7 +289,14 @@ _all_items: List[MedievilItemData] = [
 
     ("Time Rune: The Lake", 152, MedievilItemCategory.PROGRESSION, True),
     ("Time Rune: Pumpkin Gorge", 153, MedievilItemCategory.PROGRESSION, True),
-    ("Time Rune: The Time Device", 154, MedievilItemCategory.PROGRESSION, True)
+    ("Time Rune: The Time Device", 154, MedievilItemCategory.PROGRESSION, True),
+    
+    # List of Traps
+    ("Trap: Heavy Dan", 154, MedievilItemCategory.TRAP, False),
+    ("Trap: Light Dan", 155, MedievilItemCategory.TRAP, False),
+    ("Trap: Goodbye Shield", 156, MedievilItemCategory.TRAP, False),
+    ("Trap: Hudless", 157, MedievilItemCategory.TRAP, False)
+    
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
