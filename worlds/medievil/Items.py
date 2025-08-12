@@ -9,10 +9,11 @@ class MedievilItemCategory(IntEnum):
     PROGRESSION = 1
     WEAPON = 2
     CHALICE = 3
-    TRAP = 4
-    FUN = 5
-    LEVEL_END = 6
-    SKIP = 7
+    RUNE = 4
+    TRAP = 5
+    FUN = 6
+    LEVEL_END = 7
+    SKIP = 8
 
 
 class MedievilItemData(NamedTuple):
@@ -248,48 +249,48 @@ _all_items: List[MedievilItemData] = [
     ("Key Item: Sheet Music", 116, MedievilItemCategory.PROGRESSION, True),
 
     # Runes
-    ("Chaos Rune: The Graveyard", 117, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: The Hilltop Mausoleum", 118, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Scarecrow Fields", 119, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: The Lake", 120, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Pumpkin Gorge", 121, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Sleeping Village", 122, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Pools of the Ancient Dead", 123, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Asylum Grounds", 124, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: The Haunted Ruins", 125, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: Ghost Ship", 126, MedievilItemCategory.PROGRESSION, True),
-    ("Chaos Rune: The Time Device", 127, MedievilItemCategory.PROGRESSION, True),
+    ("Chaos Rune: The Graveyard", 117, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: The Hilltop Mausoleum", 118, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Scarecrow Fields", 119, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: The Lake", 120, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Pumpkin Gorge", 121, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Sleeping Village", 122, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Pools of the Ancient Dead", 123, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Asylum Grounds", 124, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: The Haunted Ruins", 125, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: Ghost Ship", 126, MedievilItemCategory.RUNE, False),
+    ("Chaos Rune: The Time Device", 127, MedievilItemCategory.RUNE, False),
 
-    ("Earth Rune: The Graveyard", 128, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Hilltop Mausoleum", 129, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: Scarecrow Fields", 130, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Crystal Caves", 131, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Lake", 132, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: Pumpkin Gorge", 133, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: Sleeping Village", 134, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: Inside the Asylum", 135, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: Enchanted Earth", 136, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Haunted Ruins", 137, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Entrance Hall", 138, MedievilItemCategory.PROGRESSION, True),
-    ("Earth Rune: The Time Device", 139, MedievilItemCategory.PROGRESSION, True),
+    ("Earth Rune: The Graveyard", 128, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Hilltop Mausoleum", 129, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: Scarecrow Fields", 130, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Crystal Caves", 131, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Lake", 132, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: Pumpkin Gorge", 133, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: Sleeping Village", 134, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: Inside the Asylum", 135, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: Enchanted Earth", 136, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Haunted Ruins", 137, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Entrance Hall", 138, MedievilItemCategory.RUNE, False),
+    ("Earth Rune: The Time Device", 139, MedievilItemCategory.RUNE, False),
 
-    ("Moon Rune: The Hilltop Mausoleum", 140, MedievilItemCategory.PROGRESSION, True),
-    ("Moon Rune: Scarecrow Fields", 141, MedievilItemCategory.PROGRESSION, True),
-    ("Moon Rune: Pumpkin Gorge", 142, MedievilItemCategory.PROGRESSION, True),
-    ("Moon Rune: Ghost Ship", 143, MedievilItemCategory.PROGRESSION, True),
-    ("Moon Rune: The Time Device", 144, MedievilItemCategory.PROGRESSION, True),
+    ("Moon Rune: The Hilltop Mausoleum", 140, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Scarecrow Fields", 141, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Pumpkin Gorge", 142, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Ghost Ship", 143, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: The Time Device", 144, MedievilItemCategory.RUNE, False),
 
-    ("Star Rune: Return to the Graveyard", 145, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: Dan's Crypt", 146, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: The Crystal Caves", 147, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: The Lake", 148, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: Enchanted Earth", 149, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: The Gallows Gauntlet", 150, MedievilItemCategory.PROGRESSION, True),
-    ("Star Rune: Ghost Ship", 151, MedievilItemCategory.PROGRESSION, True),
+    ("Star Rune: Return to the Graveyard", 145, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Dan's Crypt", 146, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Crystal Caves", 147, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Lake", 148, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Enchanted Earth", 149, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Gallows Gauntlet", 150, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Ghost Ship", 151, MedievilItemCategory.RUNE, False),
 
-    ("Time Rune: The Lake", 152, MedievilItemCategory.PROGRESSION, True),
-    ("Time Rune: Pumpkin Gorge", 153, MedievilItemCategory.PROGRESSION, True),
-    ("Time Rune: The Time Device", 154, MedievilItemCategory.PROGRESSION, True),
+    ("Time Rune: The Lake", 152, MedievilItemCategory.RUNE, False),
+    ("Time Rune: Pumpkin Gorge", 153, MedievilItemCategory.RUNE, False),
+    ("Time Rune: The Time Device", 154, MedievilItemCategory.RUNE, False),
     
     # List of Traps
     ("Trap: Heavy Dan", 154, MedievilItemCategory.TRAP, False),
@@ -333,6 +334,11 @@ def BuildItemPool(count: int, options) -> List[str]:
                 item_pool_names.append(item_name)
             else:
                 print(f"Warning: Guaranteed item '{item_name}' not found in item_dictionary. Skipping.")
+
+    # Add runes if RuneSanity is enabled
+    if hasattr(options, "runesanity") and options.runesanity.value == 1:
+        rune_items = [item_data.name for item_data in _all_items if item_data.category == MedievilItemCategory.RUNE]
+        item_pool_names.extend(rune_items)
                 
     progression_and_weapon_items = [
         item_data.name for item_data in _all_items
@@ -345,7 +351,7 @@ def BuildItemPool(count: int, options) -> List[str]:
     
     # Populate the rest of the pool with random filler items
     filler_item_names = [item_data.name for item_data in _all_items 
-                         if item_data.category == MedievilItemCategory.FILLER]
+                         if item_data.category == MedievilItemCategory.FILLER or item_data.category == MedievilItemCategory.TRAP]
     
 
     for _ in range(count - len(item_pool_names)):

@@ -156,26 +156,7 @@ class MedievilWorld(World):
         create_connection("Enchanted Earth", "Ant Hill")
         
         # # hall of heroes
-        create_connection("The Graveyard", "Hall of Heroes")
-        create_connection("Return to the Graveyard", "Hall of Heroes")
-        create_connection("Cemetery Hill", "Hall of Heroes")        
-        create_connection("The Hilltop Mausoleum", "Hall of Heroes")        
-        create_connection("Scarecrow Fields", "Hall of Heroes")        
-        create_connection("Ant Hill", "Hall of Heroes")        
-        create_connection("The Crystal Caves", "Hall of Heroes")
-        create_connection("The Lake", "Hall of Heroes")
-        create_connection("Pumpkin Gorge", "Hall of Heroes")
-        create_connection("Pumpkin Serpent", "Hall of Heroes")
-        create_connection("The Sleeping Village", "Hall of Heroes")
-        create_connection("Pools of the Ancient Dead", "Hall of Heroes")
-        create_connection("Asylum Grounds", "Hall of Heroes")
-        create_connection("Inside the Asylum", "Hall of Heroes")
-        create_connection("Enchanted Earth", "Hall of Heroes")
-        create_connection("The Gallows Gauntlet", "Hall of Heroes")
-        create_connection("The Haunted Ruins", "Hall of Heroes")
-        create_connection("The Ghost Ship", "Hall of Heroes")
-        create_connection("The Entrance Hall", "Hall of Heroes")
-        create_connection("The Time Device", "Hall of Heroes")
+        create_connection("Map", "Hall of Heroes")
         
         create_connection("Dan's Crypt", "Locked Items DC")        
         create_connection("Cemetery Hill", "Locked Items CH")
@@ -239,9 +220,11 @@ class MedievilWorld(World):
         # Add the generated MedievilItem objects to the multiworld's item pool
         self.multiworld.itempool.extend(generated_items)
         
-        print("Final Item pool: ")
-        for item in self.multiworld.itempool:
-            print(item.name)
+        # print(self.options.runesanity.value)
+        
+        # print("Final Item pool: ")
+        # for item in self.multiworld.itempool:
+        #     print(item.name)
 
     def create_item(self, name: str) -> Item:
         item_data = item_dictionary.get(name)
@@ -307,7 +290,7 @@ class MedievilWorld(World):
             ], self.player)
         
         def has_number_of_chalices(self, count, state: CollectionState):
-            
+            # looks at vanilla chalices currently. So it's based on locations
             chalice_list = [
                 "Chalice: The Graveyard",
                 "Chalice: Cemetery Hill",
@@ -331,11 +314,11 @@ class MedievilWorld(World):
                 "Chalice: The Time Device"
             ]
             
-            matches = []
-            for chalice in chalice_list:
-                if state.can_reach_location(chalice, self.player):
-                    matches.append(chalice)
-            return len(matches) == count
+            collected_chalices = 0
+            for chalice_location in chalice_list:
+                if state.can_reach_location(chalice_location, self.player):
+                    collected_chalices += 1
+            return collected_chalices >= count
             
             
         for region in self.multiworld.get_regions(self.player):
@@ -372,29 +355,63 @@ class MedievilWorld(World):
         
         # hall of heroes rules
         
-        set_rule(self.get_entrance("The Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(self,1, state))
-        set_rule(self.get_entrance("Return to the Graveyard -> Hall of Heroes"), lambda state: has_number_of_chalices(self,2, state))
-        set_rule(self.get_entrance("Cemetery Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(self,3, state))
-        set_rule(self.get_entrance("The Hilltop Mausoleum -> Hall of Heroes"), lambda state: has_number_of_chalices(self,4, state))
-        set_rule(self.get_entrance("Scarecrow Fields -> Hall of Heroes"), lambda state: has_number_of_chalices(self,5, state))
-        set_rule(self.get_entrance("Ant Hill -> Hall of Heroes"), lambda state: has_number_of_chalices(self,6, state))
-        set_rule(self.get_entrance("The Crystal Caves -> Hall of Heroes"), lambda state: has_number_of_chalices(self,7, state))
-        set_rule(self.get_entrance("The Lake -> Hall of Heroes"), lambda state: has_number_of_chalices(self,8, state))
-        set_rule(self.get_entrance("Pumpkin Gorge -> Hall of Heroes"), lambda state: has_number_of_chalices(self,9, state))
-        set_rule(self.get_entrance("Pumpkin Serpent -> Hall of Heroes"), lambda state: has_number_of_chalices(self,10, state))
-        set_rule(self.get_entrance("The Sleeping Village -> Hall of Heroes"), lambda state: has_number_of_chalices(self,11, state))
-        set_rule(self.get_entrance("Pools of the Ancient Dead -> Hall of Heroes"), lambda state: has_number_of_chalices(self,12, state))
-        set_rule(self.get_entrance("Asylum Grounds -> Hall of Heroes"), lambda state: has_number_of_chalices(self,13, state))
-        set_rule(self.get_entrance("Inside the Asylum -> Hall of Heroes"), lambda state: has_number_of_chalices(self,14, state))
-        set_rule(self.get_entrance("Enchanted Earth -> Hall of Heroes"), lambda state: has_number_of_chalices(self,15, state))
-        set_rule(self.get_entrance("The Gallows Gauntlet -> Hall of Heroes"), lambda state: has_number_of_chalices(self,16, state))
-        set_rule(self.get_entrance("The Haunted Ruins -> Hall of Heroes"), lambda state: has_number_of_chalices(self,17, state))
-        set_rule(self.get_entrance("The Ghost Ship -> Hall of Heroes"), lambda state: has_number_of_chalices(self,18, state))
-        set_rule(self.get_entrance("The Entrance Hall -> Hall of Heroes"), lambda state: has_number_of_chalices(self,19, state))
-        set_rule(self.get_entrance("The Time Device -> Hall of Heroes"), lambda state: has_number_of_chalices(self,20, state))
+        set_rule(self.get_entrance("Map -> Hall of Heroes"), lambda state: has_number_of_chalices(self, 1, state))
+        
+        # Canny Tim
+        set_rule(self.get_location("Equipment: Crossbow from Canny Tim - HH"), lambda state: has_number_of_chalices(self, 1, state))
+        set_rule(self.get_location("Life Bottle: Hall of Heroes (Canny Tim)"), lambda state: has_number_of_chalices(self, 2, state))
+
+        # Stanyer Iron Hewer
+        set_rule(self.get_location("Equipment: Hammer from Stanyer Iron Hewer - HH"), lambda state: has_number_of_chalices(self, 3, state))
+        set_rule(self.get_location("Gold Coins: Stanyer Iron Hewer - HH"), lambda state: has_number_of_chalices(self, 4, state))
+
+        # Woden the Mighty
+        set_rule(self.get_location("Equipment: Broadsword from Woden the Mighty - HH"), lambda state: has_number_of_chalices(self, 5, state))
+        set_rule(self.get_location("Gold Coins: Woden the Mighty - HH"), lambda state: has_number_of_chalices(self, 6, state))
+
+        # Imanzi Shongama
+        set_rule(self.get_location("Equipment: Spear from Imanzi Shongama - HH"), lambda state: has_number_of_chalices(self, 7, state))
+
+        # Ravenhooves the Archer
+        set_rule(self.get_location("Equipment: Longbow from Ravenhooves The Archer - HH"), lambda state: has_number_of_chalices(self, 8, state))
+
+        # Bloodmonath
+        set_rule(self.get_location("Equipment: Axe from Bloodmonath- HH"), lambda state: has_number_of_chalices(self, 9, state))
+
+        # Ravenhooves the Archer
+        set_rule(self.get_location("Equipment: Fire Longbow from Ravenhooves the Archer - HH"), lambda state: has_number_of_chalices(self, 10, state))
+
+        # Karl Sturngard
+        set_rule(self.get_location("Equipment: Gold Shield from Karl Sturngard - HH"), lambda state: has_number_of_chalices(self, 11, state))
+
+        # Bloodmonath
+        set_rule(self.get_location("Gold Coins: Bloodmonath - HH"), lambda state: has_number_of_chalices(self, 12, state))
+
+        # Dirk Steadfast
+        set_rule(self.get_location("Life Bottle: Hall of Heroes (Dirk Steadfast)"), lambda state: has_number_of_chalices(self, 13, state))
+
+        # Ravenhooves the Archer
+        set_rule(self.get_location("Life Bottle: Hall of Heroes (Ravenhooves The Archer)"), lambda state: has_number_of_chalices(self, 14, state))
+
+        # Megwynne Stormbinder
+        set_rule(self.get_location("Equipment: Lightning from Megwynne Stormbinder - HH"), lambda state: has_number_of_chalices(self, 15, state))
+
+        # Ravenhooves the Archer
+        set_rule(self.get_location("Equipment: Magic Longbow from Ravenhooves the Archer - HH"), lambda state: has_number_of_chalices(self, 16, state))
+
+        # Imanzi Shongama
+        set_rule(self.get_location("Energy Vial: Imanzi Shongama - HH"), lambda state: has_number_of_chalices(self, 17, state))
+
+        # Karl Sturngard
+        set_rule(self.get_location("Gold Coins: Karl Sturngard - HH"), lambda state: has_number_of_chalices(self, 18, state))
+
+        # Dirk Steadfast
+        set_rule(self.get_location("Equipment: Magic Sword from Dirk Steadfast - HH"), lambda state: has_number_of_chalices(self, 19, state))
+
+        # Megwynne Stormbinder
+        set_rule(self.get_location("Energy Vial: Megwynne Stormbinder - HH"), lambda state: has_number_of_chalices(self, 20, state))
         
         # locked chalice items
-        
         set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state))
         set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
         set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitem_required(self, "Sheet Music", state))
@@ -442,7 +459,11 @@ class MedievilWorld(World):
                 "guaranteed_items": self.options.guaranteed_items.value,
                 "goal": self.options.goal.value,
                 "exclude_ant_caves": self.options.exclude_ant_caves.value,
-                "exclude_dynamic_items": self.options.exclude_dynamic_items.value
+                "exclude_dynamic_items": self.options.exclude_dynamic_items.value,
+                "runesanity": self.options.runesanity.value,
+                "monstersanity": self.options.monstersanity.value,
+                "booksanity": self.options.booksanity.value,
+                "progression_option": self.options.progression_option.value
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
