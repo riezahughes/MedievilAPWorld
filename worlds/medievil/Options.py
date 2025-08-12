@@ -52,11 +52,11 @@ class MonsterSanityToggle(Toggle):
     option_false = 0
     
 class RuneSanityToggle(Toggle):
-    """Sets whether to mix runes into the pool (Is this by default, but doesn't work. Vanilla progression)"""
+    """Sets whether to mix runes into the pool (Doesn't work yet. Will add the items, but not the logic)"""
     display_name = "RuneSanity"
-    default = 1
+    default = 0
     option_true = 1
-    option_false = 0    
+    option_false = 0
     
 class BookSanityToggle(Toggle):
     """Sets whether reading books counts as checks (Doesn't work)"""
