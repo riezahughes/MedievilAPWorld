@@ -83,7 +83,7 @@ class MedievilLocation(Location):
                 for j, location_data in enumerate(location_tables[region_name]):
                     # Assign an ID to each location within the region
                     # The ID for each location in a region will be current_region_base_id + j
-                    # print(f"{current_region_base_id + j}: {location_data.name}")
+                    print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
         return output
@@ -273,15 +273,15 @@ location_tables = {
         # Requires Shadow Talisman
          MedievilLocationData("Key Item: Shadow Talisman - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Star Rune: Enchanted Earth","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Earth Rune: Enchanted Earth","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Copper Shield in Egg - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+         MedievilLocationData("Egg Drop 1 - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+         MedievilLocationData("Egg Drop 2 - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+         MedievilLocationData("Egg Drop 3 - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Energy Vial: Shadow Talisman Cave - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Left of Tree Drop - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Right of Tree Drop - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag Near Tree Hollow - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag Behind Big Tree 1 - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag Behind Big Tree 2 - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),         
-         MedievilLocationData("Gold Coins: Chest In Egg - EE","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Gold Coins: Bag at Cave Entrance - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest Near Barrier - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest Left of Fountain - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -427,21 +427,30 @@ location_tables = {
     ],
          
     "Inside the Asylum": [
-         MedievilLocationData("Earth Rune: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Key Item: Dragon Gem - IA","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Silver Shield in Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Energy Vial: Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Energy Vial: Asylumn Room 1 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Energy Vial: Asylumn Room 2 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Bag in Bat Room Left - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Chest in Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Bag in Bat Room Centre - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Bag in Bat Room Right - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Bag in Asylumn Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Gold Coins: Bag in Sewer Prison Entrance - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Gold Coins: Bag on Sewer Prison Bench - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Cleared: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Inside the Asylum","Chalice of Souls",MedievilLocationCategory.CHALICE),
+          MedievilLocationData("Earth Rune: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+          MedievilLocationData("Key Item: Dragon Gem - IA","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+          
+     # these have been removed from the  game due to dynamic location issues. I can't figure out when a person has picked them up. Instead we'll be using room clears.
+     # MedievilLocationData("Equipment: Silver Shield in Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Energy Vial: Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Energy Vial: Asylumn Room 1 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Energy Vial: Asylumn Room 2 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Gold Coins: Bag in Bat Room Left - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Gold Coins: Chest in Bat Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Gold Coins: Bag in Bat Room Centre - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Gold Coins: Bag in Bat Room Right - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     # MedievilLocationData("Gold Coins: Bag in Asylumn Room - IA","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+     
+          MedievilLocationData("Gauntlet Cleared: Room 1 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Gauntlet Cleared: Room 2 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Gauntlet Cleared: Room 3 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Gauntlet Cleared: Room 4 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Gauntlet Cleared: Room 5 - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+     
+          MedievilLocationData("Gold Coins: Bag in Sewer Prison Entrance - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Gold Coins: Bag on Sewer Prison Bench - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+          MedievilLocationData("Cleared: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
+          MedievilLocationData("Chalice: Inside the Asylum","Chalice of Souls",MedievilLocationCategory.CHALICE),
     ],
         
     "Pumpkin Gorge": [
@@ -535,7 +544,7 @@ location_tables = {
          MedievilLocationData("Earth Rune: The Time Device","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Moon Rune: The Time Device","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Time Rune: The Time Device","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
-         MedievilLocationData("Equipment: Silver Shield on Clock - TD","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Silver Shield on Clock - TD","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Gold Coins: Laser Platform Right - TD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Laser Platform Left - TD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Lone Pillar 1 - TD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -549,8 +558,8 @@ location_tables = {
     ],
         
     "Zaroks Lair": [
-         MedievilLocationData("Equipment: Good Lightning - ZL","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
-         MedievilLocationData("Equipment: Silver Shield - ZL Arena","Gold Shield Ammo (100)",MedievilLocationCategory.DYNAMIC_ITEM),
+         MedievilLocationData("Equipment: Good Lightning - ZL","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+         MedievilLocationData("Equipment: Silver Shield - ZL Arena","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Zaroks Lair","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
     ],
     
