@@ -276,27 +276,28 @@ _all_items: List[MedievilItemData] = [
 
     ("Moon Rune: The Hilltop Mausoleum", 140, MedievilItemCategory.RUNE, False),
     ("Moon Rune: Scarecrow Fields", 141, MedievilItemCategory.RUNE, False),
-    ("Moon Rune: Pumpkin Gorge", 142, MedievilItemCategory.RUNE, False),
-    ("Moon Rune: Ghost Ship", 143, MedievilItemCategory.RUNE, False),
-    ("Moon Rune: The Time Device", 144, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Sleeping Village", 142, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Pumpkin Gorge", 143, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: Ghost Ship", 144, MedievilItemCategory.RUNE, False),
+    ("Moon Rune: The Time Device", 145, MedievilItemCategory.RUNE, False),
 
-    ("Star Rune: Return to the Graveyard", 145, MedievilItemCategory.RUNE, False),
-    ("Star Rune: Dan's Crypt", 146, MedievilItemCategory.RUNE, False),
-    ("Star Rune: The Crystal Caves", 147, MedievilItemCategory.RUNE, False),
-    ("Star Rune: The Lake", 148, MedievilItemCategory.RUNE, False),
-    ("Star Rune: Enchanted Earth", 149, MedievilItemCategory.RUNE, False),
-    ("Star Rune: The Gallows Gauntlet", 150, MedievilItemCategory.RUNE, False),
-    ("Star Rune: Ghost Ship", 151, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Return to the Graveyard", 146, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Dan's Crypt", 147, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Crystal Caves", 148, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Lake", 149, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Enchanted Earth", 150, MedievilItemCategory.RUNE, False),
+    ("Star Rune: The Gallows Gauntlet", 151, MedievilItemCategory.RUNE, False),
+    ("Star Rune: Ghost Ship", 152, MedievilItemCategory.RUNE, False),
 
-    ("Time Rune: The Lake", 152, MedievilItemCategory.RUNE, False),
-    ("Time Rune: Pumpkin Gorge", 153, MedievilItemCategory.RUNE, False),
-    ("Time Rune: The Time Device", 154, MedievilItemCategory.RUNE, False),
+    ("Time Rune: The Lake", 153, MedievilItemCategory.RUNE, False),
+    ("Time Rune: Pumpkin Gorge", 154, MedievilItemCategory.RUNE, False),
+    ("Time Rune: The Time Device", 155, MedievilItemCategory.RUNE, False),
     
     # List of Traps
-    ("Trap: Heavy Dan", 154, MedievilItemCategory.TRAP, False),
-    ("Trap: Light Dan", 155, MedievilItemCategory.TRAP, False),
-    ("Trap: Goodbye Shield", 156, MedievilItemCategory.TRAP, False),
-    ("Trap: Hudless", 157, MedievilItemCategory.TRAP, False)
+    ("Trap: Heavy Dan", 156, MedievilItemCategory.TRAP, False),
+    ("Trap: Light Dan", 157, MedievilItemCategory.TRAP, False),
+    ("Trap: Goodbye Shield", 158, MedievilItemCategory.TRAP, False),
+    ("Trap: Hudless", 159, MedievilItemCategory.TRAP, False)
     
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
