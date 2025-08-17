@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, location_tables, location_dictionary
-from .Options import MedievilOption, GoalOptions, ExcludeDynamicItems
+from .Options import MedievilOption, GoalOptions, ExcludeAntCaves
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -168,7 +168,7 @@ class MedievilWorld(World):
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
         for location in location_table:
-            if self.options.exclude_dynamic_items.value == ExcludeDynamicItems.option_true and location.category == MedievilLocationCategory.DYNAMIC_ITEM:
+            if self.options.exclude_ant_caves == ExcludeAntCaves.option_true and region_name == "Ant Hill":
                 continue
             if location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
@@ -459,7 +459,7 @@ class MedievilWorld(World):
                 "guaranteed_items": self.options.guaranteed_items.value,
                 "goal": self.options.goal.value,
                 "exclude_ant_caves": self.options.exclude_ant_caves.value,
-                "exclude_dynamic_items": self.options.exclude_dynamic_items.value,
+                "deathlink": self.options.deathlink.value,
                 "runesanity": self.options.runesanity.value,
                 "monstersanity": self.options.monstersanity.value,
                 "booksanity": self.options.booksanity.value,
