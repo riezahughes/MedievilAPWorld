@@ -343,6 +343,10 @@ class MedievilWorld(World):
                 if state.can_reach_location(chalice_location, self.player):
                     collected_chalices += 1
             return collected_chalices >= count
+        
+        def is_not_in_dans_crypt(self, state: CollectionState):
+            if(state.can_reach_region("The Graveyard -> Cemetery Hill", self.player)):
+                return True
             
             
         for region in self.multiworld.get_regions(self.player):
@@ -360,8 +364,14 @@ class MedievilWorld(World):
         
         # Map rules
         
-        # ant hill checks
+        for location in self.multiworld.get_locations(self.player):
+            # Check if the location is within "Dan's Crypt" or "Locked Items DC"
+            if location.parent_region.name in ["Dan's Crypt", "Locked Items DC"]:
+                add_item_rule(location, lambda item: item.name != "Equipment: Hammer")
+                add_item_rule(location, lambda item: item.name != "Equipment: Club")
+                add_item_rule(location, lambda item: item.name != "Skill: Daring Dash")
         
+        # ant hill checks
         if(self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true):
             set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitems_required(self, ["Witches Talisman"] , state))
             
