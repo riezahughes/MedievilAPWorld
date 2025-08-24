@@ -5,6 +5,7 @@ from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, De
 class GoalOptions():
     DEFEAT_ZAROK = 0
     CHALICE = 1
+    BOTH = 2
 
 class ProgressionOptions():
     VANILLA = 0
@@ -24,6 +25,7 @@ class GoalOption(Choice):
     default = GoalOptions.DEFEAT_ZAROK
     option_zarok = GoalOptions.DEFEAT_ZAROK
     option_chalice = GoalOptions.CHALICE
+    option_both = GoalOptions.BOTH
     
 class ProgressionOption(Choice):
     """Lets users choose how they wish to progress
@@ -33,12 +35,19 @@ class ProgressionOption(Choice):
     default = ProgressionOptions.VANILLA
     option_vanilla = ProgressionOptions.VANILLA
     
-class ExcludeAntCaves(Toggle):
-    """Remove the need to go into the Ant Hill from logic"""
-    display_name = "Remove Ant Hill Logic"
-    default = 0
+class IncludeAntHillInChecksToggle(Toggle):
+    """Toggle whether to include the ant hill in your location checks and logic"""
+    display_name = "Include Ant Hill Logic"
+    default = 1
     option_true = 1
-    option_false = 0    
+    option_false = 0
+
+class IncludeChalicesInChecksToggle(Toggle):
+    """Include Chalices in Checks"""
+    display_name = "Include Chalices"
+    default = 1
+    option_true = 1
+    option_false = 0
     
 class MonsterSanityToggle(Toggle):
     """Sets whether to do checks for individual monsters (Doesn't work)"""
@@ -72,7 +81,8 @@ class DeathLinkToggle(Toggle):
 class MedievilOption(PerGameCommonOptions):
     goal: GoalOption
     progression_option: ProgressionOption
-    exclude_ant_caves: ExcludeAntCaves
+    include_ant_hill_in_checks: IncludeAntHillInChecksToggle
+    include_chalices_in_checks: IncludeChalicesInChecksToggle
     deathlink: DeathLinkToggle
     monstersanity: MonsterSanityToggle
     booksanity: BookSanityToggle
