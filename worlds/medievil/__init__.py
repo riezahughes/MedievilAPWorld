@@ -342,12 +342,7 @@ class MedievilWorld(World):
             for chalice_location in chalice_list:
                 if state.can_reach_location(chalice_location, self.player):
                     collected_chalices += 1
-            return collected_chalices >= count
-        
-        def is_not_in_dans_crypt(self, state: CollectionState):
-            if(state.can_reach_region("The Graveyard -> Cemetery Hill", self.player)):
-                return True
-            
+            return collected_chalices >= count            
             
         for region in self.multiworld.get_regions(self.player):
             for location in region.locations:
