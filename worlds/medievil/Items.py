@@ -2,6 +2,7 @@ from enum import IntEnum
 from typing import NamedTuple, List, Optional
 import random
 from BaseClasses import Item, ItemClassification # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
+from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle
 
 
 class MedievilItemCategory(IntEnum):
@@ -215,9 +216,6 @@ _all_items: List[MedievilItemData] = [
     
     ("Skill: Daring Dash",60,MedievilItemCategory.PROGRESSION, True),    
     
-    # Chalice
-    ("Chalice of Souls", 88, MedievilItemCategory.CHALICE, False),
-    
     # Key Inventory Items
     ("Key Item: Dragon Gem - Pumpkin Serpent", 89, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Dragon Gem - Inside the Asylum", 90, MedievilItemCategory.PROGRESSION, True),
@@ -337,7 +335,7 @@ def BuildItemPool(count: int, options) -> List[str]:
                 print(f"Warning: Guaranteed item '{item_name}' not found in item_dictionary. Skipping.")
 
     # Add runes if RuneSanity is enabled
-    if hasattr(options, "runesanity") and options.runesanity.value == 1:
+    if hasattr(options, "runesanity") and options.runesanity.value == RuneSanityToggle.option_true:
         rune_items = [item_data.name for item_data in _all_items if item_data.category == MedievilItemCategory.RUNE]
         item_pool_names.extend(rune_items)
                 
@@ -348,7 +346,10 @@ def BuildItemPool(count: int, options) -> List[str]:
     
     for item_name in progression_and_weapon_items:
         if item_name not in item_pool_names and len(item_pool_names) < count:
-            item_pool_names.append(item_name)
+            if hasattr(options, "include_ant_hill") and options.include_ant_hill.value == IncludeAntHillInChecksToggle.option_false and "Amber" in item_name:
+                continue
+            else:
+                item_pool_names.append(item_name)
     
     # Populate the rest of the pool with random filler items
     filler_item_names = [item_data.name for item_data in _all_items 

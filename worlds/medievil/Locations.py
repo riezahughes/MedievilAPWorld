@@ -145,7 +145,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Shop Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag Near Hill Fountain - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Graveyard","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
 
     "Cemetery Hill": [
@@ -210,7 +210,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Undertakers Entrance - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Cliffs Left - RTG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Return to the Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Return to the Graveyard","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Return to the Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
 
     "Scarecrow Fields": [
@@ -265,7 +265,7 @@ location_tables = {
          MedievilLocationData("Energy Vial: Birthing room exit - TA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest at Barrier Fairy - TA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Ant Hill","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Ant Hill","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Ant Hill","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
          
         
@@ -288,7 +288,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest Top of Fountain - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest Right of Fountain - EE","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Enchanted Earth","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Enchanted Earth","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Enchanted Earth","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
 
     "The Sleeping Village": [
@@ -319,7 +319,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Bag at Bottom of table - SV","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest next to Chalice - SV","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Sleeping Village","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Sleeping Village","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Sleeping Village","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
 
     "Pools of the Ancient Dead": [
@@ -346,7 +346,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Jump Spot 1 - PAD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Jump Spot 2 - PAD","Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Pools of the Ancient Dead","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Pools of the Ancient Dead","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Pools of the Ancient Dead","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "The Lake": [
@@ -366,7 +366,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Outside Whirlpool Exit - TL","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest in Whirlpool Switch Area - TL","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),         
          MedievilLocationData("Cleared: The Lake","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Lake","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Lake","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "The Crystal Caves": [
@@ -395,7 +395,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Bag on Left of Pool - CC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag on Right of Pool - CC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Crystal Caves","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Crystal Caves","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Crystal Caves","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "The Gallows Gauntlet": [
@@ -408,7 +408,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest at Serpent - GG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest Near Star Entrance - GG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Gallows Gauntlet","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Gallows Gauntlet","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Gallows Gauntlet","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "Asylum Grounds": [
@@ -423,7 +423,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Behind Chaos Gate - AG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Behind Elephant in Grave - AG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Asylum Grounds","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Asylum Grounds","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Asylum Grounds","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
          
     "Inside the Asylum": [
@@ -450,7 +450,7 @@ location_tables = {
           MedievilLocationData("Gold Coins: Bag in Sewer Prison Entrance - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
           MedievilLocationData("Gold Coins: Bag on Sewer Prison Bench - IA","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
           MedievilLocationData("Cleared: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-          MedievilLocationData("Chalice: Inside the Asylum","Chalice of Souls",MedievilLocationCategory.CHALICE),
+          MedievilLocationData("Chalice: Inside the Asylum","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "Pumpkin Gorge": [
@@ -476,7 +476,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest at Boulders after Star Rune - PG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest Near Chalice - PG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Pumpkin Gorge","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Pumpkin Gorge","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Pumpkin Gorge","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "Pumpkin Serpent": [
@@ -489,7 +489,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Bag Behind Vines and Pod - PS","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest at Merchant Gargoyle - PS","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Pumpkin Serpent","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Pumpkin Serpent","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Pumpkin Serpent","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "The Haunted Ruins": [
@@ -510,7 +510,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest at Catapult 2 - HR","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Chest at Catapult 3 - HR","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Haunted Ruins","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Haunted Ruins","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Haunted Ruins","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
     
     "The Ghost Ship": [
@@ -530,12 +530,12 @@ location_tables = {
          MedievilLocationData("Gold Coins: Chest in Cannon Room - GS","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Rope Bridge - GS","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: Ghost Ship","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: Ghost Ship","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Ghost Ship","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
 
     "The Entrance Hall":[
          MedievilLocationData("Cleared: The Entrance Hall","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Entrance Hall","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Entrance Hall","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
     
     "The Time Device": [
@@ -554,7 +554,7 @@ location_tables = {
          MedievilLocationData("Gold Coins: Bag at Earth Station 2 - TD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag at Earth Station 3 - TD","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Cleared: The Time Device","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Time Device","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Time Device","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
         
     "Zaroks Lair": [
@@ -569,18 +569,18 @@ location_tables = {
          MedievilLocationData("Gold Coins: Behind Wall in Crypt - Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
     ],    
     "Locked Items CH": [
-         MedievilLocationData("Chalice: Cemetery Hill","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Cemetery Hill","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
     "Locked Items HM": [
          MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 1 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 2 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 3 - HM","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Chalice: The Hilltop Mausoleum","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: The Hilltop Mausoleum","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
     "Locked Items SF": [
          MedievilLocationData("Life Bottle: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),         
          MedievilLocationData("Gold Coins: Chest Next to Chalice - SF","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Chalice: Scarecrow Fields","Chalice of Souls",MedievilLocationCategory.CHALICE),
+         MedievilLocationData("Chalice: Scarecrow Fields","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE),
     ],
     
     # Books for Booksanity go here

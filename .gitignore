@@ -1,6 +1,7 @@
 .idea
 .vscode
 
+fuzz_output/
 *_Spoiler.txt
 *.bmbp
 *.apbp
