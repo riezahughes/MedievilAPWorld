@@ -132,7 +132,6 @@ location_tables = {
          MedievilLocationData("Equipment: Copper Shield in Chest - DC","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Daggers - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Over the water - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Cleared: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
          MedievilLocationData("Book: Unlocking Runes - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Using Crypt - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Pressing Select - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
@@ -141,6 +140,7 @@ location_tables = {
          MedievilLocationData("Book: Coins - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Gargoyle: Left - DC","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),
          MedievilLocationData("Gargoyle: Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),
+         MedievilLocationData("Cleared: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
     ],
     
     "The Graveyard": [
@@ -155,13 +155,13 @@ location_tables = {
          MedievilLocationData("Gold Coins: Life Bottle Right Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Shop Chest - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Bag Near Hill Fountain - TG","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Cleared: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
-         MedievilLocationData("Chalice: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE_PICKUP),
          MedievilLocationData("Book: Welcome Back - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Healing Fountain - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Gaze of an Angel - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Skull Key - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Gargoyle: End of Level - TG","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),
+         MedievilLocationData("Cleared: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
+         MedievilLocationData("Chalice: The Graveyard","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE_PICKUP),
     ],
 
     "Cemetery Hill": [
