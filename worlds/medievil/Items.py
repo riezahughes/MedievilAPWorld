@@ -2,19 +2,20 @@ from enum import IntEnum
 from typing import NamedTuple, List, Optional
 import random
 from BaseClasses import Item, ItemClassification # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
-from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle
+from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle, TrapToggle, AmmoAndChargeToggle
 
 
 class MedievilItemCategory(IntEnum):
-    FILLER = 0
-    PROGRESSION = 1
-    WEAPON = 2
-    CHALICE = 3
-    RUNE = 4
-    TRAP = 5
-    FUN = 6
-    LEVEL_END = 7
-    SKIP = 8
+    AMMO_FILLER = 0
+    GOLD_FILLER = 1
+    PROGRESSION = 2
+    WEAPON = 3
+    CHALICE = 4
+    RUNE = 5
+    TRAP = 6
+    FUN = 7
+    LEVEL_END = 8
+    SKIP = 9
 
 
 class MedievilItemData(NamedTuple):
@@ -43,7 +44,7 @@ class MedievilItem(Item):
             self.category = item_data.category
         else:
             self.m_code = None
-            self.category = MedievilItemCategory.FILLER # Fallback for unknown items
+            self.category = MedievilItemCategory.GOLD_FILLER # Fallback for unknown items
 
 
     @staticmethod
@@ -112,11 +113,11 @@ key_item_names = {
     "Chaos Rune: Scarecrow Fields", 
     "Chaos Rune: The Lake", 
     "Chaos Rune: Pumpkin Gorge", 
-    "Chaos Rune: Sleeping Village", 
+    "Chaos Rune: The Sleeping Village", 
     "Chaos Rune: Pools of the Ancient Dead",
     "Chaos Rune: Asylum Grounds", 
     "Chaos Rune: The Haunted Ruins", 
-    "Chaos Rune: Ghost Ship", 
+    "Chaos Rune: The Ghost Ship", 
     "Chaos Rune: The Time Device", 
     "Earth Rune: The Graveyard", 
     "Earth Rune: The Hilltop Mausoleum", 
@@ -124,7 +125,7 @@ key_item_names = {
     "Earth Rune: The Crystal Caves", 
     "Earth Rune: The Lake", 
     "Earth Rune: Pumpkin Gorge", 
-    "Earth Rune: Sleeping Village", 
+    "Earth Rune: The Sleeping Village", 
     "Earth Rune: Inside the Asylum",
     "Earth Rune: Enchanted Earth", 
     "Earth Rune: The Haunted Ruins", 
@@ -133,7 +134,7 @@ key_item_names = {
     "Moon Rune: The Hilltop Mausoleum", 
     "Moon Rune: Scarecrow Fields", 
     "Moon Rune: Pumpkin Gorge", 
-    "Moon Rune: Ghost Ship", 
+    "Moon Rune: The Ghost Ship", 
     "Moon Rune: The Time Device", 
     "Star Rune: Return to the Graveyard", 
     "Star Rune: Dan's Crypt", 
@@ -141,7 +142,7 @@ key_item_names = {
     "Star Rune: The Lake", 
     "Star Rune: Enchanted Earth", 
     "Star Rune: The Gallows Gauntlet",
-    "Star Rune: Ghost Ship", 
+    "Star Rune: The Ghost Ship", 
     "Time Rune: The Lake", 
     "Time Rune: Pumpkin Gorge", 
     "Time Rune: The Time Device",
@@ -150,37 +151,37 @@ key_item_names = {
 
 _all_items: List[MedievilItemData] = [
     # Filler Items
-    ("Gold Coins (50)", 0, MedievilItemCategory.FILLER, False),
-    ("Gold Coins (100)", 1, MedievilItemCategory.FILLER, False),
-    ("Gold Coins (150)", 2, MedievilItemCategory.FILLER, False),
-    ("Dagger Ammo (10)", 3, MedievilItemCategory.FILLER, False),
-    ("Dagger Ammo (20)", 4, MedievilItemCategory.FILLER, False),
-    ("Broadsword Charge (20)", 5, MedievilItemCategory.FILLER, False),
-    ("Broadsword Charge (50)", 6, MedievilItemCategory.FILLER, False),
-    ("Club Charge (20)", 7, MedievilItemCategory.FILLER, False),
-    ("Club Charge (50)", 8, MedievilItemCategory.FILLER, False),
-    ("Chicken Drumsticks Ammo (10)", 9, MedievilItemCategory.FILLER, False),
-    ("Crossbow Ammo (20)", 10, MedievilItemCategory.FILLER, False),
-    ("Crossbow Ammo (50)", 11, MedievilItemCategory.FILLER, False),
-    ("Longbow Ammo (20)", 12, MedievilItemCategory.FILLER, False),
-    ("Longbow Ammo (50)", 13, MedievilItemCategory.FILLER, False),
-    ("Fire Longbow Ammo (20)", 14, MedievilItemCategory.FILLER, False),
-    ("Fire Longbow Ammo (50)", 15, MedievilItemCategory.FILLER, False),
-    ("Magic Longbow Ammo (20)", 16, MedievilItemCategory.FILLER, False),
-    ("Magic Longbow Ammo (50)", 17, MedievilItemCategory.FILLER, False),
-    ("Spear Ammo (20)", 18, MedievilItemCategory.FILLER, False),
-    ("Spear Ammo (50)", 19, MedievilItemCategory.FILLER, False),
-    ("Lightning Charge (30)", 20, MedievilItemCategory.FILLER, False),
-    ("Lightning Charge (50)", 21, MedievilItemCategory.FILLER, False),
-    ("Copper Shield Ammo (50)", 22, MedievilItemCategory.FILLER, False),
-    ("Copper Shield Ammo (100)", 23, MedievilItemCategory.FILLER, False),
-    ("Silver Shield Ammo (50)", 24, MedievilItemCategory.FILLER, False),
-    ("Silver Shield Ammo (100)", 25, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Ammo (50)", 26, MedievilItemCategory.FILLER, False),
-    ("Gold Shield Ammo (100)", 27, MedievilItemCategory.FILLER, False),
-    ("Health Vial (50)", 28, MedievilItemCategory.FILLER, False),
-    ("Health Vial (150)", 29, MedievilItemCategory.FILLER, False),
-    ("Health Vial (300)", 30, MedievilItemCategory.FILLER, False),
+    ("Gold Coins (50)", 0, MedievilItemCategory.GOLD_FILLER, False),
+    ("Gold Coins (100)", 1, MedievilItemCategory.GOLD_FILLER, False),
+    ("Gold Coins (150)", 2, MedievilItemCategory.GOLD_FILLER, False),
+    ("Dagger Ammo (10)", 3, MedievilItemCategory.AMMO_FILLER, False),
+    ("Dagger Ammo (20)", 4, MedievilItemCategory.AMMO_FILLER, False),
+    ("Broadsword Charge (20)", 5, MedievilItemCategory.AMMO_FILLER, False),
+    ("Broadsword Charge (50)", 6, MedievilItemCategory.AMMO_FILLER, False),
+    ("Club Charge (20)", 7, MedievilItemCategory.AMMO_FILLER, False),
+    ("Club Charge (50)", 8, MedievilItemCategory.AMMO_FILLER, False),
+    ("Chicken Drumsticks Ammo (10)", 9, MedievilItemCategory.AMMO_FILLER, False),
+    ("Crossbow Ammo (20)", 10, MedievilItemCategory.AMMO_FILLER, False),
+    ("Crossbow Ammo (50)", 11, MedievilItemCategory.AMMO_FILLER, False),
+    ("Longbow Ammo (20)", 12, MedievilItemCategory.AMMO_FILLER, False),
+    ("Longbow Ammo (50)", 13, MedievilItemCategory.AMMO_FILLER, False),
+    ("Fire Longbow Ammo (20)", 14, MedievilItemCategory.AMMO_FILLER, False),
+    ("Fire Longbow Ammo (50)", 15, MedievilItemCategory.AMMO_FILLER, False),
+    ("Magic Longbow Ammo (20)", 16, MedievilItemCategory.AMMO_FILLER, False),
+    ("Magic Longbow Ammo (50)", 17, MedievilItemCategory.AMMO_FILLER, False),
+    ("Spear Ammo (20)", 18, MedievilItemCategory.AMMO_FILLER, False),
+    ("Spear Ammo (50)", 19, MedievilItemCategory.AMMO_FILLER, False),
+    ("Lightning Charge (30)", 20, MedievilItemCategory.AMMO_FILLER, False),
+    ("Lightning Charge (50)", 21, MedievilItemCategory.AMMO_FILLER, False),
+    ("Copper Shield Ammo (50)", 22, MedievilItemCategory.AMMO_FILLER, False),
+    ("Copper Shield Ammo (100)", 23, MedievilItemCategory.AMMO_FILLER, False),
+    ("Silver Shield Ammo (50)", 24, MedievilItemCategory.AMMO_FILLER, False),
+    ("Silver Shield Ammo (100)", 25, MedievilItemCategory.AMMO_FILLER, False),
+    ("Gold Shield Ammo (50)", 26, MedievilItemCategory.AMMO_FILLER, False),
+    ("Gold Shield Ammo (100)", 27, MedievilItemCategory.AMMO_FILLER, False),
+    ("Health Vial (50)", 28, MedievilItemCategory.AMMO_FILLER, False),
+    ("Health Vial (150)", 29, MedievilItemCategory.AMMO_FILLER, False),
+    ("Health Vial (300)", 30, MedievilItemCategory.AMMO_FILLER, False),
     
     # list of weapons
     ("Equipment: Small Sword", 31, MedievilItemCategory.WEAPON, False),
@@ -353,7 +354,7 @@ def BuildItemPool(count: int, options) -> List[str]:
     
     # Populate the rest of the pool with random filler items
     filler_item_names = [item_data.name for item_data in _all_items 
-                         if item_data.category == MedievilItemCategory.FILLER or item_data.category == MedievilItemCategory.TRAP]
+                         if item_data.category == MedievilItemCategory.GOLD_FILLER or (options.ammo.value == AmmoAndChargeToggle.option_true and item_data.category == MedievilItemCategory.AMMO_FILLER) or (options.traps.value == TrapToggle.option_true and item_data.category == MedievilItemCategory.TRAP)]
     
 
     for _ in range(count - len(item_pool_names)):

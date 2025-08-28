@@ -9,7 +9,8 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
-from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle
+from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle,  ProgressionOptions
+from .Rules import has_number_of_chalices, set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -60,7 +61,10 @@ class MedievilWorld(World):
     def generate_early(self):
         self.enabled_location_categories.add(MedievilLocationCategory.PROGRESSION)
         self.enabled_location_categories.add(MedievilLocationCategory.WEAPON)
-        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE)
+        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE_PICKUP)
+        self.enabled_location_categories.add(MedievilLocationCategory.CHALICE_REWARD)
+        self.enabled_location_categories.add(MedievilLocationCategory.BOOK)
+        self.enabled_location_categories.add(MedievilLocationCategory.GARGOYLE)
         self.enabled_location_categories.add(MedievilLocationCategory.FUN)
         self.enabled_location_categories.add(MedievilLocationCategory.LEVEL_END)
         self.enabled_location_categories.add(MedievilLocationCategory.DYNAMIC_ITEM)
@@ -180,10 +184,16 @@ class MedievilWorld(World):
         new_region = Region(region_name, self.player, self.multiworld)
         
         for location in location_table:
-            if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false and location.name == "Energy Vial: Megwynne Stormbinder - HH":
+            if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false and location.name == "Chalice Reward 20":
                 continue
-            if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and location.category == MedievilLocationCategory.CHALICE:
+            if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and location.category == MedievilLocationCategory.CHALICE_PICKUP:
                 continue
+            if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and location.category == MedievilLocationCategory.CHALICE_REWARD:
+                continue
+            if self.options.booksanity.value == BookSanityToggle.option_false and location.category == MedievilLocationCategory.BOOK:
+                continue
+            if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and location.category == MedievilLocationCategory.GARGOYLE:
+                continue            
             if location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
                     self.player,
@@ -265,90 +275,14 @@ class MedievilWorld(World):
     
     def set_rules(self) -> None:
         
-        def is_level_cleared(self, location: str, state: CollectionState):        
-            return state.can_reach_location("Cleared: " + location, self.player)
-        
-        def has_daring_dash(self, state: CollectionState):
-            return state.has("Skill: Daring Dash", self.player)
-        
-        def is_boss_defeated(self, boss: str, state: CollectionState): # can used later
-            return state.has("Boss: " + boss, self.player, 1)
-        
-        def has_keyitems_required(self, items: list[str], state: CollectionState):
-            passed_check = True
-            for item in items:
-                if(state.has("Key Item: " + item, self.player, 1) is False):
-                    passed_check = False
-            return passed_check
-
-        def has_weapon_required(self, weapon: str, state: CollectionState):
-            return state.has("Equipment: " + weapon, self.player, 1)
-        
-        def has_required_souls(self, state: CollectionState):
-            return state.has_all([
-                "Key Item: Soul Helmet 1",
-                "Key Item: Soul Helmet 2",
-                "Key Item: Soul Helmet 3",
-                "Key Item: Soul Helmet 4",
-                "Key Item: Soul Helmet 5",
-                "Key Item: Soul Helmet 6",
-                "Key Item: Soul Helmet 7",
-                "Key Item: Soul Helmet 8"
-            ], self.player)
-        
-        def has_required_amber(self, state: CollectionState):
-            return state.has_all([
-                "Key Item: Amber 1",
-                "Key Item: Amber 2",
-                "Key Item: Amber 3",
-                "Key Item: Amber 4",
-                "Key Item: Amber 5",
-                "Key Item: Amber 6",
-                "Key Item: Amber 7"
-            ], self.player)
-        
-        def has_number_of_chalices(self, count, state: CollectionState):
-            
-            if(self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false):
-                return True
-            # looks at vanilla chalices currently. So it's based on locations
-            chalice_list = [
-                "Chalice: The Graveyard",
-                "Chalice: Cemetery Hill",
-                "Chalice: The Hilltop Mausoleum",
-                "Chalice: Return to the Graveyard",
-                "Chalice: Scarecrow Fields",
-                "Chalice: Enchanted Earth",
-                "Chalice: Sleeping Village",
-                "Chalice: Pools of the Ancient Dead",
-                "Chalice: The Lake",
-                "Chalice: The Crystal Caves",
-                "Chalice: The Gallows Gauntlet",
-                "Chalice: Asylum Grounds",
-                "Chalice: Inside the Asylum",
-                "Chalice: Pumpkin Gorge",
-                "Chalice: Pumpkin Serpent",
-                "Chalice: The Haunted Ruins",
-                "Chalice: Ghost Ship",
-                "Chalice: The Entrance Hall",
-                "Chalice: The Time Device"
-            ]
-            
-            # adds ant hill chalice if it's not excluded
-            if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
-                chalice_list.append("Chalice: Ant Hill")
-            
-            collected_chalices = 0
-            for chalice_location in chalice_list:
-                if state.can_reach_location(chalice_location, self.player):
-                    collected_chalices += 1
-            return collected_chalices >= count            
-            
         for region in self.multiworld.get_regions(self.player):
             for location in region.locations:
                     set_rule(location, lambda state: True)
                     
-        max_chalice_count = 20 if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false else 19
+        max_chalice_count = 20 if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true else 19
+        
+        print(self.options.goal.value == GoalOptions.BOTH)
+        print(max_chalice_count)
                     
         if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Cleared: Zaroks Lair", self.player)
@@ -356,7 +290,6 @@ class MedievilWorld(World):
             self.multiworld.completion_condition[self.player] = lambda state: has_number_of_chalices(self, max_chalice_count, state)
         elif self.options.goal.value == GoalOptions.BOTH:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Cleared: Zaroks Lair", self.player) and has_number_of_chalices(self, max_chalice_count, state)
-        
         # Map rules
         
         for location in self.multiworld.get_locations(self.player):
@@ -365,107 +298,41 @@ class MedievilWorld(World):
                 add_item_rule(location, lambda item: item.name != "Equipment: Hammer")
                 add_item_rule(location, lambda item: item.name != "Equipment: Club")
                 add_item_rule(location, lambda item: item.name != "Skill: Daring Dash")
+                
+            if location.parent_region.name in ["Locked Items DC", "Locked Items CH", "Locked Items HM", "Locked Items SF"]:
+                add_item_rule(location, lambda item: item.name != "Key Item: Skull Key")
+                
+            if "Chalice Reward" in location.name:
+                add_item_rule(location, lambda item: "Key Item" not in item.name)
         
         # ant hill checks
         if(self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true):
-            set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitems_required(self, ["Witches Talisman"] , state))
-            
+            if(self.options.progression_option.value == ProgressionOptions.OPEN):
+                set_ant_hill_rules_open(self)
+            else:
+                set_ant_hill_rules_vanilla(self)
+                
         if(self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true and self.options.include_chalices_in_checks == IncludeChalicesInChecksToggle.option_true):
-            set_rule(self.get_location("Energy Vial: Megwynne Stormbinder - HH"), lambda state: has_number_of_chalices(self, 20, state))
+            set_ant_hill_chalice(self)
+            
+        # level progression
+        if(self.options.progression_option.value == ProgressionOptions.VANILLA):
+            set_vanilla_level_progression(self)
         
-        set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
-        set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state) and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
-        set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
-        set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state) and has_keyitems_required(self, ["Skull Key"] , state )) 
-        set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-        set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-        set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
-        set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
-        set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: is_level_cleared(self, "Sleeping Village" , state) and has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"] , state))
-        set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds" , state)) 
-        set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: is_level_cleared(self, "Pumpkin Gorge" , state) and has_keyitems_required(self, ["Witches Talisman"] , state)) 
-        set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: is_level_cleared(self, "Enchanted Earth" , state) and has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"] , state) and has_required_souls(self, state)) 
-        set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
-        set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake" , state)) 
-        set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: is_level_cleared(self, "The Crystal Caves" , state) and has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"] , state)) 
-        set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: is_level_cleared(self, "The Gallows Gauntlet" , state) and has_keyitems_required(self, ["King Peregrine's Crown"] , state) and has_daring_dash(self, state)) 
-        set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins" , state)) 
-        set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship" , state)) 
-        set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
-        set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
-        
-        # hall of heroes rules
-        
-        set_rule(self.get_entrance("Map -> Hall of Heroes"), lambda state: has_number_of_chalices(self, 1, state))
-        
-        # Canny Tim
-        set_rule(self.get_location("Equipment: Crossbow from Canny Tim - HH"), lambda state: has_number_of_chalices(self, 1, state))
-        set_rule(self.get_location("Life Bottle: Hall of Heroes (Canny Tim)"), lambda state: has_number_of_chalices(self, 2, state))
-
-        # Stanyer Iron Hewer
-        set_rule(self.get_location("Equipment: Hammer from Stanyer Iron Hewer - HH"), lambda state: has_number_of_chalices(self, 3, state))
-        set_rule(self.get_location("Gold Coins: Stanyer Iron Hewer - HH"), lambda state: has_number_of_chalices(self, 4, state))
-
-        # Woden the Mighty
-        set_rule(self.get_location("Equipment: Broadsword from Woden the Mighty - HH"), lambda state: has_number_of_chalices(self, 5, state))
-        set_rule(self.get_location("Gold Coins: Woden the Mighty - HH"), lambda state: has_number_of_chalices(self, 6, state))
-
-        # Imanzi Shongama
-        set_rule(self.get_location("Equipment: Spear from Imanzi Shongama - HH"), lambda state: has_number_of_chalices(self, 7, state))
-
-        # Ravenhooves the Archer
-        set_rule(self.get_location("Equipment: Longbow from Ravenhooves The Archer - HH"), lambda state: has_number_of_chalices(self, 8, state))
-
-        # Bloodmonath
-        set_rule(self.get_location("Equipment: Axe from Bloodmonath- HH"), lambda state: has_number_of_chalices(self, 9, state))
-
-        # Ravenhooves the Archer
-        set_rule(self.get_location("Equipment: Fire Longbow from Ravenhooves the Archer - HH"), lambda state: has_number_of_chalices(self, 10, state))
-
-        # Karl Sturngard
-        set_rule(self.get_location("Equipment: Gold Shield from Karl Sturngard - HH"), lambda state: has_number_of_chalices(self, 11, state))
-
-        # Bloodmonath
-        set_rule(self.get_location("Gold Coins: Bloodmonath - HH"), lambda state: has_number_of_chalices(self, 12, state))
-
-        # Dirk Steadfast
-        set_rule(self.get_location("Life Bottle: Hall of Heroes (Dirk Steadfast)"), lambda state: has_number_of_chalices(self, 13, state))
-
-        # Ravenhooves the Archer
-        set_rule(self.get_location("Life Bottle: Hall of Heroes (Ravenhooves The Archer)"), lambda state: has_number_of_chalices(self, 14, state))
-
-        # Megwynne Stormbinder
-        set_rule(self.get_location("Equipment: Lightning from Megwynne Stormbinder - HH"), lambda state: has_number_of_chalices(self, 15, state))
-
-        # Ravenhooves the Archer
-        set_rule(self.get_location("Equipment: Magic Longbow from Ravenhooves the Archer - HH"), lambda state: has_number_of_chalices(self, 16, state))
-
-        # Imanzi Shongama
-        set_rule(self.get_location("Energy Vial: Imanzi Shongama - HH"), lambda state: has_number_of_chalices(self, 17, state))
-
-        # Karl Sturngard
-        set_rule(self.get_location("Gold Coins: Karl Sturngard - HH"), lambda state: has_number_of_chalices(self, 18, state))
-
-        # Dirk Steadfast
-        set_rule(self.get_location("Equipment: Magic Sword from Dirk Steadfast - HH"), lambda state: has_number_of_chalices(self, 19, state))
+        # hall of heroes
+        if(self.options.include_chalices_in_checks):
+            set_hall_of_heroes_progression(self)
         
         # locked chalice items
-        set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state))
-        set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
-        set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
-        set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
-        
-        # options rule setup
-        
-        # set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"))
+        set_locked_items_locations(self)
         
         # Get a birds eye view of everything
         
-        # from Utils import visualize_regions
-        # state = self.multiworld.get_all_state(False)
-        # state.update_reachable_regions(self.player)
-        # visualize_regions(self.get_region("Menu"), "medievil_layout.puml", show_entrance_names=True,
-        #                 regions_to_highlight=state.reachable_regions[self.player])        
+        from Utils import visualize_regions
+        state = self.multiworld.get_all_state(False)
+        state.update_reachable_regions(self.player)
+        visualize_regions(self.get_region("Menu"), "medievil_layout.puml", show_entrance_names=True,
+                        regions_to_highlight=state.reachable_regions[self.player])        
         
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
@@ -500,13 +367,18 @@ class MedievilWorld(World):
             "options": {
                 "guaranteed_items": self.options.guaranteed_items.value,
                 "goal": self.options.goal.value,
+                "progression_option": self.options.progression_option.value,
                 "include_ant_hill_in_checks": self.options.include_ant_hill_in_checks.value,
                 "include_chalices_in_checks": self.options.include_chalices_in_checks.value,
+                "traps": self.options.traps.value,
+                "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,
+                "break_ammo_limit": self.options.break_ammo_limit.value,
+                "break_percentage_limit": self.options.break_percentage_limit.value,
+                "cheat_menu_toggle": self.options.cheat_menu.value,
                 "runesanity": self.options.runesanity.value,
-                "monstersanity": self.options.monstersanity.value,
+                "gargoylesanity": self.options.gargoylesanity.value,
                 "booksanity": self.options.booksanity.value,
-                "progression_option": self.options.progression_option.value
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server

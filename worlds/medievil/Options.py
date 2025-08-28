@@ -9,7 +9,12 @@ class GoalOptions():
 
 class ProgressionOptions():
     VANILLA = 0
-    RANDOM = 1
+    OPEN = 1
+    
+class CheatMenuOptions():
+    OFF = 0
+    SIMPLE = 1
+    SUPER = 2
     
 
 class GuaranteedItemsOption(ItemDict):
@@ -20,7 +25,9 @@ class GuaranteedItemsOption(ItemDict):
 class GoalOption(Choice):
     """Lets the user choose the completion goal
     Defeat Zarok - Beat the boss at the end
-    Chalices - Collect all chalices (Collect all chalices doesn't work right now)"""
+    Chalices - Collect all chalices
+    Both - Defeat both zarok AND get the chalices
+    """
     display_name = "Completion Goal"
     default = GoalOptions.DEFEAT_ZAROK
     option_zarok = GoalOptions.DEFEAT_ZAROK
@@ -30,10 +37,13 @@ class GoalOption(Choice):
 class ProgressionOption(Choice):
     """Lets users choose how they wish to progress
     Vanilla - Plays the game like normal
-    (Will only do Vanilla for now)"""
+    Open - Unlocks the whole map to go in any order
+    NOTE: IT IS RECOMMENDED TO TURN ON OPEN IF YOU'RE DOING RUNESANITY
+    """
     display_name = "Game Progression Options"
     default = ProgressionOptions.VANILLA
     option_vanilla = ProgressionOptions.VANILLA
+    option_open = ProgressionOptions.OPEN
     
 class IncludeAntHillInChecksToggle(Toggle):
     """Toggle whether to include the ant hill in your location checks and logic"""
@@ -49,27 +59,65 @@ class IncludeChalicesInChecksToggle(Toggle):
     option_true = 1
     option_false = 0
     
-class MonsterSanityToggle(Toggle):
-    """Sets whether to do checks for individual monsters (Doesn't work)"""
-    display_name = "MonsterSanity"
+class RuneSanityToggle(Toggle):
+    """Sets whether to mix runes into the pool NOTE: IT IS RECOMMENDED TO TURN PROGRESSION TO OPEN FOR THIS"""
+    display_name = "RuneSanity"
     default = 0
     option_true = 1
-    option_false = 0
+    option_false = 0    
     
-class RuneSanityToggle(Toggle):
-    """Sets whether to mix runes into the pool (Doesn't work yet. Will add the items, but not the logic)"""
-    display_name = "RuneSanity"
+class GargoyleSanityToggle(Toggle):
+    """Sets whether to do checks for interacting with gargoyle statues"""
+    display_name = "GargoyleSanity"
     default = 0
     option_true = 1
     option_false = 0
     
 class BookSanityToggle(Toggle):
-    """Sets whether reading books counts as checks (Doesn't work)"""
+    """Sets whether reading books counts as checks"""
     display_name = "BookSanity"
     default = 0
     option_true = 1
     option_false = 0
     
+class CheatMenuChoice(Choice):
+    """Sets the cheat menu to be available in the pause menu. This allows level skip, chalice completion and
+    invulnerability. Please note, though. That the chalices are counted via checks as getting the actual number isn't 
+    viable at the moment. Sorry!"""
+    display_name = "Cheat Menu Toggle"
+    default = CheatMenuOptions.OFF
+    option_off = CheatMenuOptions.OFF
+    option_simple = CheatMenuOptions.SIMPLE
+    option_super = CheatMenuOptions.SUPER
+    
+class BreakAmmoLimit(Toggle):
+    """Allow weapon ammo to be higher than the default"""
+    display_name = "Break Ammo Count Limit"
+    default = 1
+    option_true = 1
+    option_false = 0
+    
+class BreakPercentageLimit(Toggle):
+    """Allow weapon percentages to be higher than the default"""
+    display_name = "Break Weapon Percentage Limit"
+    default = 1
+    option_true = 1
+    option_false = 0
+    
+class AmmoAndChargeToggle(Toggle):
+    """Allow Ammo and Charge in the pool"""
+    display_name = "Ammo and Charge in Item Pool"
+    default = 1
+    option_true = 1
+    option_false = 0
+    
+class TrapToggle(Toggle):
+    """Allow traps in the pool"""
+    display_name = "Traps in Item Pool"
+    default = 1
+    option_true = 1
+    option_false = 0
+           
 class DeathLinkToggle(Toggle):
     """Sets if you want deathlink or not"""
     display_name = "Death Link"
@@ -83,8 +131,13 @@ class MedievilOption(PerGameCommonOptions):
     progression_option: ProgressionOption
     include_ant_hill_in_checks: IncludeAntHillInChecksToggle
     include_chalices_in_checks: IncludeChalicesInChecksToggle
+    break_ammo_limit: BreakAmmoLimit
+    break_percentage_limit: BreakPercentageLimit
+    traps: TrapToggle
+    ammo: AmmoAndChargeToggle
     deathlink: DeathLinkToggle
-    monstersanity: MonsterSanityToggle
+    cheat_menu: CheatMenuChoice
+    gargoylesanity: GargoyleSanityToggle
     booksanity: BookSanityToggle
     runesanity: RuneSanityToggle
     guaranteed_items: GuaranteedItemsOption
