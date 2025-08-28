@@ -375,7 +375,7 @@ class MedievilWorld(World):
                 "deathlink": self.options.deathlink.value,
                 "break_ammo_limit": self.options.break_ammo_limit.value,
                 "break_percentage_limit": self.options.break_percentage_limit.value,
-                "cheat_menu_toggle": self.options.cheat_menu.value,
+                "cheat_menu": self.options.cheat_menu.value,
                 "runesanity": self.options.runesanity.value,
                 "gargoylesanity": self.options.gargoylesanity.value,
                 "booksanity": self.options.booksanity.value,

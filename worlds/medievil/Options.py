@@ -84,7 +84,7 @@ class CheatMenuChoice(Choice):
     """Sets the cheat menu to be available in the pause menu. This allows level skip, chalice completion and
     invulnerability. Please note, though. That the chalices are counted via checks as getting the actual number isn't 
     viable at the moment. Sorry!"""
-    display_name = "Cheat Menu Toggle"
+    display_name = "Cheat Menu"
     default = CheatMenuOptions.OFF
     option_off = CheatMenuOptions.OFF
     option_simple = CheatMenuOptions.SIMPLE
