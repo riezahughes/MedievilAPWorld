@@ -1,5 +1,5 @@
 from worlds.generic.Rules import set_rule
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Iterable
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle
 
 
@@ -35,7 +35,7 @@ def has_required_souls(self, state: CollectionState):
         "Key Item: Soul Helmet 8"
     ], self.player)
     
-def has_required_runes(self, runes, state:CollectionState):
+def has_required_runes(self, runes: Iterable[str], state:CollectionState):
     return state.has_all(runes, self.player)
 
 def has_required_amber(self, state: CollectionState):
@@ -117,27 +117,27 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
     set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
     
-# def set_open_level_progression(self):
-    # set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
-    # set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
-    # set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
-    # set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_keyitems_required(self, ["Skull Key"] , state )) 
-    # set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-    # set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
-    # set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
-    # set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
-    # set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"] , state))
-    # set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds" , state)) 
-    # set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: has_keyitems_required(self, ["Witches Talisman"] , state)) 
-    # set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"] , state) and has_required_souls(self, state)) 
-    # set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
-    # set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake" , state)) 
-    # set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"] , state)) 
-    # set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: has_keyitems_required(self, ["King Peregrine's Crown"] , state) and has_daring_dash(self, state)) 
-    # set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins" , state)) 
-    # set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship" , state)) 
-    # set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
-    # set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
+def set_open_level_progression(self):
+    set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
+    set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
+    set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
+    set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_keyitems_required(self, ["Skull Key"] , state )) 
+    set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+    set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
+    set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
+    set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields" , state)) 
+    set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"] , state))
+    set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds" , state)) 
+    set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: has_keyitems_required(self, ["Witches Talisman"] , state)) 
+    set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"] , state) and has_required_souls(self, state)) 
+    set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead" , state))
+    set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake" , state)) 
+    set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"] , state)) 
+    set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: has_keyitems_required(self, ["King Peregrine's Crown"] , state) and has_daring_dash(self, state)) 
+    set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins" , state)) 
+    set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship" , state)) 
+    set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
+    set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
     
         
 def set_hall_of_heroes_progression(self):
@@ -200,4 +200,4 @@ def set_locked_items_locations(self):
     set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state))
     set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
     set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
-    set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))            
+    set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))

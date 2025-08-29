@@ -9,8 +9,8 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
-from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle,  ProgressionOptions
-from .Rules import has_number_of_chalices, set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations
+from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle,  ProgressionOptions, RuneSanityToggle
+from .Rules import has_number_of_chalices, set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_open_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -119,7 +119,7 @@ class MedievilWorld(World):
             regions[from_region].exits.append(connection)
             connection.connect(regions[to_region])
             
-        create_connection("Menu", "Map")
+        create_connection("Menu", "Dan's Crypt")
         
         # Can go from the map to every location
         create_connection("Map", "Dan's Crypt")
@@ -194,7 +194,20 @@ class MedievilWorld(World):
                 continue
             if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and location.category == MedievilLocationCategory.GARGOYLE:
                 continue            
-            if location.category in self.enabled_location_categories:
+
+            if(self.options.progression_option.value == ProgressionOptions.OPEN and self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt"):
+                first_star_rune = MedievilItem("Star Rune: Dan's Crypt", ItemClassification.progression, 9901146, self.player )
+                new_location = MedievilLocation(
+                    self.player,
+                    "Star Rune: Dan's Crypt",
+                    MedievilLocationCategory.RUNE,
+                    "Star Rune: Dan's Crypt",
+                    None,
+                    new_region
+                )
+                new_location.place_locked_item(first_star_rune)            
+            
+            elif location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
                     self.player,
                     location.name,
@@ -203,6 +216,7 @@ class MedievilWorld(World):
                     self.location_name_to_id[location.name],
                     new_region
                 )
+            
             else:
                 event_item = self.create_item(location.default_item)
                 new_location = MedievilLocation(
@@ -214,7 +228,6 @@ class MedievilWorld(World):
                     new_region
                 )
                 event_item.code = None
-                new_location.place_locked_item(event_item)
             # print(f"{self.location_name_to_id[location.name]}: {location.name}")
             new_region.locations.append(new_location)
             
@@ -280,9 +293,6 @@ class MedievilWorld(World):
                     set_rule(location, lambda state: True)
                     
         max_chalice_count = 20 if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true else 19
-        
-        print(self.options.goal.value == GoalOptions.BOTH)
-        print(max_chalice_count)
                     
         if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
             self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Cleared: Zaroks Lair", self.player)
@@ -318,6 +328,8 @@ class MedievilWorld(World):
         # level progression
         if(self.options.progression_option.value == ProgressionOptions.VANILLA):
             set_vanilla_level_progression(self)
+        elif(self.options.progression_option.value == ProgressionOptions.OPEN and self.options.runesanity.value == RuneSanityToggle.option_true):
+            set_open_level_progression(self)
         
         # hall of heroes
         if(self.options.include_chalices_in_checks):
@@ -391,3 +403,4 @@ class MedievilWorld(World):
         }
 
         return slot_data
+    

@@ -144,3 +144,7 @@ For Frequently asked questions, please see the website's [FAQ Page](https://arch
 ## Code of Conduct
 
 Please refer to our [code of conduct](/docs/code_of_conduct.md).
+
+# Running Fuzzer
+
+`python fuzz.py -r 100 -j 16 -g medievil -n 1`
