@@ -202,10 +202,10 @@ class MedievilWorld(World):
                     "Star Rune: Dan's Crypt",
                     MedievilLocationCategory.RUNE,
                     "Star Rune: Dan's Crypt",
-                    None,
+                    self.location_name_to_id["Star Rune: Dan's Crypt"],
                     new_region
                 )
-                new_location.place_locked_item(first_star_rune)            
+                new_location.place_locked_item(first_star_rune)
             
             elif location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
