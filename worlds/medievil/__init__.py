@@ -328,7 +328,7 @@ class MedievilWorld(World):
         # level progression
         if(self.options.progression_option.value == ProgressionOptions.VANILLA):
             set_vanilla_level_progression(self)
-        elif(self.options.progression_option.value == ProgressionOptions.OPEN and self.options.runesanity.value == RuneSanityToggle.option_true):
+        elif(self.options.progression_option.value == ProgressionOptions.OPEN):
             set_open_level_progression(self)
         
         # hall of heroes
