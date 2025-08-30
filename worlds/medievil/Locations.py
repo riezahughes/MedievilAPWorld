@@ -643,6 +643,7 @@ location_tables = {
     "Zaroks Lair": [
          MedievilLocationData("Equipment: Good Lightning - ZL","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
          MedievilLocationData("Equipment: Silver Shield - ZL Arena","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
+         MedievilLocationData("Gargoyle: Entrance - ZL","Gold Shield Ammo (100)", MedievilLocationCategory.GARGOYLE),         
          MedievilLocationData("Cleared: Zaroks Lair","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
     ],
     
