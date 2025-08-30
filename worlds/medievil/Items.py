@@ -296,7 +296,7 @@ _all_items: List[MedievilItemData] = [
     # List of Traps
     ("Trap: Heavy Dan", 156, MedievilItemCategory.TRAP, False),
     ("Trap: Light Dan", 157, MedievilItemCategory.TRAP, False),
-    ("Trap: Goodbye Shield", 158, MedievilItemCategory.TRAP, False),
+    ("Trap: Darkness", 158, MedievilItemCategory.TRAP, False),
     ("Trap: Hudless", 159, MedievilItemCategory.TRAP, False)
     
 ]
