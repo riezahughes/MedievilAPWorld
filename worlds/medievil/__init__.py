@@ -322,7 +322,7 @@ class MedievilWorld(World):
             else:
                 set_ant_hill_rules_vanilla(self)
                 
-        if(self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true and self.options.include_chalices_in_checks == IncludeChalicesInChecksToggle.option_true):
+        if(self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true and self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true):
             set_ant_hill_chalice(self)
             
         # level progression
@@ -332,8 +332,13 @@ class MedievilWorld(World):
             set_open_level_progression(self)
         
         # hall of heroes
-        if(self.options.include_chalices_in_checks):
+        if(self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true):
             set_hall_of_heroes_progression(self)
+            
+        # runesanity options
+            
+        # if(self.options.runesanity.value == RuneSanityToggle.option_true):
+        #     set_runesanity_rules(self)
         
         # locked chalice items
         set_locked_items_locations(self)

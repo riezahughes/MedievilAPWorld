@@ -1,6 +1,6 @@
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, add_rule
 from BaseClasses import CollectionState, Iterable
-from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle
+from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, RuneSanityToggle
 
 
 
@@ -139,6 +139,26 @@ def set_open_level_progression(self):
     set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall" , state)) 
     set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
     
+def set_runesanity_rules(self):
+    add_rule(self.get_entrance("The Graveyard -> Map"), lambda state: has_required_runes(self, ["Earth Rune: The Graveyard", "Chaos Rune: The Graveyard"], state))
+    add_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: has_required_runes(self, ["Moon Rune: The Hilltop Mausoleum", "Chaos Rune: The Hilltop Mausoleum" ], state))
+    add_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_required_runes(self, ["Star Rune: Return to the Graveyard"], state))
+    add_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: has_required_runes(self, ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"], state))
+    add_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Lake"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Entrance Hall"),lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> The Time Device"), lambda state: has_required_runes(self, [], state))
+    add_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: has_required_runes(self, [], state))
         
 def set_hall_of_heroes_progression(self):
     # hall of heroes rules
@@ -148,7 +168,6 @@ def set_hall_of_heroes_progression(self):
     # Canny Tim
     set_rule(self.get_location("Chalice Reward 1"), lambda state: has_number_of_chalices(self, 1, state))
     set_rule(self.get_location("Chalice Reward 2"), lambda state: has_number_of_chalices(self, 2, state))
-
     # Stanyer Iron Hewer
     set_rule(self.get_location("Chalice Reward 3"), lambda state: has_number_of_chalices(self, 3, state))
     set_rule(self.get_location("Chalice Reward 4"), lambda state: has_number_of_chalices(self, 4, state))
