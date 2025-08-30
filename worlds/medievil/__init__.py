@@ -195,7 +195,7 @@ class MedievilWorld(World):
             if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and location.category == MedievilLocationCategory.GARGOYLE:
                 continue            
 
-            if(self.options.progression_option.value == ProgressionOptions.OPEN and self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt"):
+            if(self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt"):
                 first_star_rune = MedievilItem("Star Rune: Dan's Crypt", ItemClassification.progression, 9901146, self.player )
                 new_location = MedievilLocation(
                     self.player,
