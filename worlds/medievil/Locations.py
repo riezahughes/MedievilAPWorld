@@ -138,6 +138,7 @@ location_tables = {
          MedievilLocationData("Book: Power Attack - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Swimming - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Coins - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
+         MedievilLocationData("Book: Track Down Zarok - DC","Gold Shield Ammo (100)",MedievilLocationCategory.BOOK),
          MedievilLocationData("Gargoyle: Left - DC","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),
          MedievilLocationData("Gargoyle: Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),
          MedievilLocationData("Cleared: Dan's Crypt","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),

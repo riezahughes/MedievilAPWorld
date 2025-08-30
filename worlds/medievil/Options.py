@@ -38,7 +38,6 @@ class ProgressionOption(Choice):
     """Lets users choose how they wish to progress
     Vanilla - Plays the game like normal
     Open - Unlocks the whole map to go in any order
-    NOTE: IT IS RECOMMENDED TO TURN ON OPEN IF YOU'RE DOING RUNESANITY
     """
     display_name = "Game Progression Options"
     default = ProgressionOptions.VANILLA
@@ -60,7 +59,7 @@ class IncludeChalicesInChecksToggle(Toggle):
     option_false = 0
     
 class RuneSanityToggle(Toggle):
-    """Sets whether to mix runes into the pool NOTE: IT IS RECOMMENDED TO TURN PROGRESSION TO OPEN FOR THIS"""
+    """Sets whether to mix runes into the pool"""
     display_name = "RuneSanity"
     default = 0
     option_true = 1
