@@ -88,8 +88,8 @@ def has_number_of_chalices(self, count, state: CollectionState):
 def set_vanilla_level_progression(self):
     print("Vanilla Progression being created: ")
     set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
-    set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state) and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
-    set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
+    set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state))
+    set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state) and has_weapon_required(self, "Club", state))
     set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: is_level_cleared(self, "The Hilltop Mausoleum" , state) and has_keyitems_required(self, ["Skull Key"] , state )) 
     set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
     set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state))
@@ -109,7 +109,6 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
     
 def set_open_level_progression(self):
-    print("Open Progression being created: ")
     set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
     set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_keyitems_required(self, ["Skull Key"] , state )) 
     set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"] , state))
@@ -557,7 +556,6 @@ def set_hall_of_heroes_progression(self):
     set_rule(self.get_location("Chalice Reward 19"), lambda state: has_number_of_chalices(self, 19, state))    
 
 def set_locked_items_locations(self):
-    set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_daring_dash(self, state))
-    set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state))
+    set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: (has_daring_dash(self, state) or has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
     set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
     set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
