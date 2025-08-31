@@ -10,7 +10,8 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
 from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle,  ProgressionOptions, RuneSanityToggle
-from .Rules import has_number_of_chalices, set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_open_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations
+from .Rules import set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_open_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations, set_runesanity_rules
+from .VictoryConditions import defeat_zarok_and_get_chalices_victory, defeat_zarok_victory, get_chalices_victory 
 
 class MedievilWeb(WebWorld):
     bug_report_page = ""
@@ -295,11 +296,11 @@ class MedievilWorld(World):
         max_chalice_count = 20 if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true else 19
                     
         if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Cleared: Zaroks Lair", self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: defeat_zarok_victory(self, max_chalice_count, state)
         elif self.options.goal.value == GoalOptions.CHALICE:
-            self.multiworld.completion_condition[self.player] = lambda state: has_number_of_chalices(self, max_chalice_count, state)
+            self.multiworld.completion_condition[self.player] = lambda state: get_chalices_victory(self, max_chalice_count, state)
         elif self.options.goal.value == GoalOptions.BOTH:
-            self.multiworld.completion_condition[self.player] = lambda state: state.can_reach_location("Cleared: Zaroks Lair", self.player) and has_number_of_chalices(self, max_chalice_count, state)
+            self.multiworld.completion_condition[self.player] = lambda state: defeat_zarok_and_get_chalices_victory(self, max_chalice_count, state)
         # Map rules
         
         for location in self.multiworld.get_locations(self.player):
@@ -337,8 +338,8 @@ class MedievilWorld(World):
             
         # runesanity options
             
-        # if(self.options.runesanity.value == RuneSanityToggle.option_true):
-        #     set_runesanity_rules(self)
+        if(self.options.runesanity.value == RuneSanityToggle.option_true):
+            set_runesanity_rules(self)
         
         # locked chalice items
         set_locked_items_locations(self)
@@ -349,7 +350,7 @@ class MedievilWorld(World):
         # state = self.multiworld.get_all_state(False)
         # state.update_reachable_regions(self.player)
         # visualize_regions(self.get_region("Menu"), "medievil_layout.puml", show_entrance_names=True,
-        #                 regions_to_highlight=state.reachable_regions[self.player])        
+        #                 regions_to_highlight=state.reachable_regions[self.player])    
         
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
