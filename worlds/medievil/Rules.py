@@ -138,6 +138,18 @@ def set_rune_blocks(self, locations: list[str], rune: str):
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
         set_rule(self.get_location(location), lambda state: has_required_runes(self, [rune], state))
+        
+        
+def set_breakable_locations(self, locations: list[str]):
+    for location in locations:
+        if self.options.booksanity.value == BookSanityToggle.option_false and "Book:" in location:
+            continue
+        if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and "Gargoyle:" in location:
+            continue
+        if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
+            continue
+        add_rule(self.get_location(location), lambda state: (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state) ))
+        
 
 def set_vanilla_runesanity_rules(self):
     print("Vanilla Runesanity being created: ")
@@ -175,13 +187,11 @@ def set_open_runesanity_rules(self):
         "Gold Coins: Life Bottle Right Chest - TG",
         "Gold Coins: Shop Chest - TG",
         "Gold Coins: Bag Near Hill Fountain - TG",
-        "Book: Welcome Back - TG",
-        "Book: Healing Fountain - TG",
         "Book: Gaze of an Angel - TG",
         "Book: Skull Key - TG",
-        "Gargoyle: End of Level - TG", #
+        "Gargoyle: End of Level - TG", 
         "Cleared: The Graveyard",
-        "Chalice: The Graveyard" #
+        "Chalice: The Graveyard" 
     ], "Chaos Rune: The Graveyard")
     
     # Cemetery Hill Logic
@@ -198,7 +208,7 @@ def set_open_runesanity_rules(self):
        "Gold Coins: After Earth Rune Door - HM",
        "Book: Phantom of the Opera - HM",
        "Book: Demon Heart - HM",
-       "Book: Theving Imps - HM",            
+       "Book: Thieving Imps - HM",            
     ], "Earth Rune: The Hilltop Mausoleum")
     
     set_rune_blocks(self, [
@@ -217,6 +227,7 @@ def set_open_runesanity_rules(self):
     # Return to the Graveyard
     
     set_rune_blocks(self, [
+        "Skill: Daring Dash",
         "Energy Vial: Undertakers Entrance - RTG",
         "Energy Vial: Cliffs Right - RTG",
         "Energy Vial: Cliffs Left - RTG",
@@ -264,7 +275,7 @@ def set_open_runesanity_rules(self):
         "Key Item: Shadow Talisman - EE",
         "Star Rune: Enchanted Earth",
         "Energy Vial: Shadow Talisman Cave - EE",
-        "Book: Take the Talisman - EE",    
+        "Book: Take the Talisman - EE",
         "Gargoyle: Outside Demon Entrance - EE",
         "Gargoyle: Outside Demon Exit- EE",    
     ], "Earth Rune: Enchanted Earth")
@@ -420,10 +431,10 @@ def set_open_runesanity_rules(self):
     ], "Star Rune: Pumpkin Gorge")
         
     set_rune_blocks(self, [
-        "Energy Vial: Boulders After Star Rune - PG",        
+        "Energy Vial: Boulders After Time Rune - PG",        
         "Energy Vial: Vine Patch Left - PG",
         "Energy Vial: Vine Patch Right - PG",        
-        "Gold Coins: Chest at Boulders after Star Rune - PG",
+        "Gold Coins: Chest at Boulders after Time Rune - PG",
         "Gargoyle: Exit - PG",
         "Cleared: Pumpkin Gorge",
         "Chalice: Pumpkin Gorge"
@@ -499,6 +510,59 @@ def set_open_runesanity_rules(self):
         "Cleared: The Time Device",
         "Chalice: The Time Device"        
     ], "Earth Rune: The Time Device")
+    
+    set_breakable_locations(self, [
+         "Earth Rune: The Hilltop Mausoleum",
+         "Energy Vial: Right Coffin - HM",
+         "Energy Vial: Near Rune on Left Ramp - HM",
+         "Book: Thieving Imps - HM",
+         "Key Item: Sheet Music - HM",
+         "Energy Vial: Moon Room - HM",
+         "Gold Coins: Chest in Moon Room - HM",
+         "Key Item: Skull Key - HM",
+         "Equipment: Daggers near Block Puzzle - HM",
+         "Equipment: Copper Shield near Block Puzzle - HM",
+         "Cleared: The Hilltop Mausoleum",
+         "Gold Coins: Bag in Left Barrel at Blacksmith - SV",
+         "Gold Coins: Bag in Right Barrel at Blacksmith - SV",
+         "Gold Coins: Bag in Barrel at Inn - SV",
+         "Key Item: Crucifix Cast - SV",
+         "Gold Coins: Bag in Library - SV",
+         "Book: Mayor Memoire - SV",
+         "Earth Rune: Sleeping Village",
+         "Gold Coins: Bag in Barrel at bottom of Inn Stairs - SV",
+         "Gold Coins: Bag in Barrel Behind Inn Stairs - SV",
+         "Gold Coins: Bag In Switch Bust Barrel - SV",
+         "Gold Coins: Bag In Top Bust Barrel - SV",
+         "Equipment: Dragon Armour - CC",
+         "Moon Rune: Pumpkin Gorge",
+         "Equipment: Club in Chest in Tunnel - PG",
+         "Energy Vial: In Coop - PG",
+         "Energy Vial: Chalice Path - PG",
+         "Gold Coins: Bag Behind Rocks At Start - PG",
+         "Gold Coins: Chest in Coop 1 - PG",
+         "Gold Coins: Chest in Coop 2 - PG",
+         "Gold Coins: Chest in Coop 3 - PG",
+         "Gold Coins: Chest Near Chalice - PG",
+         "Chaos Rune: Pumpkin Gorge",
+         "Energy Vial: In Moon Hut - PG",
+         "Earth Rune: Pumpkin Gorge",
+         "Gold Coins: Bag in Mushroom Area - PG",
+         "Book: Mushrooms - PG",
+         "Star Rune: Pumpkin Gorge",
+         "Equipment: Silver Shield in Chest at Top of Hill - PG",
+         "Energy Vial: Top of Hill - PG",
+         "Time Rune: Pumpkin Gorge",
+         "Energy Vial: Vine Patch Left - PG",
+         "Energy Vial: Vine Patch Right - PG",
+         "Energy Vial: Boulders After Time Rune - PG",
+         "Gold Coins: Chest at Boulders after Time Rune - PG",
+         "Gargoyle: Exit - PG",
+         "Cleared: Pumpkin Gorge",
+         "Chalice: Pumpkin Gorge",
+         "Chalice: The Haunted Ruins",
+         "Cleared: Ghost Ship",
+    ])
      
 def set_hall_of_heroes_progression(self):
     # hall of heroes rules
