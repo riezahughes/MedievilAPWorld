@@ -10,7 +10,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
 from .Options import MedievilOption, GoalOptions, IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle,  ProgressionOptions, RuneSanityToggle
-from .Rules import set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_open_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations, set_runesanity_rules
+from .Rules import set_ant_hill_rules_open, set_ant_hill_rules_vanilla, set_vanilla_level_progression, set_open_level_progression, set_ant_hill_chalice, set_hall_of_heroes_progression, set_locked_items_locations, set_open_runesanity_rules, set_vanilla_runesanity_rules
 from .VictoryConditions import defeat_zarok_and_get_chalices_victory, defeat_zarok_victory, get_chalices_victory 
 
 class MedievilWeb(WebWorld):
@@ -339,7 +339,10 @@ class MedievilWorld(World):
         # runesanity options
             
         if(self.options.runesanity.value == RuneSanityToggle.option_true):
-            set_runesanity_rules(self)
+            if(self.options.progression_option.value == ProgressionOptions.VANILLA):
+                set_vanilla_runesanity_rules(self)
+            elif(self.options.progression_option.value == ProgressionOptions.OPEN):
+                set_open_runesanity_rules(self)
         
         # locked chalice items
         set_locked_items_locations(self)

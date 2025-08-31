@@ -129,7 +129,6 @@ key_item_names = {
     "Earth Rune: Inside the Asylum",
     "Earth Rune: Enchanted Earth", 
     "Earth Rune: The Haunted Ruins", 
-    "Earth Rune: The Entrance Hall", 
     "Earth Rune: The Time Device",
     "Moon Rune: The Hilltop Mausoleum", 
     "Moon Rune: The Sleeping Village", 

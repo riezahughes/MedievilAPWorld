@@ -168,14 +168,12 @@ location_tables = {
     ],
 
     "Cemetery Hill": [
-         MedievilLocationData("Key Item: Witches Talisman - CH","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+
          MedievilLocationData("Equipment: Copper Shield 1 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Copper Shield 2 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Copper Shield 3 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
          MedievilLocationData("Equipment: Club - CH","Gold Shield Ammo (100)",MedievilLocationCategory.WEAPON),
-         MedievilLocationData("Equipment: Copper Shield in Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Energy Vial: Near Shop - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
-         MedievilLocationData("Energy Vial: Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Near Boulder Entrance - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Up Hill 1 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
          MedievilLocationData("Gold Coins: Up Hill 2 - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
@@ -184,9 +182,7 @@ location_tables = {
          MedievilLocationData("Book: Breakables - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Club - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Book: Destroy Boulder - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
-         MedievilLocationData("Book: A Guide to Covens", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
-         MedievilLocationData("Book: Hidden Locations - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),         
-         MedievilLocationData("Gargoyle: Witch Cave - CH","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),         
+         MedievilLocationData("Book: Hidden Locations - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
          MedievilLocationData("Cleared: Cemetery Hill","Gold Shield Ammo (100)",MedievilLocationCategory.LEVEL_END),
     ],
     
@@ -655,6 +651,11 @@ location_tables = {
          MedievilLocationData("Gold Coins: Behind Wall in Crypt - Right - DC","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),
     ],    
     "Locked Items CH": [
+         MedievilLocationData("Key Item: Witches Talisman - CH","Gold Shield Ammo (100)",MedievilLocationCategory.PROGRESSION),
+         MedievilLocationData("Equipment: Copper Shield in Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),   
+         MedievilLocationData("Energy Vial: Arena - CH","Gold Shield Ammo (100)",MedievilLocationCategory.FUN),                        
+         MedievilLocationData("Book: A Guide to Covens", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
+         MedievilLocationData("Gargoyle: Witch Cave - CH","Gold Shield Ammo (100)",MedievilLocationCategory.GARGOYLE),            
          MedievilLocationData("Chalice: Cemetery Hill","Gold Shield Ammo (100)",MedievilLocationCategory.CHALICE_PICKUP),
     ],
     "Locked Items HM": [

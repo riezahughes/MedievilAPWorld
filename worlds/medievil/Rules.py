@@ -34,9 +34,6 @@ def has_required_souls(self, state: CollectionState):
         "Key Item: Soul Helmet 7",
         "Key Item: Soul Helmet 8"
     ], self.player)
-    
-def has_required_runes(self, runes: Iterable[str], state:CollectionState):
-    return state.has_all(runes, self.player)
 
 def has_required_amber(self, state: CollectionState):
     return state.has_all([
@@ -86,16 +83,10 @@ def has_number_of_chalices(self, count, state: CollectionState):
             collected_chalices += 1
     return collected_chalices >= count  
 
-def set_ant_hill_rules_vanilla(self):
-     set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitems_required(self, ["Witches Talisman"] , state))
-    
-def set_ant_hill_rules_open(self):
-    set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: has_keyitems_required(self, ["Witches Talisman"] , state))    
 
-def set_ant_hill_chalice(self):
-    set_rule(self.get_location("Chalice Reward 20"), lambda state: has_number_of_chalices(self, 20, state))
     
 def set_vanilla_level_progression(self):
+    print("Vanilla Progression being created: ")
     set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt" , state))
     set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard" , state) and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
     set_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: is_level_cleared(self, "Cemetery Hill" , state))
@@ -118,6 +109,7 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device" , state))
     
 def set_open_level_progression(self):
+    print("Open Progression being created: ")
     set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
     set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_keyitems_required(self, ["Skull Key"] , state )) 
     set_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"] , state))
@@ -125,6 +117,18 @@ def set_open_level_progression(self):
     set_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"] , state) and has_required_souls(self, state)) 
     set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"] , state)) 
     set_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: has_keyitems_required(self, ["King Peregrine's Crown"] , state) and has_daring_dash(self, state))
+    
+def set_ant_hill_rules_vanilla(self):
+    set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: is_level_cleared(self, "Return to the Graveyard" , state) and has_keyitems_required(self, ["Witches Talisman"] , state))
+    
+def set_ant_hill_rules_open(self):
+    set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: has_keyitems_required(self, ["Witches Talisman"] , state))    
+    
+def set_ant_hill_chalice(self):
+    add_rule(self.get_location("Chalice Reward 20"), lambda state: has_number_of_chalices(self, 20, state))
+    
+def has_required_runes(self, runes: Iterable[str], state:CollectionState):
+    return state.has_all(runes, self.player)    
     
 def set_rune_blocks(self, locations: list[str], rune: str):
     for location in locations:
@@ -135,9 +139,28 @@ def set_rune_blocks(self, locations: list[str], rune: str):
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
         set_rule(self.get_location(location), lambda state: has_required_runes(self, [rune], state))
-    
-    
-def set_runesanity_rules(self):
+
+def set_vanilla_runesanity_rules(self):
+    print("Vanilla Runesanity being created: ")
+    add_rule(self.get_entrance("Map -> The Graveyard"), lambda state: has_required_runes(self, ["Earth Rune: The Graveyard", "Chaos Rune: The Graveyard"], state))
+    add_rule(self.get_entrance("Map -> The Hilltop Mausoleum"), lambda state: has_required_runes(self, ["Moon Rune: The Hilltop Mausoleum", "Earth Rune: The Hilltop Mausoleum", "Chaos Rune: The Hilltop Mausoleum"], state))
+    add_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_required_runes(self, ["Star Rune: Return to the Graveyard"], state))
+    add_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: has_required_runes(self, ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"], state))
+    add_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: has_required_runes(self, ["Earth Rune: Scarecrow Fields", "Chaos Rune: Scarecrow Fields", "Moon Rune: Scarecrow Fields"], state))
+    add_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: has_required_runes(self, ["Earth Rune: The Sleeping Village", "Chaos Rune: The Sleeping Village", "Moon Rune: The Sleeping Village"], state))
+    add_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: has_required_runes(self, ["Earth Rune: Pumpkin Gorge", "Chaos Rune: Pumpkin Gorge", "Moon Rune: Pumpkin Gorge", "Time Rune: Pumpkin Gorge", "Star Rune: Pumpkin Gorge"], state))
+    add_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_required_runes(self, ["Chaos Rune: The Asylum Grounds"], state))
+    add_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: has_required_runes(self, ["Earth Rune: Inside the Asylum"], state))
+    add_rule(self.get_entrance("Map -> Pools of the Ancient Dead"), lambda state: has_required_runes(self, ["Chaos Rune: Pools of the Ancient Dead"], state))
+    add_rule(self.get_entrance("Map -> The Lake"), lambda state: has_required_runes(self, ["Chaos Rune: The Lake", "Earth Rune: The Lake", "Star Rune: The Lake", "Time Rune: The Lake"], state))
+    add_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: has_required_runes(self, ["Earth Rune: The Crystal Caves", "Star Rune: The Crystal Caves"], state))
+    add_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_required_runes(self, ["Star Rune: The Gallows Gauntlet"], state))
+    add_rule(self.get_entrance("Map -> The Haunted Ruins"), lambda state: has_required_runes(self, ["Chaos Rune: The Haunted Ruins", "Earth Rune: The Haunted Ruins"], state))
+    add_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: has_required_runes(self, ["Chaos Rune: Ghost Ship", "Moon Rune: Ghost Ship", "Star Rune: Ghost Ship"], state))
+    add_rule(self.get_entrance("Map -> The Time Device"), lambda state: has_required_runes(self, ["Chaos Rune: The Time Device", "Earth Rune: The Time Device", "Moon Rune: The Time Device", "Time Rune: The Time Device"], state))
+           
+def set_open_runesanity_rules(self):
+    print(" Open Runesanity being created: ")
     
     # The Graveyard
     set_rune_blocks(self, [
@@ -477,25 +500,7 @@ def set_runesanity_rules(self):
         "Cleared: The Time Device",
         "Chalice: The Time Device"        
     ], "Earth Rune: The Time Device")
-    
-    
-    # add_rule(self.get_entrance("The Graveyard -> Map"), lambda state: has_required_runes(self, ["Earth Rune: The Graveyard", "Chaos Rune: The Graveyard"], state))
-    # add_rule(self.get_entrance("The Hilltop Mausoleum -> Map"), lambda state: has_required_runes(self, ["Moon Rune: The Hilltop Mausoleum", "Earth Rune: The Hilltop Mausoleum", "Chaos Rune: The Hilltop Mausoleum"], state))
-    # add_rule(self.get_entrance("Return to the Graveyard -> Map"), lambda state: has_required_runes(self, ["Star Rune: Return to the Graveyard"], state))
-    # add_rule(self.get_entrance("Enchanted Earth -> Map"), lambda state: has_required_runes(self, ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"], state))
-    # add_rule(self.get_entrance("Scarecrow Fields -> Map"), lambda state: has_required_runes(self, ["Earth Rune: Scarecrow Fields", "Chaos Rune: Scarecrow Fields", "Moon Rune: Scarecrow Fields"], state))
-    # add_rule(self.get_entrance("The Sleeping Village -> Map"), lambda state: has_required_runes(self, ["Earth Rune: The Sleeping Village", "Chaos Rune: The Sleeping Village", "Moon Rune: The Sleeping Village"], state))
-    # add_rule(self.get_entrance("Pumpkin Gorge -> Map"), lambda state: has_required_runes(self, ["Earth Rune: Pumpkin Gorge", "Chaos Rune: Pumpkin Gorge", "Moon Rune: Pumpkin Gorge", "Time Rune: Pumpkin Gorge", "Star Rune: Pumpkin Gorge"], state))
-    # add_rule(self.get_entrance("Asylum Grounds -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: The Asylum Grounds"], state))
-    # add_rule(self.get_entrance("Inside the Asylum -> Map"), lambda state: has_required_runes(self, ["Earth Rune: Inside the Asylum"], state))
-    # add_rule(self.get_entrance("Pools of the Ancient Dead -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: Pools of the Ancient Dead"], state))
-    # add_rule(self.get_entrance("The Lake -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: The Lake", "Earth Rune: The Lake", "Star Rune: The Lake", "Time Rune: The Lake"], state))
-    # add_rule(self.get_entrance("The Crystal Caves -> Map"), lambda state: has_required_runes(self, ["Earth Rune: The Crystal Caves", "Star Rune: The Crystal Caves"], state))
-    # add_rule(self.get_entrance("The Gallows Gauntlet -> Map"), lambda state: has_required_runes(self, ["Star Rune: The Gallows Gauntlet"], state))
-    # add_rule(self.get_entrance("The Haunted Ruins -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: The Haunted Ruins", "Earth Rune: The Haunted Ruins"], state))
-    # add_rule(self.get_entrance("The Ghost Ship -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: Ghost Ship", "Moon Rune: Ghost Ship", "Star Rune: Ghost Ship"], state))
-    # add_rule(self.get_entrance("The Time Device -> Map"), lambda state: has_required_runes(self, ["Chaos Rune: The Time Device", "Earth Rune: The Time Device", "Moon Rune: The Time Device", "Time Rune: The Time Device"], state))
-        
+     
 def set_hall_of_heroes_progression(self):
     # hall of heroes rules
     
@@ -552,7 +557,7 @@ def set_hall_of_heroes_progression(self):
     set_rule(self.get_location("Chalice Reward 19"), lambda state: has_number_of_chalices(self, 19, state))    
 
 def set_locked_items_locations(self):
-    set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state) or has_daring_dash(self, state))
-    set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
+    set_rule(self.get_entrance("Dan's Crypt -> Locked Items DC"), lambda state: has_weapon_required(self, "Club", state) or has_daring_dash(self, state))
+    set_rule(self.get_entrance("Cemetery Hill -> Locked Items CH"), lambda state: has_weapon_required(self, "Club", state))
     set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
     set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
