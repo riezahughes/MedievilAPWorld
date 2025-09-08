@@ -1,8 +1,8 @@
 from enum import IntEnum
 from typing import NamedTuple, List, Optional
 import random
-from BaseClasses import Item, ItemClassification # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
-from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle, TrapToggle, AmmoAndChargeToggle
+from BaseClasses import Item, ItemClassification  # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
+from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle, TrapToggle, AmmoAndChargeToggle, IncludeChalicesInChecksToggle
 
 
 class MedievilItemCategory(IntEnum):
@@ -20,15 +20,15 @@ class MedievilItemCategory(IntEnum):
 
 class MedievilItemData(NamedTuple):
     name: str
-    m_code: Optional[int] # Changed to Optional[int] for flexibility with None
+    m_code: Optional[int]  # Changed to Optional[int] for flexibility with None
     category: MedievilItemCategory
-    progression: bool # Added 'progression' field to the raw data
+    progression: bool  # Added 'progression' field to the raw data
 
 
 class MedievilItem(Item):
     game: str = "Medievil"
     category: MedievilItemCategory
-    m_code: Optional[int] # Make m_code an instance attribute for MedievilItem
+    m_code: Optional[int]  # Make m_code an instance attribute for MedievilItem
 
     def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         super().__init__(name, classification, code, player)
@@ -44,20 +44,17 @@ class MedievilItem(Item):
             self.category = item_data.category
         else:
             self.m_code = None
-            self.category = MedievilItemCategory.GOLD_FILLER # Fallback for unknown items
-
+            self.category = MedievilItemCategory.GOLD_FILLER  # Fallback for unknown items
 
     @staticmethod
     def get_name_to_id() -> dict:
-        base_id = 9901000 
+        base_id = 9901000
         # Create a dictionary mapping item names to their unique Archipelago IDs.
-        return {item_data.name: (base_id + item_data.m_code) 
-                for item_data in _all_items if item_data.m_code is not None}
+        return {item_data.name: (base_id + item_data.m_code) for item_data in _all_items if item_data.m_code is not None}
 
 
 key_item_names = {
     # life bottles
-    
     "Life Bottle: Dan's Crypt",
     "Life Bottle: The Graveyard",
     "Life Bottle: Hall of Heroes (Canny Tim)",
@@ -67,12 +64,9 @@ key_item_names = {
     "Life Bottle: Hall of Heroes (Ravenhooves The Archer )",
     "Life Bottle: Hall of Heroes (Dirk Steadfast)",
     "Life Bottle: The Time Device",
-    
-    # skills 
+    # skills
     "Skill: Daring Dash"
-    
     # Inventory Key Items
-    
     "Key Item: Dragon Gem - Pumpkin Serpent",
     "Key Item: Dragon Gem - Inside the Asylum",
     "Key Item: King Peregrine's Crown",
@@ -84,67 +78,63 @@ key_item_names = {
     "Key Item: Soul Helmet 6",
     "Key Item: Soul Helmet 7",
     "Key Item: Soul Helmet 8",
-    "Key Item: Witches Talisman", 
-    "Key Item: Safe Key", 
-    "Key Item: Shadow Artefact", 
-    "Key Item: Shadow Talisman",     
-    "Key Item: Crucifix", 
-    "Key Item: Landlords Bust", 
-    "Key Item: Crucifix Cast", 
-    "Key Item: Amber Piece 1", 
-    "Key Item: Amber Piece 2", 
-    "Key Item: Amber Piece 3", 
-    "Key Item: Amber Piece 4", 
-    "Key Item: Amber Piece 5", 
-    "Key Item: Amber Piece 6", 
-    "Key Item: Amber Piece 7", 
-    "Key Item: Harvester Parts", 
-    "Key Item: Skull Key", 
-    "Key Item: Sheet Music", 
-    
+    "Key Item: Witches Talisman",
+    "Key Item: Safe Key",
+    "Key Item: Shadow Artefact",
+    "Key Item: Shadow Talisman",
+    "Key Item: Crucifix",
+    "Key Item: Landlords Bust",
+    "Key Item: Crucifix Cast",
+    "Key Item: Amber Piece 1",
+    "Key Item: Amber Piece 2",
+    "Key Item: Amber Piece 3",
+    "Key Item: Amber Piece 4",
+    "Key Item: Amber Piece 5",
+    "Key Item: Amber Piece 6",
+    "Key Item: Amber Piece 7",
+    "Key Item: Harvester Parts",
+    "Key Item: Skull Key",
+    "Key Item: Sheet Music",
     # Required Equipment
-    
     "Equipment: Club",
-    
-    # Runes 
-    
-    "Chaos Rune: The Graveyard", 
-    "Chaos Rune: The Hilltop Mausoleum", 
-    "Chaos Rune: Scarecrow Fields", 
-    "Chaos Rune: The Lake", 
-    "Chaos Rune: Pumpkin Gorge", 
-    "Chaos Rune: The Sleeping Village", 
+    # Runes
+    "Chaos Rune: The Graveyard",
+    "Chaos Rune: The Hilltop Mausoleum",
+    "Chaos Rune: Scarecrow Fields",
+    "Chaos Rune: The Lake",
+    "Chaos Rune: Pumpkin Gorge",
+    "Chaos Rune: The Sleeping Village",
     "Chaos Rune: Pools of the Ancient Dead",
-    "Chaos Rune: The Asylum Grounds", 
-    "Chaos Rune: The Haunted Ruins", 
-    "Chaos Rune: The Ghost Ship", 
-    "Chaos Rune: The Time Device", 
-    "Earth Rune: The Graveyard", 
-    "Earth Rune: The Hilltop Mausoleum", 
-    "Earth Rune: Scarecrow Fields", 
-    "Earth Rune: The Crystal Caves", 
-    "Earth Rune: The Lake", 
-    "Earth Rune: Pumpkin Gorge", 
-    "Earth Rune: The Sleeping Village", 
+    "Chaos Rune: The Asylum Grounds",
+    "Chaos Rune: The Haunted Ruins",
+    "Chaos Rune: The Ghost Ship",
+    "Chaos Rune: The Time Device",
+    "Earth Rune: The Graveyard",
+    "Earth Rune: The Hilltop Mausoleum",
+    "Earth Rune: Scarecrow Fields",
+    "Earth Rune: The Crystal Caves",
+    "Earth Rune: The Lake",
+    "Earth Rune: Pumpkin Gorge",
+    "Earth Rune: The Sleeping Village",
     "Earth Rune: Inside the Asylum",
-    "Earth Rune: Enchanted Earth", 
-    "Earth Rune: The Haunted Ruins", 
+    "Earth Rune: Enchanted Earth",
+    "Earth Rune: The Haunted Ruins",
     "Earth Rune: The Time Device",
-    "Moon Rune: The Hilltop Mausoleum", 
-    "Moon Rune: The Sleeping Village", 
-    "Moon Rune: Scarecrow Fields", 
-    "Moon Rune: Pumpkin Gorge", 
-    "Moon Rune: The Ghost Ship", 
-    "Moon Rune: The Time Device", 
-    "Star Rune: Return to the Graveyard", 
-    "Star Rune: Dan's Crypt", 
-    "Star Rune: The Crystal Caves", 
-    "Star Rune: The Lake", 
-    "Star Rune: Enchanted Earth", 
+    "Moon Rune: The Hilltop Mausoleum",
+    "Moon Rune: The Sleeping Village",
+    "Moon Rune: Scarecrow Fields",
+    "Moon Rune: Pumpkin Gorge",
+    "Moon Rune: The Ghost Ship",
+    "Moon Rune: The Time Device",
+    "Star Rune: Return to the Graveyard",
+    "Star Rune: Dan's Crypt",
+    "Star Rune: The Crystal Caves",
+    "Star Rune: The Lake",
+    "Star Rune: Enchanted Earth",
     "Star Rune: The Gallows Gauntlet",
-    "Star Rune: The Ghost Ship", 
-    "Time Rune: The Lake", 
-    "Time Rune: Pumpkin Gorge", 
+    "Star Rune: The Ghost Ship",
+    "Time Rune: The Lake",
+    "Time Rune: Pumpkin Gorge",
     "Time Rune: The Time Device",
 }
 
@@ -182,14 +172,13 @@ _all_items: List[MedievilItemData] = [
     ("Health Vial (50)", 28, MedievilItemCategory.AMMO_FILLER, False),
     ("Health Vial (150)", 29, MedievilItemCategory.AMMO_FILLER, False),
     ("Health Vial (300)", 30, MedievilItemCategory.AMMO_FILLER, False),
-    
     # list of weapons
     ("Equipment: Small Sword", 31, MedievilItemCategory.WEAPON, False),
     ("Equipment: Broadsword", 32, MedievilItemCategory.WEAPON, False),
     ("Equipment: Magic Sword", 33, MedievilItemCategory.WEAPON, False),
     ("Equipment: Club", 34, MedievilItemCategory.PROGRESSION, True),
     ("Equipment: Hammer", 35, MedievilItemCategory.WEAPON, False),
-    ("Equipment: Daggers", 36, MedievilItemCategory.WEAPON, False),    
+    ("Equipment: Daggers", 36, MedievilItemCategory.WEAPON, False),
     ("Equipment: Axe", 37, MedievilItemCategory.WEAPON, False),
     ("Equipment: Chicken Drumsticks", 38, MedievilItemCategory.WEAPON, False),
     ("Equipment: Crossbow", 39, MedievilItemCategory.WEAPON, False),
@@ -203,25 +192,22 @@ _all_items: List[MedievilItemData] = [
     ("Equipment: Silver Shield", 47, MedievilItemCategory.WEAPON, False),
     ("Equipment: Gold Shield", 48, MedievilItemCategory.WEAPON, False),
     ("Equipment: Dragon Armour", 49, MedievilItemCategory.WEAPON, False),
-
-    # Progression items    
+    # Progression items
     ("Life Bottle: Dan's Crypt", 50, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Graveyard", 51, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Hall of Heroes (Canny Tim)", 52, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Dan's Crypt - Behind Wall", 53, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Scarecrow Fields", 54, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Pools of the Ancient Dead", 55, MedievilItemCategory.PROGRESSION, True),    
-    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer)", 56, MedievilItemCategory.PROGRESSION, True),    
+    ("Life Bottle: Pools of the Ancient Dead", 55, MedievilItemCategory.PROGRESSION, True),
+    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer)", 56, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 57, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Time Device", 58, MedievilItemCategory.PROGRESSION, True),
-    
-    ("Skill: Daring Dash",60,MedievilItemCategory.PROGRESSION, True),    
-    
+    ("Skill: Daring Dash", 60, MedievilItemCategory.PROGRESSION, True),
     # Key Inventory Items
     ("Key Item: Dragon Gem - Pumpkin Serpent", 89, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Dragon Gem - Inside the Asylum", 90, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: King Peregrine's Crown", 91, MedievilItemCategory.PROGRESSION, True),
-    ("Key Item: Soul Helmet 1", 92, MedievilItemCategory.PROGRESSION, True), # progressive soul helmet?
+    ("Key Item: Soul Helmet 1", 92, MedievilItemCategory.PROGRESSION, True),  # progressive soul helmet?
     ("Key Item: Soul Helmet 2", 93, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Soul Helmet 3", 94, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Soul Helmet 4", 95, MedievilItemCategory.PROGRESSION, True),
@@ -236,7 +222,7 @@ _all_items: List[MedievilItemData] = [
     ("Key Item: Crucifix", 104, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Landlords Bust", 105, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Crucifix Cast", 106, MedievilItemCategory.PROGRESSION, True),
-    ("Key Item: Amber Piece 1", 107, MedievilItemCategory.PROGRESSION, True), # progressive amber piece later?
+    ("Key Item: Amber Piece 1", 107, MedievilItemCategory.PROGRESSION, True),  # progressive amber piece later?
     ("Key Item: Amber Piece 2", 108, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Amber Piece 3", 109, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Amber Piece 4", 110, MedievilItemCategory.PROGRESSION, True),
@@ -246,7 +232,6 @@ _all_items: List[MedievilItemData] = [
     ("Key Item: Harvester Parts", 114, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Skull Key", 115, MedievilItemCategory.PROGRESSION, True),
     ("Key Item: Sheet Music", 116, MedievilItemCategory.PROGRESSION, True),
-
     # Runes
     ("Chaos Rune: The Graveyard", 117, MedievilItemCategory.RUNE, True),
     ("Chaos Rune: The Hilltop Mausoleum", 118, MedievilItemCategory.RUNE, True),
@@ -259,7 +244,6 @@ _all_items: List[MedievilItemData] = [
     ("Chaos Rune: The Haunted Ruins", 125, MedievilItemCategory.RUNE, True),
     ("Chaos Rune: Ghost Ship", 126, MedievilItemCategory.RUNE, True),
     ("Chaos Rune: The Time Device", 127, MedievilItemCategory.RUNE, True),
-
     ("Earth Rune: The Graveyard", 128, MedievilItemCategory.RUNE, True),
     ("Earth Rune: The Hilltop Mausoleum", 129, MedievilItemCategory.RUNE, True),
     ("Earth Rune: Scarecrow Fields", 130, MedievilItemCategory.RUNE, True),
@@ -271,33 +255,28 @@ _all_items: List[MedievilItemData] = [
     ("Earth Rune: Enchanted Earth", 136, MedievilItemCategory.RUNE, True),
     ("Earth Rune: The Haunted Ruins", 137, MedievilItemCategory.RUNE, True),
     ("Earth Rune: The Time Device", 138, MedievilItemCategory.RUNE, True),
-
     ("Moon Rune: The Hilltop Mausoleum", 139, MedievilItemCategory.RUNE, True),
     ("Moon Rune: Scarecrow Fields", 140, MedievilItemCategory.RUNE, True),
     ("Moon Rune: The Sleeping Village", 141, MedievilItemCategory.RUNE, True),
     ("Moon Rune: Pumpkin Gorge", 142, MedievilItemCategory.RUNE, True),
     ("Moon Rune: Ghost Ship", 143, MedievilItemCategory.RUNE, True),
     ("Moon Rune: The Time Device", 144, MedievilItemCategory.RUNE, True),
-
     ("Star Rune: Return to the Graveyard", 145, MedievilItemCategory.RUNE, True),
     ("Star Rune: Dan's Crypt", 146, MedievilItemCategory.RUNE, True),
     ("Star Rune: The Crystal Caves", 147, MedievilItemCategory.RUNE, True),
     ("Star Rune: The Lake", 148, MedievilItemCategory.RUNE, True),
     ("Star Rune: Enchanted Earth", 149, MedievilItemCategory.RUNE, True),
-    ("Star Rune: Pumpkin Gorge", 150, MedievilItemCategory.RUNE, True),   
+    ("Star Rune: Pumpkin Gorge", 150, MedievilItemCategory.RUNE, True),
     ("Star Rune: The Gallows Gauntlet", 151, MedievilItemCategory.RUNE, True),
     ("Star Rune: Ghost Ship", 152, MedievilItemCategory.RUNE, True),
-
     ("Time Rune: The Lake", 153, MedievilItemCategory.RUNE, True),
     ("Time Rune: Pumpkin Gorge", 154, MedievilItemCategory.RUNE, True),
     ("Time Rune: The Time Device", 155, MedievilItemCategory.RUNE, True),
-    
     # List of Traps
     ("Trap: Heavy Dan", 156, MedievilItemCategory.TRAP, False),
     ("Trap: Light Dan", 157, MedievilItemCategory.TRAP, False),
     ("Trap: Darkness", 158, MedievilItemCategory.TRAP, False),
-    ("Trap: Hudless", 159, MedievilItemCategory.TRAP, False)
-    
+    ("Trap: Hudless", 159, MedievilItemCategory.TRAP, False),
 ]
 # Convert raw list of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
@@ -326,7 +305,7 @@ def BuildItemPool(count: int, options) -> List[str]:
         List[str]: A shuffled list of item names.
     """
     item_pool_names: List[str] = []
-    
+
     # Add any guaranteed items specified in the options first
     if hasattr(options, "guaranteed_items") and options.guaranteed_items.value:
         for item_name in options.guaranteed_items.value:
@@ -339,23 +318,45 @@ def BuildItemPool(count: int, options) -> List[str]:
     if hasattr(options, "runesanity") and options.runesanity.value == RuneSanityToggle.option_true:
         rune_items = [item_data.name for item_data in _all_items if item_data.category == MedievilItemCategory.RUNE]
         item_pool_names.extend(rune_items)
-                
+
+    # Checks all other progression items
+
     progression_and_weapon_items = [
-        item_data.name for item_data in _all_items
-        if item_data.progression or item_data.category == MedievilItemCategory.WEAPON
+        item_data.name
+        for item_data in _all_items
+        if item_data.category == MedievilItemCategory.WEAPON
+        or item_data.category == MedievilItemCategory.PROGRESSION
+        or (
+            hasattr(options, "include_chalices_in_checks")
+            and options.include_chalices_in_checks == IncludeChalicesInChecksToggle.option_true
+            and item_data.category == MedievilItemCategory.CHALICE
+        )
+        or (
+            hasattr(options, "runesanity")
+            and options.runesanity.value == RuneSanityToggle.option_true
+            and item_data.category == MedievilItemCategory.RUNE
+        )
     ]
-    
+
     for item_name in progression_and_weapon_items:
         if item_name not in item_pool_names and len(item_pool_names) < count:
-            if hasattr(options, "include_ant_hill") and options.include_ant_hill.value == IncludeAntHillInChecksToggle.option_false and "Amber" in item_name:
+            if (
+                hasattr(options, "include_ant_hill")
+                and options.include_ant_hill.value == IncludeAntHillInChecksToggle.option_false
+                and "Amber" in item_name
+            ):
                 continue
             else:
                 item_pool_names.append(item_name)
-    
+
     # Populate the rest of the pool with random filler items
-    filler_item_names = [item_data.name for item_data in _all_items 
-                         if item_data.category == MedievilItemCategory.GOLD_FILLER or (options.ammo.value == AmmoAndChargeToggle.option_true and item_data.category == MedievilItemCategory.AMMO_FILLER) or (options.traps.value == TrapToggle.option_true and item_data.category == MedievilItemCategory.TRAP)]
-    
+    filler_item_names = [
+        item_data.name
+        for item_data in _all_items
+        if item_data.category == MedievilItemCategory.GOLD_FILLER
+        or (options.ammo.value == AmmoAndChargeToggle.option_true and item_data.category == MedievilItemCategory.AMMO_FILLER)
+        or (options.traps.value == TrapToggle.option_true and item_data.category == MedievilItemCategory.TRAP)
+    ]
 
     for _ in range(count - len(item_pool_names)):
         if filler_item_names:
@@ -366,5 +367,5 @@ def BuildItemPool(count: int, options) -> List[str]:
             # Fallback: if no specific filler items left, pick from any available item
             item_pool_names.append(random.choice(list(item_dictionary.keys())))
 
-    random.shuffle(item_pool_names) # Shuffle the final list of item names
+    random.shuffle(item_pool_names)  # Shuffle the final list of item names
     return item_pool_names
