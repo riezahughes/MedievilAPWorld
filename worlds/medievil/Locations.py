@@ -128,6 +128,7 @@ location_tables = {
         MedievilLocationData("Chalice Reward 19", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_REWARD),
         MedievilLocationData("Chalice Reward 20", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_REWARD),
         MedievilLocationData("Book: Heroes of Eld - HH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
+        MedievilLocationData("Book: Worthy Hero - HH", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Gargoyle: Entrance - HH", "Gold Shield Ammo (100)", MedievilLocationCategory.GARGOYLE),
     ],
     "Dan's Crypt": [
