@@ -215,7 +215,19 @@ class MedievilWorld(World):
             if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and location.category == MedievilLocationCategory.GARGOYLE:
                 continue
 
-            if self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt":
+            if location.name == "Equipment: Good Lightning - ZL":
+                good_lightning = MedievilItem("Equipment: Good Lightning", ItemClassification.useful, 9901045, self.player)
+                new_location = MedievilLocation(
+                    self.player,
+                    "Equipment: Good Lightning - ZL",
+                    MedievilLocationCategory.WEAPON,
+                    "Equipment: Good Lightning",
+                    self.location_name_to_id["Equipment: Good Lightning - ZL"],
+                    new_region,
+                )
+                new_location.place_locked_item(good_lightning)
+
+            elif self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt":
                 first_star_rune = MedievilItem("Star Rune: Dan's Crypt", ItemClassification.progression, 9901146, self.player)
                 new_location = MedievilLocation(
                     self.player,
