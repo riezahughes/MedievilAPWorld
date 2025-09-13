@@ -205,10 +205,7 @@ class MedievilWorld(World):
                 and location.category == MedievilLocationCategory.CHALICE_PICKUP
             ):
                 continue
-            if (
-                self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false
-                and location.category == MedievilLocationCategory.CHALICE_REWARD
-            ):
+            if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and region_name == "Hall of Heroes":
                 continue
             if self.options.booksanity.value == BookSanityToggle.option_false and location.category == MedievilLocationCategory.BOOK:
                 continue
