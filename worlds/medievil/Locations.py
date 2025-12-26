@@ -89,7 +89,7 @@ class MedievilLocation(Location):
                 for j, location_data in enumerate(location_tables[region_name]):
                     # Assign an ID to each location within the region
                     # The ID for each location in a region will be current_region_base_id + j
-                    # print(f"{current_region_base_id + j}: {location_data.name}")
+                    print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
         return output
@@ -165,6 +165,7 @@ location_tables = {
         MedievilLocationData("Book: Healing Fountain - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Book: Gaze of an Angel - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Book: Skull Key - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
+        MedievilLocationData("Book: The Chalice - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Gargoyle: End of Level - TG", "Gold Shield Ammo (100)", MedievilLocationCategory.GARGOYLE),
         MedievilLocationData("Cleared: The Graveyard", "Gold Shield Ammo (100)", MedievilLocationCategory.LEVEL_END),
         MedievilLocationData("Chalice: The Graveyard", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
