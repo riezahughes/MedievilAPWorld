@@ -183,7 +183,8 @@ def set_ant_hill_rules_open(self):
 
 
 def set_ant_hill_chalice(self):
-    add_rule(self.get_location("Chalice Reward 20"), lambda state: has_number_of_chalices(self, 20, state))
+    if self.options.chalice_win_count.value > 19:
+        add_rule(self.get_location("Chalice Reward 20"), lambda state: has_number_of_chalices(self, 20, state))
 
 
 def has_required_runes(self, runes: Iterable[str], state: CollectionState):
@@ -798,60 +799,66 @@ def set_open_runesanity_rules(self):
     )
 
 
-def set_hall_of_heroes_progression(self):
+def set_hall_of_heroes_progression(self, max_chalice_count):
     # hall of heroes rules
 
     set_rule(self.get_entrance("Map -> Hall of Heroes"), lambda state: has_number_of_chalices(self, 1, state))
 
-    # Canny Tim
-    set_rule(self.get_location("Chalice Reward 1"), lambda state: has_number_of_chalices(self, 1, state))
-    set_rule(self.get_location("Chalice Reward 2"), lambda state: has_number_of_chalices(self, 2, state))
-    # Stanyer Iron Hewer
-    set_rule(self.get_location("Chalice Reward 3"), lambda state: has_number_of_chalices(self, 3, state))
-    set_rule(self.get_location("Chalice Reward 4"), lambda state: has_number_of_chalices(self, 4, state))
+    for i in range(1, max_chalice_count + 1):
+        location_name = f"Chalice Reward {i}"
+        set_rule(self.get_location(location_name), lambda state: has_number_of_chalices(self, i, state))
 
-    # Woden the Mighty
-    set_rule(self.get_location("Chalice Reward 5"), lambda state: has_number_of_chalices(self, 5, state))
-    set_rule(self.get_location("Chalice Reward 6"), lambda state: has_number_of_chalices(self, 6, state))
+    # keeping a copy of these for the history
 
-    # Imanzi Shongama
-    set_rule(self.get_location("Chalice Reward 7"), lambda state: has_number_of_chalices(self, 7, state))
+    # # Canny Tim
+    # set_rule(self.get_location("Chalice Reward 1"), lambda state: has_number_of_chalices(self, 1, state))
+    # set_rule(self.get_location("Chalice Reward 2"), lambda state: has_number_of_chalices(self, 2, state))
+    # # Stanyer Iron Hewer
+    # set_rule(self.get_location("Chalice Reward 3"), lambda state: has_number_of_chalices(self, 3, state))
+    # set_rule(self.get_location("Chalice Reward 4"), lambda state: has_number_of_chalices(self, 4, state))
 
-    # Ravenhooves the Archer
-    set_rule(self.get_location("Chalice Reward 8"), lambda state: has_number_of_chalices(self, 8, state))
+    # # Woden the Mighty
+    # set_rule(self.get_location("Chalice Reward 5"), lambda state: has_number_of_chalices(self, 5, state))
+    # set_rule(self.get_location("Chalice Reward 6"), lambda state: has_number_of_chalices(self, 6, state))
 
-    # Bloodmonath
-    set_rule(self.get_location("Chalice Reward 9"), lambda state: has_number_of_chalices(self, 9, state))
+    # # Imanzi Shongama
+    # set_rule(self.get_location("Chalice Reward 7"), lambda state: has_number_of_chalices(self, 7, state))
 
-    # Ravenhooves the Archer
-    set_rule(self.get_location("Chalice Reward 10"), lambda state: has_number_of_chalices(self, 10, state))
+    # # Ravenhooves the Archer
+    # set_rule(self.get_location("Chalice Reward 8"), lambda state: has_number_of_chalices(self, 8, state))
 
-    # Karl Sturngard
-    set_rule(self.get_location("Chalice Reward 11"), lambda state: has_number_of_chalices(self, 11, state))
+    # # Bloodmonath
+    # set_rule(self.get_location("Chalice Reward 9"), lambda state: has_number_of_chalices(self, 9, state))
 
-    # Bloodmonath
-    set_rule(self.get_location("Chalice Reward 12"), lambda state: has_number_of_chalices(self, 12, state))
+    # # Ravenhooves the Archer
+    # set_rule(self.get_location("Chalice Reward 10"), lambda state: has_number_of_chalices(self, 10, state))
 
-    # Dirk Steadfast
-    set_rule(self.get_location("Chalice Reward 13"), lambda state: has_number_of_chalices(self, 13, state))
+    # # Karl Sturngard
+    # set_rule(self.get_location("Chalice Reward 11"), lambda state: has_number_of_chalices(self, 11, state))
 
-    # Ravenhooves the Archer
-    set_rule(self.get_location("Chalice Reward 14"), lambda state: has_number_of_chalices(self, 14, state))
+    # # Bloodmonath
+    # set_rule(self.get_location("Chalice Reward 12"), lambda state: has_number_of_chalices(self, 12, state))
 
-    # Megwynne Stormbinder
-    set_rule(self.get_location("Chalice Reward 15"), lambda state: has_number_of_chalices(self, 15, state))
+    # # Dirk Steadfast
+    # set_rule(self.get_location("Chalice Reward 13"), lambda state: has_number_of_chalices(self, 13, state))
 
-    # Ravenhooves the Archer
-    set_rule(self.get_location("Chalice Reward 16"), lambda state: has_number_of_chalices(self, 16, state))
+    # # Ravenhooves the Archer
+    # set_rule(self.get_location("Chalice Reward 14"), lambda state: has_number_of_chalices(self, 14, state))
 
-    # Imanzi Shongama
-    set_rule(self.get_location("Chalice Reward 17"), lambda state: has_number_of_chalices(self, 17, state))
+    # # Megwynne Stormbinder
+    # set_rule(self.get_location("Chalice Reward 15"), lambda state: has_number_of_chalices(self, 15, state))
 
-    # Karl Sturngard
-    set_rule(self.get_location("Chalice Reward 18"), lambda state: has_number_of_chalices(self, 18, state))
+    # # Ravenhooves the Archer
+    # set_rule(self.get_location("Chalice Reward 16"), lambda state: has_number_of_chalices(self, 16, state))
 
-    # Dirk Steadfast
-    set_rule(self.get_location("Chalice Reward 19"), lambda state: has_number_of_chalices(self, 19, state))
+    # # Imanzi Shongama
+    # set_rule(self.get_location("Chalice Reward 17"), lambda state: has_number_of_chalices(self, 17, state))
+
+    # # Karl Sturngard
+    # set_rule(self.get_location("Chalice Reward 18"), lambda state: has_number_of_chalices(self, 18, state))
+
+    # # Dirk Steadfast
+    # set_rule(self.get_location("Chalice Reward 19"), lambda state: has_number_of_chalices(self, 19, state))
 
 
 def set_locked_items_locations(self):

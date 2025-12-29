@@ -197,9 +197,26 @@ class MedievilWorld(World):
     def create_region(self, region_name, location_table) -> Region:
         new_region = Region(region_name, self.player, self.multiworld)
 
+        chalice_count = 0
+        # if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true and self.options.chalice_win_count.value > 19:
+        #     chalice_count = -1
+
         for location in location_table:
-            if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false and location.name == "Chalice Reward 20":
+            # keep track of chalices collected for logic purposes
+            if "Chalice Reward" in location.name and chalice_count <= self.options.chalice_win_count.value:
+                chalice_count += 1
+            # if ant hill is disabled, make sure that it's skipped correctly.
+            if (
+                self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false
+                and "Chalice Reward" in location.name
+                and self.options.chalice_win_count.value > 19
+                and chalice_count > 19
+            ):
                 continue
+            # if the chalice reward count is higher than implied, then skip
+            if chalice_count > self.options.chalice_win_count.value and "Chalice Reward" in location.name:
+                continue
+
             if (
                 self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false
                 and location.category == MedievilLocationCategory.CHALICE_PICKUP
@@ -240,7 +257,6 @@ class MedievilWorld(World):
                 new_location = MedievilLocation(
                     self.player, location.name, location.category, location.default_item, self.location_name_to_id[location.name], new_region
                 )
-
             else:
                 event_item = self.create_item(location.default_item)
                 new_location = MedievilLocation(self.player, location.name, location.category, location.default_item, None, new_region)
@@ -310,7 +326,10 @@ class MedievilWorld(World):
             for location in region.locations:
                 set_rule(location, lambda state: True)
 
-        max_chalice_count = 20 if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true else 19
+        max_chalice_count = self.options.chalice_win_count.value
+
+        if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false and max_chalice_count > 19:
+            max_chalice_count = 19
 
         if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
             self.multiworld.completion_condition[self.player] = lambda state: defeat_zarok_victory(self, max_chalice_count, state)
@@ -354,7 +373,7 @@ class MedievilWorld(World):
 
         # hall of heroes
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
-            set_hall_of_heroes_progression(self)
+            set_hall_of_heroes_progression(self, max_chalice_count)
 
         # runesanity options
 
@@ -407,6 +426,7 @@ class MedievilWorld(World):
                 "progression_option": self.options.progression_option.value,
                 "include_ant_hill_in_checks": self.options.include_ant_hill_in_checks.value,
                 "include_chalices_in_checks": self.options.include_chalices_in_checks.value,
+                "chalice_win_count": self.options.chalice_win_count.value,
                 "traps": self.options.traps.value,
                 "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,
