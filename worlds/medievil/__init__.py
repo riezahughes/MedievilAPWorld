@@ -313,6 +313,8 @@ class MedievilWorld(World):
             or item_data.category == MedievilItemCategory.CHALICE
         ):
             item_classification = ItemClassification.useful
+        elif item_data.category == MedievilItemCategory.TRAP:
+            item_classification = ItemClassification.trap
         else:  # Default for FILLER or other categories not explicitly useful/progression
             item_classification = ItemClassification.filler
 
