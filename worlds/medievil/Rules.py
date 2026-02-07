@@ -101,8 +101,10 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard", state))
     set_rule(
         self.get_entrance("Map -> The Hilltop Mausoleum"),
-        lambda state: is_level_cleared(self, "Cemetery Hill", state)
-        and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)),
+        lambda state: (
+            is_level_cleared(self, "Cemetery Hill", state)
+            and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
+        ),
     )
     set_rule(
         self.get_entrance("Map -> Return to the Graveyard"),
@@ -114,8 +116,9 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields", state))
     set_rule(
         self.get_entrance("Map -> Asylum Grounds"),
-        lambda state: is_level_cleared(self, "Sleeping Village", state)
-        and has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"], state),
+        lambda state: (
+            is_level_cleared(self, "Sleeping Village", state) and has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"], state)
+        ),
     )
     set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds", state))
     set_rule(
@@ -124,22 +127,25 @@ def set_vanilla_level_progression(self):
     )
     set_rule(
         self.get_entrance("Map -> Pools of the Ancient Dead"),
-        lambda state: is_level_cleared(self, "Enchanted Earth", state)
-        and has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"], state)
-        and has_required_souls(self, state),
+        lambda state: (
+            is_level_cleared(self, "Enchanted Earth", state)
+            and has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"], state)
+            and has_required_souls(self, state)
+        ),
     )
     set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead", state))
     set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake", state))
     set_rule(
         self.get_entrance("Map -> The Gallows Gauntlet"),
-        lambda state: is_level_cleared(self, "The Crystal Caves", state)
-        and has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"], state),
+        lambda state: is_level_cleared(self, "The Crystal Caves", state) and has_weapon_required(self, "Dragon Armour", state),
     )
     set_rule(
         self.get_entrance("Map -> The Haunted Ruins"),
-        lambda state: is_level_cleared(self, "The Gallows Gauntlet", state)
-        and has_keyitems_required(self, ["King Peregrine's Crown"], state)
-        and has_daring_dash(self, state),
+        lambda state: (
+            is_level_cleared(self, "The Gallows Gauntlet", state)
+            and has_keyitems_required(self, ["King Peregrine's Crown"], state)
+            and has_daring_dash(self, state)
+        ),
     )
     set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins", state))
     set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship", state))
@@ -163,7 +169,7 @@ def set_open_level_progression(self):
     )
     set_rule(
         self.get_entrance("Map -> The Gallows Gauntlet"),
-        lambda state: has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"], state),
+        lambda state: has_weapon_required(self, "Dragon Armour", state),
     )
     set_rule(
         self.get_entrance("Map -> The Haunted Ruins"),
@@ -210,7 +216,7 @@ def set_breakable_locations(self, locations: list[str]):
             continue
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
-        add_rule(self.get_location(location), lambda state: (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)))
+        add_rule(self.get_location(location), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
 
 
 def set_dashable_locations(self, locations: list[str]):
@@ -864,7 +870,7 @@ def set_hall_of_heroes_progression(self, max_chalice_count):
 def set_locked_items_locations(self):
     set_rule(
         self.get_entrance("Cemetery Hill -> Locked Items CH"),
-        lambda state: (has_daring_dash(self, state) or has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state)),
+        lambda state: has_daring_dash(self, state) or has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state),
     )
     set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
     set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
