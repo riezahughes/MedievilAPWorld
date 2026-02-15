@@ -163,6 +163,15 @@ class DeathLinkToggle(Toggle):
     option_false = 0
 
 
+class DeathSoundToggle(Toggle):
+    """There is a sound that will play moments before your death with this on."""
+
+    display_name = "Death Sound"
+    default = 0
+    option_true = 1
+    option_false = 0
+
+
 @dataclass
 class MedievilOption(PerGameCommonOptions):
     goal: GoalOption
@@ -175,6 +184,7 @@ class MedievilOption(PerGameCommonOptions):
     traps: TrapToggle
     ammo: AmmoAndChargeToggle
     deathlink: DeathLinkToggle
+    deeathsound: DeathSoundToggle
     cheat_menu: CheatMenuChoice
     gargoylesanity: GargoyleSanityToggle
     booksanity: BookSanityToggle
