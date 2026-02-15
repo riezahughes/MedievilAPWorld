@@ -734,7 +734,6 @@ def set_open_runesanity_rules(self):
     set_dashable_locations(
         self,
         [
-            "Life Bottle: Dan's Crypt",
             "Earth Rune: The Hilltop Mausoleum",
             "Gold Coins: Lone Pillar 1 - TD",
             "Gold Coins: Lone Pillar 2 - TD",
