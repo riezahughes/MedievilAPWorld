@@ -191,7 +191,7 @@ _all_items: List[MedievilItemData] = [
     ("Equipment: Copper Shield", 46, MedievilItemCategory.WEAPON, False),
     ("Equipment: Silver Shield", 47, MedievilItemCategory.WEAPON, False),
     ("Equipment: Gold Shield", 48, MedievilItemCategory.WEAPON, False),
-    ("Equipment: Dragon Armour", 49, MedievilItemCategory.WEAPON, False),
+    ("Equipment: Dragon Armour", 49, MedievilItemCategory.WEAPON, True),
     # Progression items
     ("Life Bottle: Dan's Crypt", 50, MedievilItemCategory.PROGRESSION, True),
     ("Life Bottle: The Graveyard", 51, MedievilItemCategory.PROGRESSION, True),

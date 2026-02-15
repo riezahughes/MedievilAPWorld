@@ -137,7 +137,11 @@ def set_vanilla_level_progression(self):
     set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake", state))
     set_rule(
         self.get_entrance("Map -> The Gallows Gauntlet"),
-        lambda state: is_level_cleared(self, "The Crystal Caves", state) and has_weapon_required(self, "Dragon Armour", state),
+        lambda state: (
+            is_level_cleared(self, "The Crystal Caves", state)
+            and has_weapon_required(self, "Dragon Armour", state)
+            and has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"], state)
+        ),
     )
     set_rule(
         self.get_entrance("Map -> The Haunted Ruins"),
@@ -167,10 +171,7 @@ def set_open_level_progression(self):
         self.get_entrance("Map -> Pools of the Ancient Dead"),
         lambda state: has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"], state) and has_required_souls(self, state),
     )
-    set_rule(
-        self.get_entrance("Map -> The Gallows Gauntlet"),
-        lambda state: has_weapon_required(self, "Dragon Armour", state),
-    )
+    set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_weapon_required(self, "Dragon Armour", state))
     set_rule(
         self.get_entrance("Map -> The Haunted Ruins"),
         lambda state: has_keyitems_required(self, ["King Peregrine's Crown"], state) and has_daring_dash(self, state),
