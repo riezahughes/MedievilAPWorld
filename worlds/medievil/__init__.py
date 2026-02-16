@@ -432,7 +432,7 @@ class MedievilWorld(World):
                 "traps": self.options.traps.value,
                 "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,
-                "deathsound": self.options.deeathsound.value,
+                "deathsound": self.options.deathsound.value,
                 "break_ammo_limit": self.options.break_ammo_limit.value,
                 "break_percentage_limit": self.options.break_percentage_limit.value,
                 "cheat_menu": self.options.cheat_menu.value,

@@ -184,7 +184,7 @@ class MedievilOption(PerGameCommonOptions):
     traps: TrapToggle
     ammo: AmmoAndChargeToggle
     deathlink: DeathLinkToggle
-    deeathsound: DeathSoundToggle
+    deathsound: DeathSoundToggle
     cheat_menu: CheatMenuChoice
     gargoylesanity: GargoyleSanityToggle
     booksanity: BookSanityToggle
