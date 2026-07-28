@@ -5,84 +5,87 @@ presently, Archipelago is also the randomizer itself.
 
 Currently, the following games are supported:
 
-- The Legend of Zelda: A Link to the Past
-- Factorio
-- Subnautica
-- Risk of Rain 2
-- The Legend of Zelda: Ocarina of Time
-- Timespinner
-- Super Metroid
-- Secret of Evermore
-- Final Fantasy
-- VVVVVV
-- Raft
-- Super Mario 64
-- Meritous
-- Super Metroid/Link to the Past combo randomizer (SMZ3)
-- ChecksFinder
-- Hollow Knight
-- The Witness
-- Sonic Adventure 2: Battle
-- Starcraft 2
-- Donkey Kong Country 3
-- Dark Souls 3
-- Super Mario World
-- Pokémon Red and Blue
-- Hylics 2
-- Overcooked! 2
-- Zillion
-- Lufia II Ancient Cave
-- Blasphemous
-- Wargroove
-- Stardew Valley
-- The Legend of Zelda
-- The Messenger
-- Kingdom Hearts 2
-- The Legend of Zelda: Link's Awakening DX
-- Adventure
-- DLC Quest
-- Noita
-- Undertale
-- Bumper Stickers
-- Mega Man Battle Network 3: Blue Version
-- Muse Dash
-- DOOM 1993
-- Terraria
-- Lingo
-- Pokémon Emerald
-- DOOM II
-- Shivers
-- Heretic
-- Landstalker: The Treasures of King Nole
-- Final Fantasy Mystic Quest
-- TUNIC
-- Kirby's Dream Land 3
-- Celeste 64
-- Castlevania 64
-- A Short Hike
-- Yoshi's Island
-- Mario & Luigi: Superstar Saga
-- Bomb Rush Cyberfunk
-- Aquaria
-- Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
-- A Hat in Time
-- Old School Runescape
-- Kingdom Hearts 1
-- Mega Man 2
-- Yacht Dice
-- Faxanadu
-- Saving Princess
-- Castlevania: Circle of the Moon
-- Inscryption
-- Civilization VI
-- The Legend of Zelda: The Wind Waker
-- Jak and Daxter: The Precursor Legacy
-- Super Mario Land 2: 6 Golden Coins
-- shapez
-- Paint
-- Celeste (Open World)
-- Choo-Choo Charles
-- APQuest
+* The Legend of Zelda: A Link to the Past
+* Factorio
+* Subnautica
+* Risk of Rain 2
+* The Legend of Zelda: Ocarina of Time
+* Timespinner
+* Super Metroid
+* Secret of Evermore
+* Final Fantasy
+* VVVVVV
+* Raft
+* Super Mario 64
+* Meritous
+* Super Metroid/Link to the Past combo randomizer (SMZ3)
+* ChecksFinder
+* Hollow Knight
+* The Witness
+* Sonic Adventure 2: Battle
+* Starcraft 2
+* Donkey Kong Country 3
+* Dark Souls 3
+* Super Mario World
+* Pokémon Red and Blue
+* Hylics 2
+* Overcooked! 2
+* Zillion
+* Lufia II Ancient Cave
+* Blasphemous
+* Wargroove
+* Stardew Valley
+* The Legend of Zelda
+* The Messenger
+* Kingdom Hearts 2
+* The Legend of Zelda: Link's Awakening DX
+* Adventure
+* DLC Quest
+* Noita
+* Undertale
+* Bumper Stickers
+* Mega Man Battle Network 3: Blue Version
+* Muse Dash
+* DOOM 1993
+* Terraria
+* Lingo
+* Pokémon Emerald
+* DOOM II
+* Shivers
+* Heretic
+* Landstalker: The Treasures of King Nole
+* Final Fantasy Mystic Quest
+* TUNIC
+* Kirby's Dream Land 3
+* Celeste 64
+* Castlevania 64
+* A Short Hike
+* Yoshi's Island
+* Mario & Luigi: Superstar Saga
+* Bomb Rush Cyberfunk
+* Aquaria
+* Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006
+* A Hat in Time
+* Old School Runescape
+* Kingdom Hearts 1
+* Mega Man 2
+* Yacht Dice
+* Faxanadu
+* Saving Princess
+* Castlevania: Circle of the Moon
+* Inscryption
+* Civilization VI
+* The Legend of Zelda: The Wind Waker
+* Jak and Daxter: The Precursor Legacy
+* Super Mario Land 2: 6 Golden Coins
+* shapez
+* Paint
+* Celeste (Open World)
+* Choo-Choo Charles
+* APQuest
+* Satisfactory
+* EarthBound
+* Mega Man 3
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
@@ -93,11 +96,11 @@ windows binaries.
 Archipelago is built upon a strong legacy of brilliant hobbyists. We want to honor that legacy by showing it here.
 The repositories which Archipelago is built upon, inspired by, or otherwise owes its gratitude to are:
 
-- [bonta0's MultiWorld](https://github.com/Bonta0/ALttPEntranceRandomizer/tree/multiworld_31)
-- [AmazingAmpharos' Entrance Randomizer](https://github.com/AmazingAmpharos/ALttPEntranceRandomizer)
-- [VT Web Randomizer](https://github.com/sporchia/alttp_vt_randomizer)
-- [Dessyreqt's alttprandomizer](https://github.com/Dessyreqt/alttprandomizer)
-- [Zarby89's](https://github.com/Ijwu/Enemizer/commits?author=Zarby89)
+* [bonta0's MultiWorld](https://github.com/Bonta0/ALttPEntranceRandomizer/tree/multiworld_31)
+* [AmazingAmpharos' Entrance Randomizer](https://github.com/AmazingAmpharos/ALttPEntranceRandomizer)
+* [VT Web Randomizer](https://github.com/sporchia/alttp_vt_randomizer)
+* [Dessyreqt's alttprandomizer](https://github.com/Dessyreqt/alttprandomizer)
+* [Zarby89's](https://github.com/Ijwu/Enemizer/commits?author=Zarby89)
   and [sosuke3's](https://github.com/Ijwu/Enemizer/commits?author=sosuke3) contributions to Enemizer, which make up the
   vast majority of Enemizer contributions.
 
@@ -128,9 +131,9 @@ If you are a developer or are running on a platform with no compiled releases av
 This project makes use of multiple other projects. We wouldn't be here without these other repositories and the
 contributions of their developers, past and present.
 
-- [z3randomizer](https://github.com/ArchipelagoMW/z3randomizer)
-- [Enemizer](https://github.com/Ijwu/Enemizer)
-- [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
+* [z3randomizer](https://github.com/ArchipelagoMW/z3randomizer)
+* [Enemizer](https://github.com/Ijwu/Enemizer)
+* [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
 
@@ -148,3 +151,4 @@ Please refer to our [code of conduct](/docs/code_of_conduct.md).
 # Running Fuzzer
 
 `python fuzz.py -r 100 -j 16 -g medievil -n 1`
+
