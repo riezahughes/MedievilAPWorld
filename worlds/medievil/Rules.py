@@ -349,6 +349,7 @@ def set_open_runesanity_rules(self):
             "Book: Phantom of the Opera - HM",
             "Book: Demon Heart - HM",
             "Book: Thieving Imps - HM",
+            "Chalice: The Hilltop Mausoleum",
         ],
         "Earth Rune: The Hilltop Mausoleum",
     )
@@ -874,3 +875,4 @@ def set_locked_items_locations(self):
     )
     set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
     set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
+    set_rule(self.get_entrance("The Sleeping Village -> Locked Items SV"), lambda state: has_keyitems_required(self, ["Crucifix"], state))

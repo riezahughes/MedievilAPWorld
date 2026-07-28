@@ -120,6 +120,7 @@ class MedievilWorld(World):
             "Locked Items CH",
             "Locked Items HM",
             "Locked Items SF",
+            "Locked Items SV",
         ]
 
         if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
@@ -191,6 +192,7 @@ class MedievilWorld(World):
         create_connection("Cemetery Hill", "Locked Items CH")
         create_connection("The Hilltop Mausoleum", "Locked Items HM")
         create_connection("Scarecrow Fields", "Locked Items SF")
+        create_connection("The Sleeping Village", "Locked Items SV")
         create_connection("Hall of Heroes", "Map")
 
     # For each region, add the associated locations retrieved from the corresponding location_table

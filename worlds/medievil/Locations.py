@@ -78,6 +78,7 @@ class MedievilLocation(Location):
             "Locked Items CH",
             "Locked Items HM",
             "Locked Items SF",
+            "Locked Items SV",
         ]
 
         output = {}
@@ -345,7 +346,6 @@ location_tables = {
         MedievilLocationData("Energy Vial: At Pond - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Energy Vial: Bust Switch - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Energy Vial: Near Exit - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
-        MedievilLocationData("Energy Vial: Near Chalice - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Bag in Left Barrel at Blacksmith - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Bag in Right Barrel at Blacksmith - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Bag at Pond - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
@@ -357,7 +357,6 @@ location_tables = {
         MedievilLocationData("Gold Coins: Bag in Library - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Bag at Top of table - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Bag at Bottom of table - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
-        MedievilLocationData("Gold Coins: Chest next to Chalice - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Book: Blacksmiths Monthly - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Book: Missing Crucifix - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Book: Fountain Rune - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
@@ -374,7 +373,6 @@ location_tables = {
         MedievilLocationData("Book: Zaroks Note - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.BOOK),
         MedievilLocationData("Gargoyle: Entrance - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.GARGOYLE),
         MedievilLocationData("Cleared: Sleeping Village", "Gold Shield Ammo (100)", MedievilLocationCategory.LEVEL_END),
-        MedievilLocationData("Chalice: Sleeping Village", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
     ],
     "Pools of the Ancient Dead": [
         MedievilLocationData("Life Bottle: Pools of the Ancient Dead", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
@@ -651,6 +649,11 @@ location_tables = {
         MedievilLocationData("Life Bottle: Scarecrow Fields", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Gold Coins: Chest Next to Chalice - SF", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Chalice: Scarecrow Fields", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
+    ],
+    "Locked Items SV": [
+        MedievilLocationData("Energy Vial: Near Chalice - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
+        MedievilLocationData("Gold Coins: Chest next to Chalice - SV", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
+        MedievilLocationData("Chalice: Sleeping Village", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
     ],
     # Books for Booksanity go here
     # Bosses go here
