@@ -1,204 +1,200 @@
-from worlds.generic.Rules import set_rule, add_rule
-from BaseClasses import CollectionState, Iterable
+import dataclasses
+from typing import TYPE_CHECKING
+
+from typing_extensions import override
+
+from BaseClasses import CollectionState, Entrance, Location
+from rule_builder.rules import CanReachLocation, Has, HasAll, Rule, True_
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle
 
-
-def is_level_cleared(self, location: str, state: CollectionState):
-    return state.can_reach_location("Cleared: " + location, self.player)
-
-
-def has_daring_dash(self, state: CollectionState):
-    return state.has("Skill: Daring Dash", self.player)
+if TYPE_CHECKING:
+    from . import MedievilWorld
 
 
-def is_boss_defeated(self, boss: str, state: CollectionState):  # can used later
-    return state.has("Boss: " + boss, self.player, 1)
+def weapon(name: str) -> Rule:
+    return Has(f"Equipment: {name}")
 
 
-def has_keyitems_required(self, items: list[str], state: CollectionState):
-    passed_check = True
-    for item in items:
-        if state.has("Key Item: " + item, self.player, 1) is False:
-            passed_check = False
-    return passed_check
+def key_items(*names: str) -> Rule:
+    return HasAll(*[f"Key Item: {name}" for name in names])
 
 
-def has_weapon_required(self, weapon: str, state: CollectionState):
-    return state.has("Equipment: " + weapon, self.player, 1)
+def cleared(level: str) -> Rule:
+    return CanReachLocation(f"Cleared: {level}")
 
 
-def has_required_souls(self, state: CollectionState):
-    return state.has_all(
-        [
-            "Key Item: Soul Helmet 1",
-            "Key Item: Soul Helmet 2",
-            "Key Item: Soul Helmet 3",
-            "Key Item: Soul Helmet 4",
-            "Key Item: Soul Helmet 5",
-            "Key Item: Soul Helmet 6",
-            "Key Item: Soul Helmet 7",
-            "Key Item: Soul Helmet 8",
-        ],
-        self.player,
-    )
+DARING_DASH = Has("Skill: Daring Dash")
+
+REQUIRED_SOULS = HasAll(*[f"Key Item: Soul Helmet {i}" for i in range(1, 9)])
+
+# The fixed list of chalice pickup locations tracked by HasNumberOfChalices. This looks at
+# vanilla chalices currently, so it's based on locations. "Chalice: Ant Hill" is appended
+# conditionally in HasNumberOfChalices._instantiate when the ant hill is enabled.
+CHALICE_LOCATIONS: tuple[str, ...] = (
+    "Chalice: The Graveyard",
+    "Chalice: Cemetery Hill",
+    "Chalice: The Hilltop Mausoleum",
+    "Chalice: Return to the Graveyard",
+    "Chalice: Scarecrow Fields",
+    "Chalice: Enchanted Earth",
+    "Chalice: Sleeping Village",
+    "Chalice: Pools of the Ancient Dead",
+    "Chalice: The Lake",
+    "Chalice: The Crystal Caves",
+    "Chalice: The Gallows Gauntlet",
+    "Chalice: Asylum Grounds",
+    "Chalice: Inside the Asylum",
+    "Chalice: Pumpkin Gorge",
+    "Chalice: Pumpkin Serpent",
+    "Chalice: The Haunted Ruins",
+    "Chalice: Ghost Ship",
+    "Chalice: The Entrance Hall",
+    "Chalice: The Time Device",
+)
 
 
-def has_required_amber(self, state: CollectionState):
-    return state.has_all(
-        [
-            "Key Item: Amber 1",
-            "Key Item: Amber 2",
-            "Key Item: Amber 3",
-            "Key Item: Amber 4",
-            "Key Item: Amber 5",
-            "Key Item: Amber 6",
-            "Key Item: Amber 7",
-        ],
-        self.player,
-    )
+@dataclasses.dataclass()
+class HasNumberOfChalices(Rule["MedievilWorld"], game="Medievil"):
+    """Checks that at least `count` of the tracked chalice pickup LOCATIONS are reachable."""
+
+    count: int
+
+    @override
+    def _instantiate(self, world: "MedievilWorld") -> Rule.Resolved:
+        if world.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false:
+            return True_().resolve(world)
+        chalice_locations = CHALICE_LOCATIONS
+        if world.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
+            chalice_locations = (*chalice_locations, "Chalice: Ant Hill")
+        return self.Resolved(
+            chalice_locations,
+            self.count,
+            player=world.player,
+            caching_enabled=getattr(world, "rule_caching_enabled", False),
+        )
+
+    @override
+    def __str__(self) -> str:
+        return f"HasNumberOfChalices({self.count})"
+
+    class Resolved(Rule.Resolved):
+        chalice_locations: tuple[str, ...]
+        count: int
+
+        @override
+        def _evaluate(self, state: CollectionState) -> bool:
+            collected_chalices = 0
+            for chalice_location in self.chalice_locations:
+                if state.can_reach_location(chalice_location, self.player):
+                    collected_chalices += 1
+            return collected_chalices >= self.count
+
+        @override
+        def location_dependencies(self) -> dict[str, set[int]]:
+            return {name: {id(self)} for name in self.chalice_locations}
+
+        @override
+        def __str__(self) -> str:
+            return f"Has {self.count} reachable chalices"
 
 
-def has_number_of_chalices(self, count, state: CollectionState):
-    if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false:
-        return True
-    # looks at vanilla chalices currently. So it's based on locations
-    chalice_list = [
-        "Chalice: The Graveyard",
-        "Chalice: Cemetery Hill",
-        "Chalice: The Hilltop Mausoleum",
-        "Chalice: Return to the Graveyard",
-        "Chalice: Scarecrow Fields",
-        "Chalice: Enchanted Earth",
-        "Chalice: Sleeping Village",
-        "Chalice: Pools of the Ancient Dead",
-        "Chalice: The Lake",
-        "Chalice: The Crystal Caves",
-        "Chalice: The Gallows Gauntlet",
-        "Chalice: Asylum Grounds",
-        "Chalice: Inside the Asylum",
-        "Chalice: Pumpkin Gorge",
-        "Chalice: Pumpkin Serpent",
-        "Chalice: The Haunted Ruins",
-        "Chalice: Ghost Ship",
-        "Chalice: The Entrance Hall",
-        "Chalice: The Time Device",
-    ]
-
-    # adds ant hill chalice if it's not excluded
-    if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
-        chalice_list.append("Chalice: Ant Hill")
-
-    collected_chalices = 0
-    for chalice_location in chalice_list:
-        if state.can_reach_location(chalice_location, self.player):
-            collected_chalices += 1
-    return collected_chalices >= count
+def layer_rule(world: "MedievilWorld", spot: "Location | Entrance", rule: Rule) -> None:
+    """AND a rule_builder Rule onto whatever access rule is already assigned to `spot`, mirroring the
+    old worlds.generic.Rules.add_rule but for Rule objects that still need to be resolved."""
+    existing = spot.access_rule
+    if existing is Location.access_rule or existing is Entrance.access_rule:
+        world.set_rule(spot, rule)
+        return
+    resolved = rule.resolve(world)
+    world.register_rule_dependencies(resolved)
+    spot.access_rule = lambda state, e=existing, n=resolved: e(state) and n(state)
 
 
-def set_vanilla_level_progression(self):
+def set_vanilla_level_progression(self: "MedievilWorld") -> None:
     print("Vanilla Progression being created: ")
-    set_rule(self.get_entrance("Map -> The Graveyard"), lambda state: is_level_cleared(self, "Dan's Crypt", state))
-    set_rule(self.get_entrance("Map -> Cemetery Hill"), lambda state: is_level_cleared(self, "The Graveyard", state))
-    set_rule(
+    self.set_rule(self.get_entrance("Map -> The Graveyard"), cleared("Dan's Crypt"))
+    self.set_rule(self.get_entrance("Map -> Cemetery Hill"), cleared("The Graveyard"))
+    self.set_rule(
         self.get_entrance("Map -> The Hilltop Mausoleum"),
-        lambda state: (
-            is_level_cleared(self, "Cemetery Hill", state)
-            and (has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
-        ),
+        cleared("Cemetery Hill") & (weapon("Club") | weapon("Hammer")),
     )
-    set_rule(
+    self.set_rule(
         self.get_entrance("Map -> Return to the Graveyard"),
-        lambda state: is_level_cleared(self, "The Hilltop Mausoleum", state) and has_keyitems_required(self, ["Skull Key"], state),
+        cleared("The Hilltop Mausoleum") & key_items("Skull Key"),
     )
-    set_rule(self.get_entrance("Map -> Enchanted Earth"), lambda state: is_level_cleared(self, "Return to the Graveyard", state))
-    set_rule(self.get_entrance("Map -> Scarecrow Fields"), lambda state: is_level_cleared(self, "Return to the Graveyard", state))
-    set_rule(self.get_entrance("Map -> The Sleeping Village"), lambda state: is_level_cleared(self, "Scarecrow Fields", state))
-    set_rule(self.get_entrance("Map -> Pumpkin Gorge"), lambda state: is_level_cleared(self, "Scarecrow Fields", state))
-    set_rule(
+    self.set_rule(self.get_entrance("Map -> Enchanted Earth"), cleared("Return to the Graveyard"))
+    self.set_rule(self.get_entrance("Map -> Scarecrow Fields"), cleared("Return to the Graveyard"))
+    self.set_rule(self.get_entrance("Map -> The Sleeping Village"), cleared("Scarecrow Fields"))
+    self.set_rule(self.get_entrance("Map -> Pumpkin Gorge"), cleared("Scarecrow Fields"))
+    self.set_rule(
         self.get_entrance("Map -> Asylum Grounds"),
-        lambda state: (
-            is_level_cleared(self, "Sleeping Village", state) and has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"], state)
-        ),
+        cleared("Sleeping Village") & key_items("Crucifix Cast", "Landlords Bust", "Crucifix"),
     )
-    set_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: is_level_cleared(self, "Asylum Grounds", state))
-    set_rule(
+    self.set_rule(self.get_entrance("Map -> Inside the Asylum"), cleared("Asylum Grounds"))
+    self.set_rule(
         self.get_entrance("Map -> Pumpkin Serpent"),
-        lambda state: is_level_cleared(self, "Pumpkin Gorge", state) and has_keyitems_required(self, ["Witches Talisman"], state),
+        cleared("Pumpkin Gorge") & key_items("Witches Talisman"),
     )
-    set_rule(
+    self.set_rule(
         self.get_entrance("Map -> Pools of the Ancient Dead"),
-        lambda state: (
-            is_level_cleared(self, "Enchanted Earth", state)
-            and has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"], state)
-            and has_required_souls(self, state)
-        ),
+        cleared("Enchanted Earth") & key_items("Shadow Talisman", "Shadow Artefact") & REQUIRED_SOULS,
     )
-    set_rule(self.get_entrance("Map -> The Lake"), lambda state: is_level_cleared(self, "Pools of the Ancient Dead", state))
-    set_rule(self.get_entrance("Map -> The Crystal Caves"), lambda state: is_level_cleared(self, "The Lake", state))
-    set_rule(
+    self.set_rule(self.get_entrance("Map -> The Lake"), cleared("Pools of the Ancient Dead"))
+    self.set_rule(self.get_entrance("Map -> The Crystal Caves"), cleared("The Lake"))
+    self.set_rule(
         self.get_entrance("Map -> The Gallows Gauntlet"),
-        lambda state: (
-            is_level_cleared(self, "The Crystal Caves", state)
-            and has_weapon_required(self, "Dragon Armour", state)
-            and has_keyitems_required(self, ["Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"], state)
-        ),
+        cleared("The Crystal Caves")
+        & weapon("Dragon Armour")
+        & key_items("Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"),
     )
-    set_rule(
+    self.set_rule(
         self.get_entrance("Map -> The Haunted Ruins"),
-        lambda state: (
-            is_level_cleared(self, "The Gallows Gauntlet", state)
-            and has_keyitems_required(self, ["King Peregrine's Crown"], state)
-            and has_daring_dash(self, state)
-        ),
+        cleared("The Gallows Gauntlet") & key_items("King Peregrine's Crown") & DARING_DASH,
     )
-    set_rule(self.get_entrance("Map -> The Ghost Ship"), lambda state: is_level_cleared(self, "The Haunted Ruins", state))
-    set_rule(self.get_entrance("Map -> The Entrance Hall"), lambda state: is_level_cleared(self, "Ghost Ship", state))
-    set_rule(self.get_entrance("Map -> The Time Device"), lambda state: is_level_cleared(self, "The Entrance Hall", state))
-    set_rule(self.get_entrance("Map -> Zaroks Lair"), lambda state: is_level_cleared(self, "The Time Device", state))
+    self.set_rule(self.get_entrance("Map -> The Ghost Ship"), cleared("The Haunted Ruins"))
+    self.set_rule(self.get_entrance("Map -> The Entrance Hall"), cleared("Ghost Ship"))
+    self.set_rule(self.get_entrance("Map -> The Time Device"), cleared("The Entrance Hall"))
+    self.set_rule(self.get_entrance("Map -> Zaroks Lair"), cleared("The Time Device"))
 
 
-def set_open_level_progression(self):
-    set_rule(
-        self.get_entrance("Map -> Cemetery Hill"),
-        lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state),
+def set_open_level_progression(self: "MedievilWorld") -> None:
+    self.set_rule(self.get_entrance("Map -> Cemetery Hill"), weapon("Club") | weapon("Hammer"))
+    self.set_rule(self.get_entrance("Map -> Return to the Graveyard"), key_items("Skull Key"))
+    self.set_rule(
+        self.get_entrance("Map -> Asylum Grounds"), key_items("Crucifix Cast", "Landlords Bust", "Crucifix")
     )
-    set_rule(self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_keyitems_required(self, ["Skull Key"], state))
-    set_rule(
-        self.get_entrance("Map -> Asylum Grounds"), lambda state: has_keyitems_required(self, ["Crucifix Cast", "Landlords Bust", "Crucifix"], state)
-    )
-    set_rule(self.get_entrance("Map -> Pumpkin Serpent"), lambda state: has_keyitems_required(self, ["Witches Talisman"], state))
-    set_rule(
+    self.set_rule(self.get_entrance("Map -> Pumpkin Serpent"), key_items("Witches Talisman"))
+    self.set_rule(
         self.get_entrance("Map -> Pools of the Ancient Dead"),
-        lambda state: has_keyitems_required(self, ["Shadow Talisman", "Shadow Artefact"], state) and has_required_souls(self, state),
+        key_items("Shadow Talisman", "Shadow Artefact") & REQUIRED_SOULS,
     )
-    set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_weapon_required(self, "Dragon Armour", state))
-    set_rule(
-        self.get_entrance("Map -> The Haunted Ruins"),
-        lambda state: has_keyitems_required(self, ["King Peregrine's Crown"], state) and has_daring_dash(self, state),
+    self.set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), weapon("Dragon Armour"))
+    self.set_rule(
+        self.get_entrance("Map -> The Haunted Ruins"), key_items("King Peregrine's Crown") & DARING_DASH
     )
 
 
-def set_ant_hill_rules_vanilla(self):
-    set_rule(
+def set_ant_hill_rules_vanilla(self: "MedievilWorld") -> None:
+    self.set_rule(
         self.get_entrance("Enchanted Earth -> Ant Hill"),
-        lambda state: is_level_cleared(self, "Return to the Graveyard", state) and has_keyitems_required(self, ["Witches Talisman"], state),
+        cleared("Return to the Graveyard") & key_items("Witches Talisman"),
     )
 
 
-def set_ant_hill_rules_open(self):
-    set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), lambda state: has_keyitems_required(self, ["Witches Talisman"], state))
+def set_ant_hill_rules_open(self: "MedievilWorld") -> None:
+    self.set_rule(self.get_entrance("Enchanted Earth -> Ant Hill"), key_items("Witches Talisman"))
 
 
-def set_ant_hill_chalice(self):
-    if self.options.chalice_win_count.value > 19:
-        add_rule(self.get_location("Chalice Reward 20"), lambda state: has_number_of_chalices(self, 20, state))
+def set_hall_of_heroes_progression(self: "MedievilWorld", max_chalice_count: int) -> None:
+    # hall of heroes rules
+    self.set_rule(self.get_entrance("Map -> Hall of Heroes"), HasNumberOfChalices(1))
+
+    for i in range(1, max_chalice_count + 1):
+        location_name = f"Chalice Reward {i}"
+        self.set_rule(self.get_location(location_name), HasNumberOfChalices(i))
 
 
-def has_required_runes(self, runes: Iterable[str], state: CollectionState):
-    return state.has_all(runes, self.player)
-
-
-def set_rune_blocks(self, locations: list[str], rune: str):
+def set_rune_blocks(self: "MedievilWorld", locations: list[str], rune: str) -> None:
     for location in locations:
         if self.options.booksanity.value == BookSanityToggle.option_false and "Book:" in location:
             continue
@@ -206,10 +202,10 @@ def set_rune_blocks(self, locations: list[str], rune: str):
             continue
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
-        set_rule(self.get_location(location), lambda state: has_required_runes(self, [rune], state))
+        layer_rule(self, self.get_location(location), Has(rune))
 
 
-def set_breakable_locations(self, locations: list[str]):
+def set_breakable_locations(self: "MedievilWorld", locations: list[str]) -> None:
     for location in locations:
         if self.options.booksanity.value == BookSanityToggle.option_false and "Book:" in location:
             continue
@@ -217,10 +213,10 @@ def set_breakable_locations(self, locations: list[str]):
             continue
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
-        add_rule(self.get_location(location), lambda state: has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state))
+        layer_rule(self, self.get_location(location), weapon("Club") | weapon("Hammer"))
 
 
-def set_dashable_locations(self, locations: list[str]):
+def set_dashable_locations(self: "MedievilWorld", locations: list[str]) -> None:
     for location in locations:
         if self.options.booksanity.value == BookSanityToggle.option_false and "Book:" in location:
             continue
@@ -228,86 +224,90 @@ def set_dashable_locations(self, locations: list[str]):
             continue
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and "Chalice:" in location:
             continue
-        add_rule(self.get_location(location), lambda state: has_daring_dash(self, state))
+        layer_rule(self, self.get_location(location), DARING_DASH)
 
 
-def set_vanilla_runesanity_rules(self):
+def set_vanilla_runesanity_rules(self: "MedievilWorld") -> None:
     print("Vanilla Runesanity being created: ")
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Graveyard"),
-        lambda state: has_required_runes(self, ["Earth Rune: The Graveyard", "Chaos Rune: The Graveyard"], state),
+        HasAll("Earth Rune: The Graveyard", "Chaos Rune: The Graveyard"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Hilltop Mausoleum"),
-        lambda state: has_required_runes(
-            self, ["Moon Rune: The Hilltop Mausoleum", "Earth Rune: The Hilltop Mausoleum", "Chaos Rune: The Hilltop Mausoleum"], state
+        HasAll(
+            "Moon Rune: The Hilltop Mausoleum", "Earth Rune: The Hilltop Mausoleum", "Chaos Rune: The Hilltop Mausoleum"
         ),
     )
-    add_rule(
-        self.get_entrance("Map -> Return to the Graveyard"), lambda state: has_required_runes(self, ["Star Rune: Return to the Graveyard"], state)
+    layer_rule(
+        self, self.get_entrance("Map -> Return to the Graveyard"), Has("Star Rune: Return to the Graveyard")
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> Enchanted Earth"),
-        lambda state: has_required_runes(self, ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"], state),
+        HasAll("Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> Scarecrow Fields"),
-        lambda state: has_required_runes(
-            self, ["Earth Rune: Scarecrow Fields", "Chaos Rune: Scarecrow Fields", "Moon Rune: Scarecrow Fields"], state
-        ),
+        HasAll("Earth Rune: Scarecrow Fields", "Chaos Rune: Scarecrow Fields", "Moon Rune: Scarecrow Fields"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Sleeping Village"),
-        lambda state: has_required_runes(
-            self, ["Earth Rune: The Sleeping Village", "Chaos Rune: The Sleeping Village", "Moon Rune: The Sleeping Village"], state
+        HasAll(
+            "Earth Rune: The Sleeping Village", "Chaos Rune: The Sleeping Village", "Moon Rune: The Sleeping Village"
         ),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> Pumpkin Gorge"),
-        lambda state: has_required_runes(
-            self,
-            [
-                "Earth Rune: Pumpkin Gorge",
-                "Chaos Rune: Pumpkin Gorge",
-                "Moon Rune: Pumpkin Gorge",
-                "Time Rune: Pumpkin Gorge",
-                "Star Rune: Pumpkin Gorge",
-            ],
-            state,
+        HasAll(
+            "Earth Rune: Pumpkin Gorge",
+            "Chaos Rune: Pumpkin Gorge",
+            "Moon Rune: Pumpkin Gorge",
+            "Time Rune: Pumpkin Gorge",
+            "Star Rune: Pumpkin Gorge",
         ),
     )
-    add_rule(self.get_entrance("Map -> Asylum Grounds"), lambda state: has_required_runes(self, ["Chaos Rune: The Asylum Grounds"], state))
-    add_rule(self.get_entrance("Map -> Inside the Asylum"), lambda state: has_required_runes(self, ["Earth Rune: Inside the Asylum"], state))
-    add_rule(
-        self.get_entrance("Map -> Pools of the Ancient Dead"),
-        lambda state: has_required_runes(self, ["Chaos Rune: Pools of the Ancient Dead"], state),
+    layer_rule(self, self.get_entrance("Map -> Asylum Grounds"), Has("Chaos Rune: The Asylum Grounds"))
+    layer_rule(self, self.get_entrance("Map -> Inside the Asylum"), Has("Earth Rune: Inside the Asylum"))
+    layer_rule(
+        self, self.get_entrance("Map -> Pools of the Ancient Dead"), Has("Chaos Rune: Pools of the Ancient Dead")
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Lake"),
-        lambda state: has_required_runes(self, ["Chaos Rune: The Lake", "Earth Rune: The Lake", "Star Rune: The Lake", "Time Rune: The Lake"], state),
+        HasAll("Chaos Rune: The Lake", "Earth Rune: The Lake", "Star Rune: The Lake", "Time Rune: The Lake"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Crystal Caves"),
-        lambda state: has_required_runes(self, ["Earth Rune: The Crystal Caves", "Star Rune: The Crystal Caves"], state),
+        HasAll("Earth Rune: The Crystal Caves", "Star Rune: The Crystal Caves"),
     )
-    add_rule(self.get_entrance("Map -> The Gallows Gauntlet"), lambda state: has_required_runes(self, ["Star Rune: The Gallows Gauntlet"], state))
-    add_rule(
+    layer_rule(self, self.get_entrance("Map -> The Gallows Gauntlet"), Has("Star Rune: The Gallows Gauntlet"))
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Haunted Ruins"),
-        lambda state: has_required_runes(self, ["Chaos Rune: The Haunted Ruins", "Earth Rune: The Haunted Ruins"], state),
+        HasAll("Chaos Rune: The Haunted Ruins", "Earth Rune: The Haunted Ruins"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Ghost Ship"),
-        lambda state: has_required_runes(self, ["Chaos Rune: Ghost Ship", "Moon Rune: Ghost Ship", "Star Rune: Ghost Ship"], state),
+        HasAll("Chaos Rune: Ghost Ship", "Moon Rune: Ghost Ship", "Star Rune: Ghost Ship"),
     )
-    add_rule(
+    layer_rule(
+        self,
         self.get_entrance("Map -> The Time Device"),
-        lambda state: has_required_runes(
-            self, ["Chaos Rune: The Time Device", "Earth Rune: The Time Device", "Moon Rune: The Time Device", "Time Rune: The Time Device"], state
+        HasAll(
+            "Chaos Rune: The Time Device", "Earth Rune: The Time Device", "Moon Rune: The Time Device", "Time Rune: The Time Device"
         ),
     )
 
 
-def set_open_runesanity_rules(self):
+def set_open_runesanity_rules(self: "MedievilWorld") -> None:
     print(" Open Runesanity being created: ")
 
     # The Graveyard
@@ -806,73 +806,11 @@ def set_open_runesanity_rules(self):
     )
 
 
-def set_hall_of_heroes_progression(self, max_chalice_count):
-    # hall of heroes rules
-
-    set_rule(self.get_entrance("Map -> Hall of Heroes"), lambda state: has_number_of_chalices(self, 1, state))
-
-    for i in range(1, max_chalice_count + 1):
-        location_name = f"Chalice Reward {i}"
-        set_rule(self.get_location(location_name), lambda state: has_number_of_chalices(self, i, state))
-
-    # keeping a copy of these for the history
-
-    # # Canny Tim
-    # set_rule(self.get_location("Chalice Reward 1"), lambda state: has_number_of_chalices(self, 1, state))
-    # set_rule(self.get_location("Chalice Reward 2"), lambda state: has_number_of_chalices(self, 2, state))
-    # # Stanyer Iron Hewer
-    # set_rule(self.get_location("Chalice Reward 3"), lambda state: has_number_of_chalices(self, 3, state))
-    # set_rule(self.get_location("Chalice Reward 4"), lambda state: has_number_of_chalices(self, 4, state))
-
-    # # Woden the Mighty
-    # set_rule(self.get_location("Chalice Reward 5"), lambda state: has_number_of_chalices(self, 5, state))
-    # set_rule(self.get_location("Chalice Reward 6"), lambda state: has_number_of_chalices(self, 6, state))
-
-    # # Imanzi Shongama
-    # set_rule(self.get_location("Chalice Reward 7"), lambda state: has_number_of_chalices(self, 7, state))
-
-    # # Ravenhooves the Archer
-    # set_rule(self.get_location("Chalice Reward 8"), lambda state: has_number_of_chalices(self, 8, state))
-
-    # # Bloodmonath
-    # set_rule(self.get_location("Chalice Reward 9"), lambda state: has_number_of_chalices(self, 9, state))
-
-    # # Ravenhooves the Archer
-    # set_rule(self.get_location("Chalice Reward 10"), lambda state: has_number_of_chalices(self, 10, state))
-
-    # # Karl Sturngard
-    # set_rule(self.get_location("Chalice Reward 11"), lambda state: has_number_of_chalices(self, 11, state))
-
-    # # Bloodmonath
-    # set_rule(self.get_location("Chalice Reward 12"), lambda state: has_number_of_chalices(self, 12, state))
-
-    # # Dirk Steadfast
-    # set_rule(self.get_location("Chalice Reward 13"), lambda state: has_number_of_chalices(self, 13, state))
-
-    # # Ravenhooves the Archer
-    # set_rule(self.get_location("Chalice Reward 14"), lambda state: has_number_of_chalices(self, 14, state))
-
-    # # Megwynne Stormbinder
-    # set_rule(self.get_location("Chalice Reward 15"), lambda state: has_number_of_chalices(self, 15, state))
-
-    # # Ravenhooves the Archer
-    # set_rule(self.get_location("Chalice Reward 16"), lambda state: has_number_of_chalices(self, 16, state))
-
-    # # Imanzi Shongama
-    # set_rule(self.get_location("Chalice Reward 17"), lambda state: has_number_of_chalices(self, 17, state))
-
-    # # Karl Sturngard
-    # set_rule(self.get_location("Chalice Reward 18"), lambda state: has_number_of_chalices(self, 18, state))
-
-    # # Dirk Steadfast
-    # set_rule(self.get_location("Chalice Reward 19"), lambda state: has_number_of_chalices(self, 19, state))
-
-
-def set_locked_items_locations(self):
-    set_rule(
+def set_locked_items_locations(self: "MedievilWorld") -> None:
+    self.set_rule(
         self.get_entrance("Cemetery Hill -> Locked Items CH"),
-        lambda state: has_daring_dash(self, state) or has_weapon_required(self, "Club", state) or has_weapon_required(self, "Hammer", state),
+        DARING_DASH | weapon("Club") | weapon("Hammer"),
     )
-    set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), lambda state: has_keyitems_required(self, ["Sheet Music"], state))
-    set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), lambda state: has_keyitems_required(self, ["Harvester Parts"], state))
-    set_rule(self.get_entrance("The Sleeping Village -> Locked Items SV"), lambda state: has_keyitems_required(self, ["Crucifix"], state))
+    self.set_rule(self.get_entrance("The Hilltop Mausoleum -> Locked Items HM"), key_items("Sheet Music"))
+    self.set_rule(self.get_entrance("Scarecrow Fields -> Locked Items SF"), key_items("Harvester Parts"))
+    self.set_rule(self.get_entrance("The Sleeping Village -> Locked Items SV"), key_items("Crucifix"))

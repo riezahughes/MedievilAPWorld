@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassi
 from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+from worlds.generic.Rules import add_item_rule
 
 from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
 from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
@@ -24,7 +24,6 @@ from .Rules import (
     set_ant_hill_rules_vanilla,
     set_vanilla_level_progression,
     set_open_level_progression,
-    set_ant_hill_chalice,
     set_hall_of_heroes_progression,
     set_locked_items_locations,
     set_open_runesanity_rules,
@@ -326,21 +325,17 @@ class MedievilWorld(World):
         return "Gold (50)"  # this clearly needs looked into
 
     def set_rules(self) -> None:
-        for region in self.multiworld.get_regions(self.player):
-            for location in region.locations:
-                set_rule(location, lambda state: True)
-
         max_chalice_count = self.options.chalice_win_count.value
 
         if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_false and max_chalice_count > 19:
             max_chalice_count = 19
 
         if self.options.goal.value == GoalOptions.DEFEAT_ZAROK:
-            self.multiworld.completion_condition[self.player] = lambda state: defeat_zarok_victory(self, max_chalice_count, state)
+            self.set_completion_rule(defeat_zarok_victory())
         elif self.options.goal.value == GoalOptions.CHALICE:
-            self.multiworld.completion_condition[self.player] = lambda state: get_chalices_victory(self, max_chalice_count, state)
+            self.set_completion_rule(get_chalices_victory(max_chalice_count))
         elif self.options.goal.value == GoalOptions.BOTH:
-            self.multiworld.completion_condition[self.player] = lambda state: defeat_zarok_and_get_chalices_victory(self, max_chalice_count, state)
+            self.set_completion_rule(defeat_zarok_and_get_chalices_victory(max_chalice_count))
         # Map rules
 
         for location in self.multiworld.get_locations(self.player):
@@ -362,12 +357,6 @@ class MedievilWorld(World):
                 set_ant_hill_rules_open(self)
             else:
                 set_ant_hill_rules_vanilla(self)
-
-        if (
-            self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true
-            and self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true
-        ):
-            set_ant_hill_chalice(self)
 
         # level progression
         if self.options.progression_option.value == ProgressionOptions.VANILLA:

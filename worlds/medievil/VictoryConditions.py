@@ -1,10 +1,15 @@
-from .Rules import has_number_of_chalices
+from rule_builder.rules import CanReachLocation, Rule
 
-def defeat_zarok_victory(self, max_chalices, state):
-    return state.can_reach_location("Cleared: Zaroks Lair", self.player)
+from .Rules import HasNumberOfChalices
 
-def get_chalices_victory(self, max_chalices, state):
-    return has_number_of_chalices(self, max_chalices, state)
 
-def defeat_zarok_and_get_chalices_victory(self, max_chalice_count, state):
-    return state.can_reach_location("Cleared: Zaroks Lair", self.player) and has_number_of_chalices(self, max_chalice_count, state)
+def defeat_zarok_victory() -> Rule:
+    return CanReachLocation("Cleared: Zaroks Lair")
+
+
+def get_chalices_victory(max_chalices: int) -> Rule:
+    return HasNumberOfChalices(max_chalices)
+
+
+def defeat_zarok_and_get_chalices_victory(max_chalice_count: int) -> Rule:
+    return CanReachLocation("Cleared: Zaroks Lair") & HasNumberOfChalices(max_chalice_count)

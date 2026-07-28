@@ -177,7 +177,7 @@ _all_items: List[MedievilItemData] = [
     ("Equipment: Broadsword", 32, MedievilItemCategory.WEAPON, False),
     ("Equipment: Magic Sword", 33, MedievilItemCategory.WEAPON, False),
     ("Equipment: Club", 34, MedievilItemCategory.PROGRESSION, True),
-    ("Equipment: Hammer", 35, MedievilItemCategory.WEAPON, False),
+    ("Equipment: Hammer", 35, MedievilItemCategory.WEAPON, True),
     ("Equipment: Daggers", 36, MedievilItemCategory.WEAPON, False),
     ("Equipment: Axe", 37, MedievilItemCategory.WEAPON, False),
     ("Equipment: Chicken Drumsticks", 38, MedievilItemCategory.WEAPON, False),
