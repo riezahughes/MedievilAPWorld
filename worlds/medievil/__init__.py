@@ -25,6 +25,7 @@ from .Rules import (
     set_vanilla_level_progression,
     set_open_level_progression,
     set_hall_of_heroes_progression,
+    set_key_item_dependencies,
     set_locked_items_locations,
     set_open_runesanity_rules,
     set_vanilla_runesanity_rules,
@@ -375,6 +376,9 @@ class MedievilWorld(World):
                 set_vanilla_runesanity_rules(self)
             elif self.options.progression_option.value == ProgressionOptions.OPEN:
                 set_open_runesanity_rules(self)
+
+        # key item dependencies that apply in every mode
+        set_key_item_dependencies(self)
 
         # locked chalice items
         set_locked_items_locations(self)
