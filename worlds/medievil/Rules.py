@@ -806,6 +806,11 @@ def set_open_runesanity_rules(self: "MedievilWorld") -> None:
     )
 
 
+def set_key_item_dependencies(self: "MedievilWorld") -> None:
+    """Base-game key-item dependencies, applied in every mode."""
+    self.set_rule(self.get_location("Key Item: Shadow Artefact - SV"), key_items("Crucifix"))
+
+
 def set_locked_items_locations(self: "MedievilWorld") -> None:
     self.set_rule(
         self.get_entrance("Cemetery Hill -> Locked Items CH"),

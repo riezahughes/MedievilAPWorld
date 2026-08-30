@@ -43,6 +43,13 @@ class OpenRunesanityLocationRulesTest(MedievilTestBase):
         self.collect_by_name("Skill: Daring Dash")
         self.assertTrue(self.can_reach_location("Earth Rune: The Hilltop Mausoleum"))
 
+    def test_chalice_hilltop_requires_earth_rune(self) -> None:
+        self.assertFalse(self.can_reach_location("Chalice: The Hilltop Mausoleum"))
+        self.collect_by_name("Key Item: Sheet Music")
+        self.assertFalse(self.can_reach_location("Chalice: The Hilltop Mausoleum"))
+        self.collect_by_name("Earth Rune: The Hilltop Mausoleum")
+        self.assertTrue(self.can_reach_location("Chalice: The Hilltop Mausoleum"))
+
 
 class OpenRunesanityAllSanityTogglesOffSmokeTest(MedievilTestBase):
     """
