@@ -1,10 +1,9 @@
 name: Fuzz APWorld
+
 on:
   push:
-    branches: [medievil, future/*, ci]
+    branches: [main]
   pull_request:
-    branches: [medievil, future/*]
-
 
 jobs:
   fuzz:
@@ -13,5 +12,6 @@ jobs:
       - uses: Eijebong/ap-actions/fuzz@main
         with:
           apworld-path: worlds/medievil
-          ap-version: '0.6.2'
+          ap-version: '0.6.7'
           python-version: '3.12'
+          runs: 100
