@@ -1,8 +1,18 @@
 from enum import IntEnum
 from typing import NamedTuple, List, Optional
 import random
-from BaseClasses import Item, ItemClassification  # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
-from .Options import RuneSanityToggle, IncludeAntHillInChecksToggle, TrapToggle, AmmoAndChargeToggle, IncludeChalicesInChecksToggle
+from BaseClasses import (
+    Item,
+    ItemClassification,
+)  # ItemClassification is used for internal logic, but not directly in MedievilItemData itself.
+from .Options import (
+    RuneSanityToggle,
+    IncludeAntHillInChecksToggle,
+    TrapToggle,
+    AmmoAndChargeToggle,
+    IncludeChalicesInChecksToggle,
+    KeysanityOptions,
+)
 
 
 class MedievilItemCategory(IntEnum):
@@ -16,6 +26,7 @@ class MedievilItemCategory(IntEnum):
     FUN = 7
     LEVEL_END = 8
     SKIP = 9
+    LEVEL_KEYS = 10
 
 
 class MedievilItemData(NamedTuple):
@@ -50,7 +61,10 @@ class MedievilItem(Item):
     def get_name_to_id() -> dict:
         base_id = 9901000
         # Create a dictionary mapping item names to their unique Archipelago IDs.
-        return {item_data.name: (base_id + item_data.m_code) for item_data in _all_items if item_data.m_code is not None}
+        output = {item_data.name: (base_id + item_data.m_code) for item_data in _all_items if item_data.m_code is not None}
+        output.update({item_data.name: base_id + item_data.m_code for item_data in _keysanity_regular})
+        output.update({item_data.name: base_id + item_data.m_code + KEYSANITY_UNIQUE_ID_OFFSET for item_data in _keysanity_unique})
+        return output
 
 
 key_item_names = {
@@ -148,23 +162,23 @@ _weapons = [
     "Equipment: Axe",
     "Equipment: Crossbow",
     "Equipment: Longbow",
-    "Equipment: Fire Longbow", 
-    "Equipment: Magic Longbow", 
+    "Equipment: Fire Longbow",
+    "Equipment: Magic Longbow",
     "Equipment: Spear",
-    "Equipment: Lightning"
+    "Equipment: Lightning",
 ]
 _ranged_weapons = [
     "Equipment: Daggers",
     "Equipment: Axe",
     "Equipment: Crossbow",
     "Equipment: Longbow",
-    "Equipment: Fire Longbow", 
-    "Equipment: Magic Longbow", 
+    "Equipment: Fire Longbow",
+    "Equipment: Magic Longbow",
     "Equipment: Spear",
-    "Equipment: Lightning"
+    "Equipment: Lightning",
 ]
 
-_life_bottles= {
+_life_bottles = {
     # life bottles
     "Life Bottle: Dan's Crypt",
     "Life Bottle: The Graveyard",
@@ -174,7 +188,7 @@ _life_bottles= {
     "Life Bottle: Pools of the Ancient Dead",
     "Life Bottle: Hall of Heroes (Ravenhooves The Archer)",
     "Life Bottle: Hall of Heroes (Dirk Steadfast)",
-    "Life Bottle: The Time Device"
+    "Life Bottle: The Time Device",
 }
 
 
@@ -318,8 +332,91 @@ _all_items: List[MedievilItemData] = [
     ("Trap: Darkness", 158, MedievilItemCategory.TRAP, False),
     ("Trap: Hudless", 159, MedievilItemCategory.TRAP, False),
 ]
-# Convert raw list of tuples into MedievilItemData NamedTuple instances
+
+
+_keysanity_regular: List[MedievilItemData] = [
+    ("The Graveyard Unlock", 160, MedievilItemCategory.LEVEL_KEYS, True),  # The Graveyard
+    ("Cemetery Hill Unlock", 161, MedievilItemCategory.LEVEL_KEYS, True),  # Cemetery Hill
+    ("The Hilltop Mausoleum Unlock", 162, MedievilItemCategory.LEVEL_KEYS, True),  # Hilltop Mausoleum
+    ("Return to the Graveyard Unlock", 163, MedievilItemCategory.LEVEL_KEYS, True),  # Return to Graveyard
+    ("Scarecrow Fields Unlock", 164, MedievilItemCategory.LEVEL_KEYS, True),  # Scarecrow Fields
+    ("Pumpkin Gorge Unlock", 165, MedievilItemCategory.LEVEL_KEYS, True),  # Pumpkin Gorge
+    ("Pumpkin Serpent Unlock", 166, MedievilItemCategory.LEVEL_KEYS, True),  # Pumpkin Serpent
+    ("The Sleeping Village Unlock", 167, MedievilItemCategory.LEVEL_KEYS, True),  # The Sleeping Village
+    ("Asylum Grounds Unlock", 168, MedievilItemCategory.LEVEL_KEYS, True),  # Asylum grounds
+    ("Inside the Asylum Unlock", 169, MedievilItemCategory.LEVEL_KEYS, True),  # Inside the Asylum
+    ("Enchanted Earth Unlock", 170, MedievilItemCategory.LEVEL_KEYS, True),  # Enchanted Earth
+    ("Pools of the Ancient Dead Unlock", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
+    ("The Lake Unlock", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
+    ("The Crystal Caves Unlock", 174, MedievilItemCategory.LEVEL_KEYS, True),  # Crystal Caves
+    ("The Gallows Gauntlet Unlock", 175, MedievilItemCategory.LEVEL_KEYS, True),  # Gallows Gauntlet
+    ("The Haunted Ruins Unlock", 176, MedievilItemCategory.LEVEL_KEYS, True),  # Haunted Ruins
+    ("The Ghost Ship Unlock", 177, MedievilItemCategory.LEVEL_KEYS, True),  # The Ghost Ship
+    ("The Entrance Hall Unlock", 178, MedievilItemCategory.LEVEL_KEYS, True),  # Entrance Hall
+    ("The Time Device Unlock", 179, MedievilItemCategory.LEVEL_KEYS, True),  # The Time Device
+]
+
+_keysanity_unique: List[MedievilItemData] = [
+    ("Angelic Call", 160, MedievilItemCategory.LEVEL_KEYS, True),  # The Graveyard
+    ("Hillwalking Boots", 161, MedievilItemCategory.LEVEL_KEYS, True),  # Cemetery Hill
+    ("Musical Staff", 162, MedievilItemCategory.LEVEL_KEYS, True),  # Hilltop Mausoleum
+    ("Moldy Dog Food", 163, MedievilItemCategory.LEVEL_KEYS, True),  # Return to Graveyard
+    ("Farm Deed", 164, MedievilItemCategory.LEVEL_KEYS, True),  # Scarecrow Fields
+    ("Smashed Pumpkin", 165, MedievilItemCategory.LEVEL_KEYS, True),  # Pumpkin Gorge
+    ("Witches Request", 166, MedievilItemCategory.LEVEL_KEYS, True),  # Pumpkin Serpent
+    ("Key to the City", 167, MedievilItemCategory.LEVEL_KEYS, True),  # The Sleeping Village
+    ("Jack's Invitation", 168, MedievilItemCategory.LEVEL_KEYS, True),  # Asylum grounds
+    ("Fight Club", 169, MedievilItemCategory.LEVEL_KEYS, True),  # Inside the Asylum
+    ("Demonic Amulet", 170, MedievilItemCategory.LEVEL_KEYS, True),  # Enchanted Earth
+    ("Soul Detector", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
+    ("Boating Licence", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
+    ("Ancient Horn", 174, MedievilItemCategory.LEVEL_KEYS, True),  # Crystal Caves
+    ("Serpent Effigy", 175, MedievilItemCategory.LEVEL_KEYS, True),  # Gallows Gauntlet
+    ("Royal Decree", 176, MedievilItemCategory.LEVEL_KEYS, True),  # Haunted Ruins
+    ("Stowaway’s Spirit", 177, MedievilItemCategory.LEVEL_KEYS, True),  # The Ghost Ship
+    ("Ancient Knocker", 178, MedievilItemCategory.LEVEL_KEYS, True),  # Entrance Hall
+    ("Alarm Clock", 179, MedievilItemCategory.LEVEL_KEYS, True),  # The Time Device
+]
+
+# The level each key opens, by m_code. Both naming lists share these m_codes, so the client unlocks the same level
+# whichever name the key has. Dan's Crypt, the Ant Hill (entered from Enchanted Earth) and Zarok's Lair have no key.
+level_key_regions: dict[int, str] = {
+    160: "The Graveyard",
+    161: "Cemetery Hill",
+    162: "The Hilltop Mausoleum",
+    163: "Return to the Graveyard",
+    164: "Scarecrow Fields",
+    165: "Pumpkin Gorge",
+    166: "Pumpkin Serpent",
+    167: "The Sleeping Village",
+    168: "Asylum Grounds",
+    169: "Inside the Asylum",
+    170: "Enchanted Earth",
+    172: "Pools of the Ancient Dead",
+    173: "The Lake",
+    174: "The Crystal Caves",
+    175: "The Gallows Gauntlet",
+    176: "The Haunted Ruins",
+    177: "The Ghost Ship",
+    178: "The Entrance Hall",
+    179: "The Time Device",
+}
+
+# Archipelago IDs must be unique per item name, so the unique-name keys get their own IDs (m_code + this offset)
+# while keeping the shared m_code that the client receives.
+KEYSANITY_UNIQUE_ID_OFFSET = 40
+
+# Convert raw lists of tuples into MedievilItemData NamedTuple instances
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
+_keysanity_regular = [MedievilItemData(*row) for row in _keysanity_regular]
+_keysanity_unique = [MedievilItemData(*row) for row in _keysanity_unique]
+_keysanity_unique_names = {item_data.name for item_data in _keysanity_unique}
+
+
+def level_key_names(naming: int) -> dict[str, str]:
+    """Region name -> the key item that opens it, for the chosen KeySanity naming."""
+    table = _keysanity_unique if naming == KeysanityOptions.UNIQUE_NAME else _keysanity_regular
+    return {level_key_regions[item_data.m_code]: item_data.name for item_data in table}
 
 
 item_descriptions = {
@@ -328,10 +425,12 @@ item_descriptions = {
 }
 
 # Create a dictionary for quick lookup of item data by name
-item_dictionary: dict[str, MedievilItemData] = {item_data.name: item_data for item_data in _all_items}
+item_dictionary: dict[str, MedievilItemData] = {
+    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique)
+}
 
 
-def BuildItemPool(count: int, options) -> List[str]:
+def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -> List[str]:
     """
     Generates a list of item names to be used for the item pool.
     This function does NOT create Archipelago Item objects; it only provides their names.
@@ -340,6 +439,7 @@ def BuildItemPool(count: int, options) -> List[str]:
     Args:
         count (int): The total number of item names to generate.
         options: The options object from the Archipelago multiworld, used for guaranteed items.
+        level_keys: KeySanity level keys to put in the pool (the starting keys are left out by the caller).
 
     Returns:
         List[str]: A shuffled list of item names.
@@ -358,6 +458,10 @@ def BuildItemPool(count: int, options) -> List[str]:
     if hasattr(options, "runesanity") and options.runesanity.value == RuneSanityToggle.option_true:
         rune_items = [item_data.name for item_data in _all_items if item_data.category == MedievilItemCategory.RUNE]
         item_pool_names.extend(rune_items)
+
+    # Add the level keys if KeySanity is enabled
+    if level_keys:
+        item_pool_names.extend(level_keys)
 
     # Checks all other progression items
 

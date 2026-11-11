@@ -23,17 +23,18 @@ class LockedItemsRegionsTest(MedievilTestBase):
         """
         self.assertTrue(self.can_reach_region("Dan's Crypt Locked Items"))
 
-    def test_locked_items_ch_requires_club_or_hammer(self) -> None:
+    def test_locked_items_ch_requires_club(self) -> None:
         self.assertFalse(self.can_reach_region("Cemetery Hill Locked Items"))
         self.collect_by_name("Skill: Daring Dash")
         self.assertFalse(self.can_reach_region("Cemetery Hill Locked Items"))
         self.collect_by_name("Equipment: Club")
         self.assertTrue(self.can_reach_region("Cemetery Hill Locked Items"))
 
-    def test_locked_items_ch_accepts_hammer(self) -> None:
+    def test_locked_items_ch_hammer_is_not_enough(self) -> None:
+        # the Club is needed to light the fire, the Hammer can't do it (see set_locked_items_locations)
         self.assertFalse(self.can_reach_region("Cemetery Hill Locked Items"))
         self.collect_by_name("Equipment: Hammer")
-        self.assertTrue(self.can_reach_region("Cemetery Hill Locked Items"))
+        self.assertFalse(self.can_reach_region("Cemetery Hill Locked Items"))
 
     def test_locked_items_hm_requires_sheet_music(self) -> None:
         self.assertFalse(self.can_reach_region("The Hilltop Mausoleum Locked Items"))

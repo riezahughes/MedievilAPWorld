@@ -1033,6 +1033,48 @@ def set_locked_items_locations(self: "MedievilWorld") -> None:
     self.set_rule(self.get_entrance("Enchanted Earth -> Enchanted Earth Locked Items"), key_items("Shadow Artefact", "Shadow Talisman"))
 
 
+def set_shop_rules(self: "MedievilWorld") -> None:
+    """ShopSanity: what it takes to reach each Merchant Gargoyle once inside its level. The level's own entrance
+    rules (progression, and the level key with KeySanity) already apply, since the shop locations sit in the
+    level's region. Rune doors are only in logic with RuneSanity on. Levels not listed here have nothing in the way.
+    Gold isn't in logic, so shops only hold progression items if the player allows it."""
+    from worlds.generic.Rules import add_item_rule
+    from .Locations import shop_location_names
+
+    shop_rules: dict[str, Rule] = {
+        "Enchanted Earth": key_items("Shadow Artefact", "Shadow Talisman"),
+        "The Gallows Gauntlet": weapon("Dragon Armour"),
+        "Ant Hill": key_items("Witches Talisman"),
+    }
+    if self.options.runesanity.value == RuneSanityToggle.option_true:
+        shop_rules.update(
+            {
+                "The Graveyard": Has("Chaos Rune: The Graveyard"),
+                "The Hilltop Mausoleum": Has("Earth Rune: The Hilltop Mausoleum"),
+                "The Lake": HasAll("Time Rune: The Lake", "Chaos Rune: The Lake", "Earth Rune: The Lake"),
+                "The Ghost Ship": Has("Moon Rune: Ghost Ship"),
+                "The Time Device": Has("Earth Rune: The Time Device"),
+            }
+        )
+
+    for shop in self.active_shops():
+        for name in shop_location_names(shop, self.options.shopsanity_items_per_shop.value):
+            location = self.get_location(name)
+            if shop.region in shop_rules:
+                layer_rule(self, location, shop_rules[shop.region])
+            if not self.options.shopsanity_allow_progression.value:
+                add_item_rule(location, lambda item: not item.advancement)
+
+
+def set_keysanity_rules(self: "MedievilWorld") -> None:
+    """KeySanity: entering a level from the map also needs that level's key, on top of the progression rules.
+    Everything inside a level (its checks, shop, Hall of Heroes door, the Ant Hill) is behind this entrance."""
+    from .Items import level_key_names
+
+    for region, key in level_key_names(self.options.keysanity_naming.value).items():
+        layer_rule(self, self.get_entrance(f"Map -> {region}"), Has(key))
+
+
 def set_HoH_entrances(self: "MedievilWorld") -> None:
     self.set_rule(self.get_entrance("The Graveyard -> Hall of Heroes"), cleared("The Graveyard") & CanReachLocation("Chalice: The Graveyard"))
     self.set_rule(
