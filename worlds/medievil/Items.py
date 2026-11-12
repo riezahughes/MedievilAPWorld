@@ -27,6 +27,7 @@ class MedievilItemCategory(IntEnum):
     LEVEL_END = 8
     SKIP = 9
     LEVEL_KEYS = 10
+    KNIGHT = 11
 
 
 class MedievilItemData(NamedTuple):
@@ -64,6 +65,7 @@ class MedievilItem(Item):
         output = {item_data.name: (base_id + item_data.m_code) for item_data in _all_items if item_data.m_code is not None}
         output.update({item_data.name: base_id + item_data.m_code for item_data in _keysanity_regular})
         output.update({item_data.name: base_id + item_data.m_code + KEYSANITY_UNIQUE_ID_OFFSET for item_data in _keysanity_unique})
+        output.update({item_data.name: base_id + item_data.m_code for item_data in _knights})
         return output
 
 
@@ -346,6 +348,7 @@ _keysanity_regular: List[MedievilItemData] = [
     ("Asylum Grounds Unlock", 168, MedievilItemCategory.LEVEL_KEYS, True),  # Asylum grounds
     ("Inside the Asylum Unlock", 169, MedievilItemCategory.LEVEL_KEYS, True),  # Inside the Asylum
     ("Enchanted Earth Unlock", 170, MedievilItemCategory.LEVEL_KEYS, True),  # Enchanted Earth
+    ("Zaroks Lair Unlock", 171, MedievilItemCategory.LEVEL_KEYS, True),  # Zaroks Lair
     ("Pools of the Ancient Dead Unlock", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
     ("The Lake Unlock", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
     ("The Crystal Caves Unlock", 174, MedievilItemCategory.LEVEL_KEYS, True),  # Crystal Caves
@@ -368,6 +371,7 @@ _keysanity_unique: List[MedievilItemData] = [
     ("Jack's Invitation", 168, MedievilItemCategory.LEVEL_KEYS, True),  # Asylum grounds
     ("Fight Club", 169, MedievilItemCategory.LEVEL_KEYS, True),  # Inside the Asylum
     ("Demonic Amulet", 170, MedievilItemCategory.LEVEL_KEYS, True),  # Enchanted Earth
+    ("False Heroes Hope", 171, MedievilItemCategory.LEVEL_KEYS, True),  # Zaroks Lair
     ("Boating Licence", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
     ("Lake Key", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
     ("Ancient Horn", 174, MedievilItemCategory.LEVEL_KEYS, True),  # Crystal Caves
@@ -378,8 +382,15 @@ _keysanity_unique: List[MedievilItemData] = [
     ("Alarm Clock", 179, MedievilItemCategory.LEVEL_KEYS, True),  # The Time Device
 ]
 
+KNIGHT_ITEM_NAME = "Knight of Gallowmere"
+
+# Kept out of _all_items so BuildItemPool only adds as many as the knights_to_find option asks for.
+_knights: List[MedievilItemData] = [
+    (KNIGHT_ITEM_NAME, 180, MedievilItemCategory.KNIGHT, True),
+]
+
 # The level each key opens, by m_code. Both naming lists share these m_codes, so the client unlocks the same level
-# whichever name the key has. Dan's Crypt, the Ant Hill (entered from Enchanted Earth) and Zarok's Lair have no key.
+# whichever name the key has. Dan's Crypt and the Ant Hill (entered from Enchanted Earth) have no key.
 level_key_regions: dict[int, str] = {
     160: "The Graveyard",
     161: "Cemetery Hill",
@@ -392,6 +403,7 @@ level_key_regions: dict[int, str] = {
     168: "Asylum Grounds",
     169: "Inside the Asylum",
     170: "Enchanted Earth",
+    171: "Zaroks Lair",
     172: "Pools of the Ancient Dead",
     173: "The Lake",
     174: "The Crystal Caves",
@@ -410,6 +422,7 @@ KEYSANITY_UNIQUE_ID_OFFSET = 40
 _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_items]
 _keysanity_regular = [MedievilItemData(*row) for row in _keysanity_regular]
 _keysanity_unique = [MedievilItemData(*row) for row in _keysanity_unique]
+_knights = [MedievilItemData(*row) for row in _knights]
 _keysanity_unique_names = {item_data.name for item_data in _keysanity_unique}
 
 
@@ -426,7 +439,7 @@ item_descriptions = {
 
 # Create a dictionary for quick lookup of item data by name
 item_dictionary: dict[str, MedievilItemData] = {
-    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique)
+    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights)
 }
 
 
@@ -492,6 +505,11 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
                 continue
             else:
                 item_pool_names.append(item_name)
+
+    # Knights go in after everything else needed, so they never squeeze out other progression
+    knights_to_find = options.knights_to_find.value if hasattr(options, "knights_to_find") else 0
+    for _ in range(min(knights_to_find, count - len(item_pool_names))):
+        item_pool_names.append(KNIGHT_ITEM_NAME)
 
     # Populate the rest of the pool with random filler items
     filler_item_names = [

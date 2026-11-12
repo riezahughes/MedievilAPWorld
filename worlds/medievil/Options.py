@@ -34,6 +34,16 @@ class ChaliceWinCountOption(Range):
     range_end = 20
 
 
+class KnightsToFind(Range):
+    """How many Knights of Gallowmere you need to find to unlock Zarok's Lair. They're spread across the multiworld.
+    Only works with open progression, it's turned off for vanilla. 0 leaves the boss open to fight at any time."""
+
+    display_name = "Knights to Find"
+    default = 8
+    range_start = 0
+    range_end = 500
+
+
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
 
@@ -245,6 +255,7 @@ class MedievilOption(PerGameCommonOptions):
     include_ant_hill_in_checks: IncludeAntHillInChecksToggle
     include_chalices_in_checks: IncludeChalicesInChecksToggle
     chalice_win_count: ChaliceWinCountOption
+    knights_to_find: KnightsToFind
     break_ammo_limit: BreakAmmoLimit
     break_percentage_limit: BreakPercentageLimit
     traps: TrapToggle

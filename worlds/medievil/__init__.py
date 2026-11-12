@@ -8,7 +8,7 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 
-from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names
+from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names, KNIGHT_ITEM_NAME
 from .Locations import (
     MedievilLocation,
     MedievilLocationCategory,
@@ -121,6 +121,13 @@ class MedievilWorld(World):
                 f"Medievil: keysanity needs open progression, turning it off for {self.player_name}."
             )
             self.options.keysanity.value = 0
+
+        # Knights unlock Zarok's Lair on the open world map, so they only work with open progression
+        if self.options.knights_to_find.value and self.options.progression_option.value != ProgressionOptions.OPEN:
+            logging.warning(
+                f"Medievil: knights_to_find needs open progression, turning it off for {self.player_name}."
+            )
+            self.options.knights_to_find.value = 0
 
     def create_regions(self):
         # Create Regions
@@ -330,18 +337,6 @@ class MedievilWorld(World):
             ):
                 continue
 
-            if location.name == "Equipment: Good Lightning - ZL":
-                good_lightning = MedievilItem("Equipment: Good Lightning", ItemClassification.progression, 9901045, self.player)
-                new_location = MedievilLocation(
-                    self.player,
-                    "Equipment: Good Lightning - ZL",
-                    MedievilLocationCategory.WEAPON,
-                    "Equipment: Good Lightning",
-                    self.location_name_to_id["Equipment: Good Lightning - ZL"],
-                    new_region,
-                )
-                new_location.place_locked_item(good_lightning)
-
             # elif self.options.runesanity.value == RuneSanityToggle.option_true and location.name == "Star Rune: Dan's Crypt":
             #     first_star_rune = MedievilItem("Star Rune: Dan's Crypt", ItemClassification.progression, 9901146, self.player)
             #     new_location = MedievilLocation(
@@ -354,7 +349,7 @@ class MedievilWorld(World):
             #     )
             #     new_location.place_locked_item(first_star_rune)
 
-            elif location.category in self.enabled_location_categories:
+            if location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
                     self.player,
                     location.name,
@@ -398,6 +393,13 @@ class MedievilWorld(World):
         for item_name in item_names_to_add:
             new_item = self.create_item(item_name)
             generated_items.append(new_item)
+
+        knights_placed = item_names_to_add.count(KNIGHT_ITEM_NAME)
+        if knights_placed < self.options.knights_to_find.value:
+            raise OptionError(
+                f"Medievil: knights_to_find is {self.options.knights_to_find.value} for {self.player_name}, but only "
+                f"{knights_placed} fit in the item pool. Lower knights_to_find or turn on more location options."
+            )
 
         print(f"Created item pool size: {len(generated_items)}")
 
@@ -558,6 +560,7 @@ class MedievilWorld(World):
                 "include_ant_hill_in_checks": self.options.include_ant_hill_in_checks.value,
                 "include_chalices_in_checks": self.options.include_chalices_in_checks.value,
                 "chalice_win_count": self.options.chalice_win_count.value,
+                "knights_to_find": self.options.knights_to_find.value,
                 "traps": self.options.traps.value,
                 "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,

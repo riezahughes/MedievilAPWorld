@@ -42,12 +42,13 @@ ALL_NON_ANT_HILL_CHALICE_UNLOCK_ITEMS = (
 class DefeatZarokGoalTest(MedievilTestBase):
     """
     Default goal. Zaroks Lair itself is reachable for free in open mode, but "Cleared: Zaroks
-    Lair" needs any weapon, the Good Lightning (locked at Zaroks Lair) and 5 life bottles.
+    Lair" needs any weapon, the Good Lightning and 5 life bottles.
     """
 
     options = {
         "goal": GoalOptions.DEFEAT_ZAROK,
         "progression_option": ProgressionOptions.OPEN,
+        "knights_to_find": 0,
     }
 
     def test_requires_a_weapon_and_five_life_bottles(self) -> None:
@@ -55,10 +56,12 @@ class DefeatZarokGoalTest(MedievilTestBase):
         self.collect_by_name(FIVE_LIFE_BOTTLES)
         self.assertBeatable(False)
         self.collect_by_name("Equipment: Club")
+        self.assertBeatable(False)
+        self.collect_by_name("Equipment: Good Lightning")
         self.assertBeatable(True)
 
     def test_four_life_bottles_are_not_enough(self) -> None:
-        self.collect_by_name("Equipment: Club")
+        self.collect_by_name(["Equipment: Club", "Equipment: Good Lightning"])
         self.collect_by_name(FIVE_LIFE_BOTTLES[:4])
         self.assertBeatable(False)
 
@@ -67,6 +70,7 @@ class ChaliceGoalTest(MedievilTestBase):
     options = {
         "goal": GoalOptions.CHALICE,
         "progression_option": ProgressionOptions.OPEN,
+        "knights_to_find": 0,
         "chalice_win_count": 11,
     }
 
@@ -85,6 +89,7 @@ class BothGoalTest(MedievilTestBase):
     options = {
         "goal": GoalOptions.BOTH,
         "progression_option": ProgressionOptions.OPEN,
+        "knights_to_find": 0,
         "chalice_win_count": 11,
     }
 
@@ -93,6 +98,8 @@ class BothGoalTest(MedievilTestBase):
         self.collect_by_name("Equipment: Club")
         self.assertBeatable(False)  # chalices done, Zarok not
         self.collect_by_name(FIVE_LIFE_BOTTLES)
+        self.assertBeatable(False)  # no Good Lightning yet
+        self.collect_by_name("Equipment: Good Lightning")
         self.assertBeatable(True)
 
 
@@ -108,6 +115,7 @@ class ChaliceGoalAntHillDisabledCapTest(MedievilTestBase):
     options = {
         "goal": GoalOptions.CHALICE,
         "progression_option": ProgressionOptions.OPEN,
+        "knights_to_find": 0,
         "chalice_win_count": 20,
         "include_ant_hill_in_checks": 0,
     }
