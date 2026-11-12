@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Optional, NamedTuple, Dict
+from typing import Optional, NamedTuple, Dict, List
 from BaseClasses import Location, Region
 from .Items import MedievilItem
 
@@ -17,6 +17,7 @@ class MedievilLocationCategory(IntEnum):
     GARGOYLE = 9
     FUN = 10
     LEVEL_END = 11
+    SHOP = 12
 
 
 class MedievilLocationData(NamedTuple):
@@ -94,6 +95,7 @@ class MedievilLocation(Location):
                     # print(f"{current_region_base_id + j}: {location_data.name}")
                     output[location_data.name] = current_region_base_id + j
 
+        output.update(shop_location_ids())
         return output
 
         # return {location_data.name: (base_id + location_data.m_code) for location_data in location_tables["MainWorld"]}
@@ -666,6 +668,75 @@ location_tables = {
     # Monsters for Monstersanity (if i hate myself) also go here
 }
 
+class MedievilShopData(NamedTuple):
+    """A level with a Merchant Gargoyle. Every Merchant Gargoyle uses the same shop menu, so the shop belongs
+    to the level: if a level has more than one merchant, they all sell the same stock."""
+
+    level_name: str  # used in the location names
+    region: str  # region the shop's locations are placed in (the level itself)
+    level_id: int  # the game's level ID (Addresses.CurrentLevel in the client)
+
+
+# Levels with a Merchant Gargoyle. What it takes to reach each merchant is in Rules.set_shop_rules.
+# Append only, the position in this list sets the location IDs.
+# Level IDs are the game's CurrentLevel values, as in the client's LevelHandlers.GetLevelNameFromId.
+shop_tables: List[MedievilShopData] = [
+    MedievilShopData("The Graveyard", "The Graveyard", 0x01),
+    MedievilShopData("Cemetery Hill", "Cemetery Hill", 0x03),
+    MedievilShopData("Return to the Graveyard", "Return to the Graveyard", 0x02),
+    MedievilShopData("Pumpkin Gorge", "Pumpkin Gorge", 0x09),
+    MedievilShopData("Pumpkin Serpent", "Pumpkin Serpent", 0x0A),
+    MedievilShopData("Enchanted Earth", "Enchanted Earth", 0x0F),
+    MedievilShopData("The Time Device", "The Time Device", 0x15),
+    MedievilShopData("The Entrance Hall", "The Entrance Hall", 0x14),
+    MedievilShopData("The Ghost Ship", "The Ghost Ship", 0x13),
+    MedievilShopData("The Haunted Ruins", "The Haunted Ruins", 0x11),
+    MedievilShopData("The Gallows Gauntlet", "The Gallows Gauntlet", 0x10),
+    MedievilShopData("The Lake", "The Lake", 0x16),
+    MedievilShopData("The Crystal Caves", "The Crystal Caves", 0x08),
+    MedievilShopData("Pools of the Ancient Dead", "Pools of the Ancient Dead", 0x0C),
+    # only exists when the Ant Hill is in the game (include_ant_hill_in_checks)
+    MedievilShopData("Ant Hill", "Ant Hill", 0x07),
+    MedievilShopData("Inside the Asylum", "Inside the Asylum", 0x0E),
+    MedievilShopData("Asylum Grounds", "Asylum Grounds", 0x0D),
+    MedievilShopData("The Sleeping Village", "The Sleeping Village", 0x0B),
+    MedievilShopData("The Hilltop Mausoleum", "The Hilltop Mausoleum", 0x04),
+]
+
+# Prices of Archipelago items in gold, rolled per location. For comparison, the vanilla shop charges 40-120 for
+# supplies/services and 200-4000 to buy back a stolen weapon.
+SHOP_PRICE_MIN = 50
+SHOP_PRICE_MAX = 400
+
+# The most Archipelago items one shop can sell: the "SECOND HAND GOODS" section is rows 8-18 of the game's shop
+# table (11 rows), and that table can't grow without patching the game. Weapons stolen by imps are listed first,
+# so in a full shop some Archipelago items wait until a row is free.
+SHOP_MENU_ROWS = 11
+
+SHOP_BASE_ID = 99250000 + 40 * 1000  # well clear of the per-region location IDs
+SHOP_ID_STRIDE = 20  # IDs per shop, so a shop can grow without moving the others
+
+
+def shop_location_name(shop: MedievilShopData, index: int) -> str:
+    return f"Merchant Gargoyle: {shop.level_name} - Item {index + 1}"
+
+
+def shop_location_names(shop: MedievilShopData, count: int) -> List[str]:
+    """The names of a shop's first `count` locations (capped at what fits in the shop menu)."""
+    return [shop_location_name(shop, i) for i in range(min(count, SHOP_MENU_ROWS))]
+
+
+def shop_location_ids() -> Dict[str, int]:
+    # every possible shop location gets an ID, however many a seed uses
+    return {
+        name: SHOP_BASE_ID + s * SHOP_ID_STRIDE + i
+        for s, shop in enumerate(shop_tables)
+        for i, name in enumerate(shop_location_names(shop, SHOP_MENU_ROWS))
+    }
+
+
 location_dictionary: Dict[str, MedievilLocationData] = {}
 for location_table in location_tables.values():
     location_dictionary.update({location_data.name: location_data for location_data in location_table})
+for _shop_location in shop_location_ids():
+    location_dictionary[_shop_location] = MedievilLocationData(_shop_location, "Gold Shield Ammo (100)", MedievilLocationCategory.SHOP)

@@ -20,6 +20,11 @@ class CheatMenuOptions:
     SUPER = 2
 
 
+class KeysanityOptions:
+    LEVEL_NAME = 0
+    UNIQUE_NAME = 1
+
+
 class ChaliceWinCountOption(Range):
     """Sets the number of chalices required to complete the game"""
 
@@ -89,6 +94,37 @@ class RuneSanityToggle(Toggle):
     option_false = 0
 
 
+class KeySanityToggle(Toggle):
+    """Sets whether to mix keys for each level into the pool. Only works with open progression, it's turned off
+    for vanilla."""
+
+    display_name = "KeySanity"
+    default = 0
+    option_true = 1
+    option_false = 0
+
+
+class KeySanityNamingOption(Choice):
+    """Sets whether to give your keys fun names:
+    LEVEL_NAME = The Graveyard Unlock
+    UNIQUE_NAME = Angelic Call
+    """
+
+    display_name = "Keysanity Item Naming"
+    default = KeysanityOptions.LEVEL_NAME
+    option_level_name = KeysanityOptions.LEVEL_NAME
+    option_unique_name = KeysanityOptions.UNIQUE_NAME
+
+
+class KeySanityStartingKeys(Range):
+    """How Many keys you'd like to start the game with"""
+
+    display_name = "Keysanity starting Keys"
+    default = 2
+    range_start = 1
+    range_end = 19
+
+
 class GargoyleSanityToggle(Toggle):
     """Sets whether to do checks for interacting with gargoyle statues"""
 
@@ -102,6 +138,35 @@ class BookSanityToggle(Toggle):
     """Sets whether reading books counts as checks"""
 
     display_name = "BookSanity"
+    default = 0
+    option_true = 1
+    option_false = 0
+
+
+class ShopSanityToggle(Toggle):
+    """Sets whether Merchant Gargoyles sell Archipelago items for gold"""
+
+    display_name = "ShopSanity"
+    default = 0
+    option_true = 1
+    option_false = 0
+
+
+class ShopSanityItemsPerShop(Range):
+    """How many Archipelago items each Merchant Gargoyle sells when ShopSanity is on. The shop has room for 11;
+    weapons stolen by imps are listed first, so in a full shop some items show once a row is free."""
+
+    display_name = "ShopSanity Items Per Shop"
+    default = 3
+    range_start = 1
+    range_end = 11  # Locations.SHOP_MENU_ROWS
+
+
+class ShopSanityProgressionToggle(Toggle):
+    """Allow progression items (such as weapons needed to progress) to be sold in Merchant Gargoyle shops.
+    Gold isn't tracked by logic, so you may need to collect gold before you can buy something you need."""
+
+    display_name = "ShopSanity Allow Progression"
     default = 0
     option_true = 1
     option_false = 0
@@ -187,7 +252,13 @@ class MedievilOption(PerGameCommonOptions):
     deathlink: DeathLinkToggle
     deathsound: DeathSoundToggle
     cheat_menu: CheatMenuChoice
+    keysanity: KeySanityToggle
+    keysanity_naming: KeySanityNamingOption
+    keysanity_starting_keys: KeySanityStartingKeys
     gargoylesanity: GargoyleSanityToggle
     booksanity: BookSanityToggle
     runesanity: RuneSanityToggle
+    shopsanity: ShopSanityToggle
+    shopsanity_items_per_shop: ShopSanityItemsPerShop
+    shopsanity_allow_progression: ShopSanityProgressionToggle
     guaranteed_items: GuaranteedItemsOption

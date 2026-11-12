@@ -1,4 +1,5 @@
 # world/dc2/__init__.py
+import logging
 from typing import Dict, Set, List
 
 from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassification, CollectionState
@@ -7,8 +8,19 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 
-from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool
-from .Locations import MedievilLocation, MedievilLocationCategory, MedievilLocationData, location_tables, location_dictionary
+from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names
+from .Locations import (
+    MedievilLocation,
+    MedievilLocationCategory,
+    MedievilLocationData,
+    location_tables,
+    location_dictionary,
+    shop_tables,
+    MedievilShopData,
+    shop_location_names,
+    SHOP_PRICE_MIN,
+    SHOP_PRICE_MAX,
+)
 from .Options import (
     MedievilOption,
     GoalOptions,
@@ -32,6 +44,8 @@ from .Rules import (
     set_non_runesanity_rules,
     set_runesanity_rules,
     set_HoH_entrances,
+    set_shop_rules,
+    set_keysanity_rules,
 )
 from .VictoryConditions import defeat_zarok_and_get_chalices_victory, defeat_zarok_victory, get_chalices_victory
 
@@ -77,6 +91,8 @@ class MedievilWorld(World):
         self.locked_locations = []
         self.main_path_locations = []
         self.enabled_location_categories = set()
+        self.shop_prices: Dict[str, int] = {}
+        self.starting_keys: List[str] = []
 
     def generate_early(self):
         self.validate_yaml_options()
@@ -91,13 +107,20 @@ class MedievilWorld(World):
         self.enabled_location_categories.add(MedievilLocationCategory.DYNAMIC_ITEM)
 
     def validate_yaml_options(self) -> None:
-        if self.options.goal.value != GoalOptions.DEFEAT_ZAROK \
-            and self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false:
-            '''We change it to include chalice or show an error needing it to be on?'''
-           # self.options.include_chalices_in_checks.value = IncludeChalicesInChecksToggle.option_true
-            raise OptionError(
-                "include_chalices_in_checks must be true for goal other than Defeat Zarok"
+        if (
+            self.options.goal.value != GoalOptions.DEFEAT_ZAROK
+            and self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false
+        ):
+            """We change it to include chalice or show an error needing it to be on?"""
+            # self.options.include_chalices_in_checks.value = IncludeChalicesInChecksToggle.option_true
+            raise OptionError("include_chalices_in_checks must be true for goal other than Defeat Zarok")
+
+        # KeySanity locks levels on the open world map, so it only works with open progression
+        if self.options.keysanity.value and self.options.progression_option.value != ProgressionOptions.OPEN:
+            logging.warning(
+                f"Medievil: keysanity needs open progression, turning it off for {self.player_name}."
             )
+            self.options.keysanity.value = 0
 
     def create_regions(self):
         # Create Regions
@@ -135,7 +158,7 @@ class MedievilWorld(World):
             "Scarecrow Fields Locked Items",
             "The Sleeping Village Locked Items",
             "Return to the Graveyard Locked Items",
-            "Enchanted Earth Locked Items"
+            "Enchanted Earth Locked Items",
         ]
 
         if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
@@ -197,7 +220,7 @@ class MedievilWorld(World):
         create_connection("The Time Device", "Map")
         create_connection("Zaroks Lair", "Map")
 
-       # Can go to Hall of heroes from each level with chalice
+        # Can go to Hall of heroes from each level with chalice
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
             create_connection("The Graveyard", "Hall of Heroes")
             create_connection("Return to the Graveyard", "Hall of Heroes")
@@ -236,13 +259,34 @@ class MedievilWorld(World):
         create_connection("The Sleeping Village", "The Sleeping Village Locked Items")
         create_connection("Enchanted Earth", "Enchanted Earth Locked Items")
         # Dont think these even matter?
-        create_connection("Dan's Crypt Locked Items","Dan's Crypt")
-        create_connection("Cemetery Hill Locked Items","Cemetery Hill")
-        create_connection("The Hilltop Mausoleum Locked Items","The Hilltop Mausoleum")
-        create_connection("Return to the Graveyard Locked Items","Return to the Graveyard")
-        create_connection("Scarecrow Fields Locked Items","Scarecrow Fields")
-        create_connection("The Sleeping Village Locked Items","The Sleeping Village")
-        create_connection("Enchanted Earth Locked Items","Enchanted Earth")
+        create_connection("Dan's Crypt Locked Items", "Dan's Crypt")
+        create_connection("Cemetery Hill Locked Items", "Cemetery Hill")
+        create_connection("The Hilltop Mausoleum Locked Items", "The Hilltop Mausoleum")
+        create_connection("Return to the Graveyard Locked Items", "Return to the Graveyard")
+        create_connection("Scarecrow Fields Locked Items", "Scarecrow Fields")
+        create_connection("The Sleeping Village Locked Items", "The Sleeping Village")
+        create_connection("Enchanted Earth Locked Items", "Enchanted Earth")
+
+        if self.options.shopsanity.value:
+            self.create_shop_locations(regions)
+
+    def active_shops(self) -> List[MedievilShopData]:
+        """The shops in this seed: the Ant Hill's merchant is only there when the Ant Hill is."""
+        if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
+            return list(shop_tables)
+        return [shop for shop in shop_tables if shop.region != "Ant Hill"]
+
+    def create_shop_locations(self, regions: Dict[str, Region]) -> None:
+        """ShopSanity: each level with a Merchant Gargoyle sells a few Archipelago items for gold."""
+        for shop in self.active_shops():
+            region = regions[shop.region]
+            for name in shop_location_names(shop, self.options.shopsanity_items_per_shop.value):
+                region.locations.append(
+                    MedievilLocation(
+                        self.player, name, MedievilLocationCategory.SHOP, "Gold Shield Ammo (100)", self.location_name_to_id[name], region
+                    )
+                )
+                self.shop_prices[name] = self.random.randrange(SHOP_PRICE_MIN, SHOP_PRICE_MAX + 1, 10)
 
     # For each region, add the associated locations retrieved from the corresponding location_table
     def create_region(self, region_name, location_table) -> Region:
@@ -273,11 +317,17 @@ class MedievilWorld(World):
                 and location.category == MedievilLocationCategory.CHALICE_PICKUP
             ):
                 continue
-            if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false and region_name == "Hall of Heroes":
+            if (
+                self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_false
+                and region_name == "Hall of Heroes"
+            ):
                 continue
             if self.options.booksanity.value == BookSanityToggle.option_false and location.category == MedievilLocationCategory.BOOK:
                 continue
-            if self.options.gargoylesanity.value == GargoyleSanityToggle.option_false and location.category == MedievilLocationCategory.GARGOYLE:
+            if (
+                self.options.gargoylesanity.value == GargoyleSanityToggle.option_false
+                and location.category == MedievilLocationCategory.GARGOYLE
+            ):
                 continue
 
             if location.name == "Equipment: Good Lightning - ZL":
@@ -306,7 +356,12 @@ class MedievilWorld(World):
 
             elif location.category in self.enabled_location_categories:
                 new_location = MedievilLocation(
-                    self.player, location.name, location.category, location.default_item, self.location_name_to_id[location.name], new_region
+                    self.player,
+                    location.name,
+                    location.category,
+                    location.default_item,
+                    self.location_name_to_id[location.name],
+                    new_region,
                 )
             else:
                 event_item = self.create_item(location.default_item)
@@ -326,8 +381,18 @@ class MedievilWorld(World):
 
         print(f"Requesting itempool size for randomized locations: {randomized_location_count}")
 
+        # KeySanity: start with a few random level keys, the rest go in the pool
+        level_keys: List[str] = []
+        if self.options.keysanity.value:
+            level_keys = list(level_key_names(self.options.keysanity_naming.value).values())
+            starting_count = min(self.options.keysanity_starting_keys.value, len(level_keys))
+            self.starting_keys = self.random.sample(level_keys, starting_count)
+            for key in self.starting_keys:
+                self.multiworld.push_precollected(self.create_item(key))
+            level_keys = [key for key in level_keys if key not in self.starting_keys]
+
         # Call BuildItemPool to get a list of item NAMES (strings)
-        item_names_to_add = BuildItemPool(randomized_location_count, self.options)
+        item_names_to_add = BuildItemPool(randomized_location_count, self.options, level_keys)
 
         generated_items: List[Item] = []
         for item_name in item_names_to_add:
@@ -356,7 +421,11 @@ class MedievilWorld(World):
         # Determine the Archipelago ItemClassification based on MedievilItemData.
         item_classification: ItemClassification
 
-        if item_data.progression or item_data.category == MedievilItemCategory.PROGRESSION or item_data.category == MedievilItemCategory.LEVEL_END:
+        if (
+            item_data.progression
+            or item_data.category == MedievilItemCategory.PROGRESSION
+            or item_data.category == MedievilItemCategory.LEVEL_END
+        ):
             item_classification = ItemClassification.progression
         elif (
             item_data.category == MedievilItemCategory.FUN
@@ -391,9 +460,8 @@ class MedievilWorld(World):
         for location in self.multiworld.get_locations(self.player):
             # Check if the location is within "Dan's Crypt" or "Locked Items DC"
 
-            
-            '''This is causing very few(0.35-0.5% fuzzer) fill errors with all(2-3) medievil games(did not test with other games)'''
-            '''Should be able to get rid of this if client can stop giving any of them on new game'''
+            """This is causing very few(0.35-0.5% fuzzer) fill errors with all(2-3) medievil games(did not test with other games)"""
+            """Should be able to get rid of this if client can stop giving any of them on new game"""
             if location.parent_region.name in ["Dan's Crypt", "Dan's Crypt Locked Items"]:
                 add_item_rule(location, lambda item: item.name != "Equipment: Hammer")
                 add_item_rule(location, lambda item: item.name != "Equipment: Club")
@@ -420,14 +488,16 @@ class MedievilWorld(World):
         elif self.options.progression_option.value == ProgressionOptions.OPEN:
             set_open_level_progression(self)
 
+        # level keys sit on top of either progression mode
+        if self.options.keysanity.value:
+            set_keysanity_rules(self)
+
         # hall of heroes
         if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
             set_HoH_entrances(self)
             set_hall_of_heroes_progression(self, max_chalice_count)
-            
-        # runesanity options
 
-      
+        # runesanity options
 
         # key item dependencies that apply in every mode
         set_key_item_dependencies(self)
@@ -443,8 +513,10 @@ class MedievilWorld(World):
             set_runesanity_rules(self)
         else:
             set_non_runesanity_rules(self)
-            
-        
+
+        if self.options.shopsanity.value:
+            set_shop_rules(self)
+
         # Get a birds eye view of everything
 
         # from Utils import visualize_regions
@@ -494,9 +566,25 @@ class MedievilWorld(World):
                 "break_percentage_limit": self.options.break_percentage_limit.value,
                 "cheat_menu": self.options.cheat_menu.value,
                 "runesanity": self.options.runesanity.value,
+                "keysanity": self.options.keysanity.value,
+                "keysanity_naming": self.options.keysanity_naming.value,
+                "keysanity_starting_keys": self.options.keysanity_starting_keys.value,
                 "gargoylesanity": self.options.gargoylesanity.value,
                 "booksanity": self.options.booksanity.value,
+                "shopsanity": self.options.shopsanity.value,
+                "shopsanity_allow_progression": self.options.shopsanity_allow_progression.value,
+                "shopsanity_items_per_shop": self.options.shopsanity_items_per_shop.value,
             },
+            # ShopSanity stock, by the game's level ID: the client puts these in the merchant's shop menu
+            "shop_stock": {
+                str(shop.level_id): [
+                    {"id": self.location_name_to_id[name], "price": self.shop_prices[name]}
+                    for name in shop_location_names(shop, self.options.shopsanity_items_per_shop.value)
+                ]
+                for shop in self.active_shops()
+            }
+            if self.options.shopsanity.value
+            else {},
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
             "base_id": self.base_id,  # to merge location and items lists
