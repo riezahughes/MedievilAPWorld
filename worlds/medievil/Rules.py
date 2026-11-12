@@ -1087,10 +1087,6 @@ def set_keysanity_rules(self: "MedievilWorld") -> None:
     for region, key in keys.items():
         layer_rule(self, self.get_entrance(f"Map -> {region}"), Has(key))
 
-    # the disc's copy protection won't open The Hilltop Mausoleum until Cemetery Hill is done,
-    # so its entrance also needs Cemetery Hill's key
-    layer_rule(self, self.get_entrance("Map -> The Hilltop Mausoleum"), Has(keys["Cemetery Hill"]))
-
 
 def set_HoH_entrances(self: "MedievilWorld") -> None:
     self.set_rule(self.get_entrance("The Graveyard -> Hall of Heroes"), cleared("The Graveyard") & CanReachLocation("Chalice: The Graveyard"))
