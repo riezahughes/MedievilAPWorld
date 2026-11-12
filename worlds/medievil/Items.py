@@ -194,9 +194,9 @@ _life_bottles = {
 
 _all_items: List[MedievilItemData] = [
     # Filler Items
-    ("Gold Coins (50)", 0, MedievilItemCategory.GOLD_FILLER, False),
-    ("Gold Coins (100)", 1, MedievilItemCategory.GOLD_FILLER, False),
-    ("Gold Coins (150)", 2, MedievilItemCategory.GOLD_FILLER, False),
+    ("Gold Coins (150)", 0, MedievilItemCategory.GOLD_FILLER, False),
+    ("Gold Coins (200)", 1, MedievilItemCategory.GOLD_FILLER, False),
+    ("Gold Coins (350)", 2, MedievilItemCategory.GOLD_FILLER, False),
     ("Dagger Ammo (10)", 3, MedievilItemCategory.AMMO_FILLER, False),
     ("Dagger Ammo (20)", 4, MedievilItemCategory.AMMO_FILLER, False),
     ("Broadsword Charge (20)", 5, MedievilItemCategory.AMMO_FILLER, False),

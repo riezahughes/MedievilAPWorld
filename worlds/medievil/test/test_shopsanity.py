@@ -56,9 +56,10 @@ class ShopSanityOnTest(MedievilTestBase):
 
     def test_slot_data_stock(self) -> None:
         stock = self.world.fill_slot_data()["shop_stock"]
-        self.assertEqual(set(stock), {str(shop.level_id) for shop in shop_tables})
+        self.assertEqual(set(stock), {shop.stock_key for shop in shop_tables})
+        self.assertEqual(len(stock), len(shop_tables))
         for shop in shop_tables:
-            entries = stock[str(shop.level_id)]
+            entries = stock[shop.stock_key]
             names = shop_location_names(shop, ShopSanityItemsPerShop.default)
             self.assertEqual(len(entries), len(names))
             for entry, name in zip(entries, names):

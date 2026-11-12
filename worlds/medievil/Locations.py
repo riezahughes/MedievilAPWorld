@@ -669,12 +669,18 @@ location_tables = {
 }
 
 class MedievilShopData(NamedTuple):
-    """A level with a Merchant Gargoyle. Every Merchant Gargoyle uses the same shop menu, so the shop belongs
-    to the level: if a level has more than one merchant, they all sell the same stock."""
+    """A Merchant Gargoyle. Every merchant uses the same shop menu; the client tells them apart by level, and
+    within a level with more than one merchant (Scarecrow Fields) by where Dan is standing."""
 
     level_name: str  # used in the location names
     region: str  # region the shop's locations are placed in (the level itself)
     level_id: int  # the game's level ID (Addresses.CurrentLevel in the client)
+    merchant: int = 0  # which merchant in the level, 0 for the first
+
+    @property
+    def stock_key(self) -> str:
+        """The shop's key in slot data's shop_stock: the level ID, plus ".<merchant>" after the first."""
+        return str(self.level_id) if self.merchant == 0 else f"{self.level_id}.{self.merchant}"
 
 
 # Levels with a Merchant Gargoyle. What it takes to reach each merchant is in Rules.set_shop_rules.
@@ -701,6 +707,9 @@ shop_tables: List[MedievilShopData] = [
     MedievilShopData("Asylum Grounds", "Asylum Grounds", 0x0D),
     MedievilShopData("The Sleeping Village", "The Sleeping Village", 0x0B),
     MedievilShopData("The Hilltop Mausoleum", "The Hilltop Mausoleum", 0x04),
+    # Scarecrow Fields has two: one at the start, and one at the end of the level next to the chalice
+    MedievilShopData("Scarecrow Fields", "Scarecrow Fields", 0x05),
+    MedievilShopData("Scarecrow Fields Chalice", "Scarecrow Fields", 0x05, merchant=1),
 ]
 
 # Prices of Archipelago items in gold, rolled per location. For comparison, the vanilla shop charges 40-120 for

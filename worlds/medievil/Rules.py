@@ -1041,27 +1041,34 @@ def set_shop_rules(self: "MedievilWorld") -> None:
     from worlds.generic.Rules import add_item_rule
     from .Locations import shop_location_names
 
-    shop_rules: dict[str, Rule] = {
+    # by shop (MedievilShopData.level_name), since Scarecrow Fields' two merchants share a region
+    # items needed in every mode
+    item_rules: dict[str, Rule] = {
+        "The Hilltop Mausoleum": weapon("Club") | weapon("Hammer"),
+        "Scarecrow Fields Chalice": key_items("Harvester Parts"),
         "Enchanted Earth": key_items("Shadow Artefact", "Shadow Talisman"),
         "The Gallows Gauntlet": weapon("Dragon Armour"),
-        "Ant Hill": key_items("Witches Talisman"),
+        "Ant Hill": key_items("Witches Talisman") & (weapon("Club") | weapon("Hammer") | DARING_DASH),
     }
-    if self.options.runesanity.value == RuneSanityToggle.option_true:
-        shop_rules.update(
-            {
-                "The Graveyard": Has("Chaos Rune: The Graveyard"),
-                "The Hilltop Mausoleum": Has("Earth Rune: The Hilltop Mausoleum"),
-                "The Lake": HasAll("Time Rune: The Lake", "Chaos Rune: The Lake", "Earth Rune: The Lake"),
-                "The Ghost Ship": Has("Moon Rune: Ghost Ship"),
-                "The Time Device": Has("Earth Rune: The Time Device"),
-            }
-        )
+    # rune doors, only in logic with RuneSanity
+    rune_rules: dict[str, Rule] = {
+        "The Graveyard": Has("Chaos Rune: The Graveyard"),
+        "The Hilltop Mausoleum": Has("Earth Rune: The Hilltop Mausoleum"),
+        "Scarecrow Fields Chalice": HasAll("Earth Rune: Scarecrow Fields", "Chaos Rune: Scarecrow Fields"),
+        "Enchanted Earth": Has("Earth Rune: Enchanted Earth"),
+        "The Lake": HasAll("Time Rune: The Lake", "Chaos Rune: The Lake", "Earth Rune: The Lake"),
+        "The Ghost Ship": Has("Moon Rune: Ghost Ship"),
+        "The Time Device": HasAll("Time Rune: The Time Device", "Chaos Rune: The Time Device"),
+    }
+    runesanity = self.options.runesanity.value == RuneSanityToggle.option_true
 
     for shop in self.active_shops():
+        rules = [item_rules.get(shop.level_name), rune_rules.get(shop.level_name) if runesanity else None]
         for name in shop_location_names(shop, self.options.shopsanity_items_per_shop.value):
             location = self.get_location(name)
-            if shop.region in shop_rules:
-                layer_rule(self, location, shop_rules[shop.region])
+            for rule in rules:
+                if rule is not None:
+                    layer_rule(self, location, rule)
             if not self.options.shopsanity_allow_progression.value:
                 add_item_rule(location, lambda item: not item.advancement)
 
@@ -1071,8 +1078,13 @@ def set_keysanity_rules(self: "MedievilWorld") -> None:
     Everything inside a level (its checks, shop, Hall of Heroes door, the Ant Hill) is behind this entrance."""
     from .Items import level_key_names
 
-    for region, key in level_key_names(self.options.keysanity_naming.value).items():
+    keys = level_key_names(self.options.keysanity_naming.value)
+    for region, key in keys.items():
         layer_rule(self, self.get_entrance(f"Map -> {region}"), Has(key))
+
+    # the disc's copy protection won't open The Hilltop Mausoleum until Cemetery Hill is done,
+    # so its entrance also needs Cemetery Hill's key
+    layer_rule(self, self.get_entrance("Map -> The Hilltop Mausoleum"), Has(keys["Cemetery Hill"]))
 
 
 def set_HoH_entrances(self: "MedievilWorld") -> None:

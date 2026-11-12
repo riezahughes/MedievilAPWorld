@@ -575,9 +575,10 @@ class MedievilWorld(World):
                 "shopsanity_allow_progression": self.options.shopsanity_allow_progression.value,
                 "shopsanity_items_per_shop": self.options.shopsanity_items_per_shop.value,
             },
-            # ShopSanity stock, by the game's level ID: the client puts these in the merchant's shop menu
+            # ShopSanity stock, by the game's level ID (".<merchant>" for a level's second merchant): the client
+            # puts these in the merchant's shop menu
             "shop_stock": {
-                str(shop.level_id): [
+                shop.stock_key: [
                     {"id": self.location_name_to_id[name], "price": self.shop_prices[name]}
                     for name in shop_location_names(shop, self.options.shopsanity_items_per_shop.value)
                 ]
