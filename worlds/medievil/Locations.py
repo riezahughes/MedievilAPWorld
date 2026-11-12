@@ -80,7 +80,7 @@ class MedievilLocation(Location):
             "Scarecrow Fields Locked Items",
             "The Sleeping Village Locked Items",
             "Return to the Graveyard Locked Items",
-            "Enchanted Earth Locked Items"
+            "Enchanted Earth Locked Items",
         ]
 
         output = {}
@@ -606,7 +606,7 @@ location_tables = {
         MedievilLocationData("Equipment: Copper Shield in Arena - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Energy Vial: Arena - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
         MedievilLocationData("Chalice: Cemetery Hill", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
-        MedievilLocationData("Gold Coins: Chest in Arena - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN)
+        MedievilLocationData("Gold Coins: Chest in Arena - CH", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
     ],
     "The Hilltop Mausoleum Locked Items": [
         MedievilLocationData("Gold Coins: Gold Chest at Phantom of the Opera 1 - HM", "Gold Shield Ammo (100)", MedievilLocationCategory.FUN),
@@ -662,11 +662,12 @@ location_tables = {
         MedievilLocationData("Gargoyle: Outside Demon Exit- EE", "Gold Shield Ammo (100)", MedievilLocationCategory.GARGOYLE),
         MedievilLocationData("Cleared: Enchanted Earth", "Gold Shield Ammo (100)", MedievilLocationCategory.LEVEL_END),
         MedievilLocationData("Chalice: Enchanted Earth", "Gold Shield Ammo (100)", MedievilLocationCategory.CHALICE_PICKUP),
-    ]
+    ],
     # Books for Booksanity go here
     # Bosses go here
     # Monsters for Monstersanity (if i hate myself) also go here
 }
+
 
 class MedievilShopData(NamedTuple):
     """A Merchant Gargoyle. Every merchant uses the same shop menu; the client tells them apart by level, and
@@ -710,6 +711,8 @@ shop_tables: List[MedievilShopData] = [
     # Scarecrow Fields has two: one at the start, and one at the end of the level next to the chalice
     MedievilShopData("Scarecrow Fields", "Scarecrow Fields", 0x05),
     MedievilShopData("Scarecrow Fields Chalice", "Scarecrow Fields", 0x05, merchant=1),
+    # Return to the Graveyard has a second one up on the cliffs. It's last because the list is append only
+    MedievilShopData("Return to the Graveyard Cliff", "Return to the Graveyard", 0x02, merchant=1),
 ]
 
 # Prices of Archipelago items in gold, rolled per location. For comparison, the vanilla shop charges 40-120 for

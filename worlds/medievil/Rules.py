@@ -1049,6 +1049,7 @@ def set_shop_rules(self: "MedievilWorld") -> None:
     item_rules: dict[str, Rule] = {
         "The Hilltop Mausoleum": weapon("Club") | weapon("Hammer"),
         "Scarecrow Fields Chalice": key_items("Harvester Parts"),
+        "Return to the Graveyard Cliff": key_items("Skull Key"),
         "Enchanted Earth": key_items("Shadow Artefact", "Shadow Talisman"),
         "The Gallows Gauntlet": weapon("Dragon Armour"),
         "Ant Hill": key_items("Witches Talisman") & (weapon("Club") | weapon("Hammer") | DARING_DASH),
@@ -1062,6 +1063,7 @@ def set_shop_rules(self: "MedievilWorld") -> None:
         "The Lake": HasAll("Time Rune: The Lake", "Chaos Rune: The Lake", "Earth Rune: The Lake"),
         "The Ghost Ship": Has("Moon Rune: Ghost Ship"),
         "The Time Device": HasAll("Time Rune: The Time Device", "Chaos Rune: The Time Device"),
+        "Return to the Graveyard Cliff": Has("Star Rune: Return to the Graveyard"),
     }
     runesanity = self.options.runesanity.value == RuneSanityToggle.option_true
 
