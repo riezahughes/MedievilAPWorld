@@ -66,6 +66,7 @@ class MedievilItem(Item):
         output.update({item_data.name: base_id + item_data.m_code for item_data in _keysanity_regular})
         output.update({item_data.name: base_id + item_data.m_code + KEYSANITY_UNIQUE_ID_OFFSET for item_data in _keysanity_unique})
         output.update({item_data.name: base_id + item_data.m_code for item_data in _knights})
+        output.update({item_data.name: base_id + item_data.m_code for item_data in _progressive})
         return output
 
 
@@ -389,6 +390,26 @@ _knights: List[MedievilItemData] = [
     (KNIGHT_ITEM_NAME, 180, MedievilItemCategory.KNIGHT, True),
 ]
 
+PROGRESSIVE_SWORD = "Equipment: Progressive Sword"
+PROGRESSIVE_BOW = "Equipment: Progressive Bow"
+PROGRESSIVE_SHIELD = "Equipment: Progressive Shield"
+
+# Kept out of _all_items so they only reach the pool when their option is on (see progressive_groups). They always
+# have an ID, so the IDs are the same whatever the options are.
+_progressive: List[MedievilItemData] = [
+    (PROGRESSIVE_SWORD, 61, MedievilItemCategory.WEAPON, True),
+    (PROGRESSIVE_BOW, 62, MedievilItemCategory.WEAPON, True),
+    (PROGRESSIVE_SHIELD, 63, MedievilItemCategory.WEAPON, False),  # shields aren't used in logic
+]
+
+# Each progressive item and the weapons it stands in for, lowest tier first: the Nth copy you hold is the Nth weapon.
+# The option on the world that turns it on is the first entry.
+progressive_groups: List[tuple[str, str, List[str]]] = [
+    ("progressive_sword", PROGRESSIVE_SWORD, ["Equipment: Small Sword", "Equipment: Broadsword", "Equipment: Magic Sword"]),
+    ("progressive_bow", PROGRESSIVE_BOW, ["Equipment: Crossbow", "Equipment: Longbow", "Equipment: Fire Longbow", "Equipment: Magic Longbow"]),
+    ("progressive_shield", PROGRESSIVE_SHIELD, ["Equipment: Copper Shield", "Equipment: Silver Shield", "Equipment: Gold Shield"]),
+]
+
 # The level each key opens, by m_code. Both naming lists share these m_codes, so the client unlocks the same level
 # whichever name the key has. Dan's Crypt and the Ant Hill (entered from Enchanted Earth) have no key.
 level_key_regions: dict[int, str] = {
@@ -423,6 +444,7 @@ _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_i
 _keysanity_regular = [MedievilItemData(*row) for row in _keysanity_regular]
 _keysanity_unique = [MedievilItemData(*row) for row in _keysanity_unique]
 _knights = [MedievilItemData(*row) for row in _knights]
+_progressive = [MedievilItemData(*row) for row in _progressive]
 _keysanity_unique_names = {item_data.name for item_data in _keysanity_unique}
 
 
@@ -439,7 +461,7 @@ item_descriptions = {
 
 # Create a dictionary for quick lookup of item data by name
 item_dictionary: dict[str, MedievilItemData] = {
-    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights)
+    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights, *_progressive)
 }
 
 
@@ -495,6 +517,13 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
         )
     ]
 
+    # Progressive items stand in for the weapons they cover: those leave the pool and one copy per weapon goes in
+    progressive_in_pool: List[str] = []
+    for option_name, progressive_name, members in progressive_groups:
+        if getattr(options, option_name).value if hasattr(options, option_name) else False:
+            progression_and_weapon_items = [name for name in progression_and_weapon_items if name not in members]
+            progressive_in_pool.extend([progressive_name] * len(members))
+
     for item_name in progression_and_weapon_items:
         if item_name not in item_pool_names and len(item_pool_names) < count:
             if (
@@ -505,6 +534,10 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
                 continue
             else:
                 item_pool_names.append(item_name)
+
+    for item_name in progressive_in_pool:
+        if len(item_pool_names) < count:
+            item_pool_names.append(item_name)
 
     # Knights go in after everything else needed, so they never squeeze out other progression
     knights_to_find = options.knights_to_find.value if hasattr(options, "knights_to_find") else 0

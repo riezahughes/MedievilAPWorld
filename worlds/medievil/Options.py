@@ -72,7 +72,7 @@ class ProgressionOption(Choice):
     """
 
     display_name = "Game Progression Options"
-    default = ProgressionOptions.VANILLA
+    default = ProgressionOptions.OPEN
     option_vanilla = ProgressionOptions.VANILLA
     option_open = ProgressionOptions.OPEN
 
@@ -96,7 +96,7 @@ class IncludeChalicesInChecksToggle(Toggle):
 
 
 class RuneSanityToggle(Toggle):
-    """Sets whether to mix runes into the pool"""
+    """Sets whether to mix runes into the pool (Note: Doing this AND Keysanity is cursed)"""
 
     display_name = "RuneSanity"
     default = 0
@@ -109,7 +109,7 @@ class KeySanityToggle(Toggle):
     for vanilla."""
 
     display_name = "KeySanity"
-    default = 0
+    default = 1
     option_true = 1
     option_false = 0
 
@@ -121,7 +121,7 @@ class KeySanityNamingOption(Choice):
     """
 
     display_name = "Keysanity Item Naming"
-    default = KeysanityOptions.LEVEL_NAME
+    default = KeysanityOptions.UNIQUE_NAME
     option_level_name = KeysanityOptions.LEVEL_NAME
     option_unique_name = KeysanityOptions.UNIQUE_NAME
 
@@ -139,7 +139,7 @@ class GargoyleSanityToggle(Toggle):
     """Sets whether to do checks for interacting with gargoyle statues"""
 
     display_name = "GargoyleSanity"
-    default = 0
+    default = 1
     option_true = 1
     option_false = 0
 
@@ -148,7 +148,7 @@ class BookSanityToggle(Toggle):
     """Sets whether reading books counts as checks"""
 
     display_name = "BookSanity"
-    default = 0
+    default = 1
     option_true = 1
     option_false = 0
 
@@ -157,7 +157,7 @@ class ShopSanityToggle(Toggle):
     """Sets whether Merchant Gargoyles sell Archipelago items for gold"""
 
     display_name = "ShopSanity"
-    default = 0
+    default = 1
     option_true = 1
     option_false = 0
 
@@ -177,7 +177,7 @@ class ShopSanityProgressionToggle(Toggle):
     Gold isn't tracked by logic, so you may need to collect gold before you can buy something you need."""
 
     display_name = "ShopSanity Allow Progression"
-    default = 0
+    default = 1
     option_true = 1
     option_false = 0
 
@@ -248,6 +248,36 @@ class DeathSoundToggle(Toggle):
     option_false = 0
 
 
+class ProgressiveSwordToggle(Toggle):
+    """Replaces the Small Sword, Broadsword and Magic Sword with 3 copies of Equipment: Progressive Sword.
+    Each copy gives the next sword up, in that order."""
+
+    display_name = "Progressive Sword"
+    default = 1
+    option_true = 1
+    option_false = 0
+
+
+class ProgressiveBowToggle(Toggle):
+    """Replaces the Crossbow, Longbow, Fire Longbow and Magic Longbow with 4 copies of Equipment: Progressive Bow.
+    Each copy gives the next bow up, in that order."""
+
+    display_name = "Progressive Bow"
+    default = 1
+    option_true = 1
+    option_false = 0
+
+
+class ProgressiveShieldToggle(Toggle):
+    """Replaces the Copper Shield, Silver Shield and Gold Shield with 3 copies of Equipment: Progressive Shield.
+    Each copy gives the next shield up, in that order."""
+
+    display_name = "Progressive Shield"
+    default = 1
+    option_true = 1
+    option_false = 0
+
+
 @dataclass
 class MedievilOption(PerGameCommonOptions):
     goal: GoalOption
@@ -272,4 +302,7 @@ class MedievilOption(PerGameCommonOptions):
     shopsanity: ShopSanityToggle
     shopsanity_items_per_shop: ShopSanityItemsPerShop
     shopsanity_allow_progression: ShopSanityProgressionToggle
+    progressive_sword: ProgressiveSwordToggle
+    progressive_bow: ProgressiveBowToggle
+    progressive_shield: ProgressiveShieldToggle
     guaranteed_items: GuaranteedItemsOption

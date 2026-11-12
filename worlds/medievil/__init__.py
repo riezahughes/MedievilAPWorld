@@ -577,6 +577,9 @@ class MedievilWorld(World):
                 "shopsanity": self.options.shopsanity.value,
                 "shopsanity_allow_progression": self.options.shopsanity_allow_progression.value,
                 "shopsanity_items_per_shop": self.options.shopsanity_items_per_shop.value,
+                "progressive_sword": self.options.progressive_sword.value,
+                "progressive_bow": self.options.progressive_bow.value,
+                "progressive_shield": self.options.progressive_shield.value,
             },
             # ShopSanity stock, by the game's level ID (".<merchant>" for a level's second merchant): the client
             # puts these in the merchant's shop menu

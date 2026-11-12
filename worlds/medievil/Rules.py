@@ -6,14 +6,30 @@ from typing_extensions import override
 from BaseClasses import CollectionState, Entrance, Location
 from rule_builder.rules import CanReachLocation, Has, HasAll, Rule, True_, HasAny, HasFromList, AtLeast, CanReachEntrance
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle, RuneSanityToggle
-from .Items import _weapons, _ranged_weapons, _life_bottles, KNIGHT_ITEM_NAME
+from .Items import _weapons, _ranged_weapons, _life_bottles, KNIGHT_ITEM_NAME, progressive_groups
 
 if TYPE_CHECKING:
     from . import MedievilWorld
 
 
 def weapon(name: str) -> Rule:
-    return Has(f"Equipment: {name}")
+    """Holding the weapon itself, or with its progressive option on, enough copies of the progressive item.
+    Only one of the two exists in any given world, so both are always safe to check."""
+    item = f"Equipment: {name}"
+    for _, progressive_name, members in progressive_groups:
+        if item in members:
+            return Has(item) | Has(progressive_name, members.index(item) + 1)
+    return Has(item)
+
+
+def any_weapon(names: list[str] | tuple[str, ...]) -> Rule:
+    """Holding any of the weapons (full item names), or the progressive item covering one of them."""
+    rule: Rule = HasAny(*names)
+    for _, progressive_name, members in progressive_groups:
+        tiers = [members.index(name) + 1 for name in names if name in members]
+        if tiers:
+            rule = rule | Has(progressive_name, min(tiers))
+    return rule
 
 
 def key_items(*names: str) -> Rule:
@@ -188,7 +204,7 @@ def set_open_level_progression(self: "MedievilWorld") -> None:
     self.set_rule(self.get_entrance("Map -> Asylum Grounds"), cleared("Dan's Crypt"))
     self.set_rule(
         self.get_entrance("Map -> Inside the Asylum"),
-        cleared("Dan's Crypt") & (HasAny(*[weapon for weapon in _weapons]) | weapon("Chicken Drumsticks")),
+        cleared("Dan's Crypt") & (any_weapon(_weapons) | weapon("Chicken Drumsticks")),
     )
     self.set_rule(self.get_entrance("Map -> Enchanted Earth"), cleared("Dan's Crypt"))
     self.set_rule(self.get_entrance("Map -> The Gallows Gauntlet"), cleared("Dan's Crypt"))
@@ -307,7 +323,7 @@ def set_weapon_locations(self: "MedievilWorld", locations: list[str], set: tuple
             continue
         if self.options.booksanity.value == BookSanityToggle.option_false and "Book:" in location:
             continue
-        layer_rule(self, self.get_location(location), HasAny(*[weapon for weapon in set]))
+        layer_rule(self, self.get_location(location), any_weapon(set))
 
 
 def set_golem_locations(self: "MedievilWorld", locations: list[str]) -> None:
