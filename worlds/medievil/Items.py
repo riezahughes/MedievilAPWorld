@@ -368,8 +368,8 @@ _keysanity_unique: List[MedievilItemData] = [
     ("Jack's Invitation", 168, MedievilItemCategory.LEVEL_KEYS, True),  # Asylum grounds
     ("Fight Club", 169, MedievilItemCategory.LEVEL_KEYS, True),  # Inside the Asylum
     ("Demonic Amulet", 170, MedievilItemCategory.LEVEL_KEYS, True),  # Enchanted Earth
-    ("Soul Detector", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
-    ("Boating Licence", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
+    ("Boating Licence", 172, MedievilItemCategory.LEVEL_KEYS, True),  # Pools of the Ancient Dead
+    ("Lake Key", 173, MedievilItemCategory.LEVEL_KEYS, True),  # The Lake
     ("Ancient Horn", 174, MedievilItemCategory.LEVEL_KEYS, True),  # Crystal Caves
     ("Serpent Effigy", 175, MedievilItemCategory.LEVEL_KEYS, True),  # Gallows Gauntlet
     ("Royal Decree", 176, MedievilItemCategory.LEVEL_KEYS, True),  # Haunted Ruins
