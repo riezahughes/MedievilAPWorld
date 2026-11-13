@@ -41,7 +41,7 @@ class KnightsToFind(Range):
     display_name = "Knights to Find"
     default = 8
     range_start = 0
-    range_end = 500
+    range_end = 250
 
 
 class GuaranteedItemsOption(ItemDict):
