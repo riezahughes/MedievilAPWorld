@@ -4,6 +4,7 @@ multiworld.completion_condition based on the `goal` option.
 """
 
 from . import MedievilTestBase
+from ..Items import LIFE_BOTTLE_ITEM_NAME
 from ..Options import GoalOptions, ProgressionOptions
 
 
@@ -15,13 +16,8 @@ ASYLUM_AND_POOLS_ITEMS = [
     "Key Item: Shadow Artefact",
 ] + [f"Key Item: Soul Helmet {i}" for i in range(1, 9)]
 
-FIVE_LIFE_BOTTLES = [
-    "Life Bottle: Dan's Crypt",
-    "Life Bottle: The Graveyard",
-    "Life Bottle: Scarecrow Fields",
-    "Life Bottle: Pools of the Ancient Dead",
-    "Life Bottle: The Time Device",
-]
+def collect_life_bottles(test: MedievilTestBase, count: int) -> None:
+    test.collect(test.get_items_by_name(LIFE_BOTTLE_ITEM_NAME)[:count])
 
 ALL_NON_ANT_HILL_CHALICE_UNLOCK_ITEMS = (
     [
@@ -53,7 +49,7 @@ class DefeatZarokGoalTest(MedievilTestBase):
 
     def test_requires_a_weapon_and_five_life_bottles(self) -> None:
         self.assertBeatable(False)
-        self.collect_by_name(FIVE_LIFE_BOTTLES)
+        collect_life_bottles(self, 5)
         self.assertBeatable(False)
         self.collect_by_name("Equipment: Club")
         self.assertBeatable(False)
@@ -62,7 +58,7 @@ class DefeatZarokGoalTest(MedievilTestBase):
 
     def test_four_life_bottles_are_not_enough(self) -> None:
         self.collect_by_name(["Equipment: Club", "Equipment: Good Lightning"])
-        self.collect_by_name(FIVE_LIFE_BOTTLES[:4])
+        collect_life_bottles(self, 4)
         self.assertBeatable(False)
 
 
@@ -97,7 +93,7 @@ class BothGoalTest(MedievilTestBase):
         self.assertBeatable(False)
         self.collect_by_name("Equipment: Club")
         self.assertBeatable(False)  # chalices done, Zarok not
-        self.collect_by_name(FIVE_LIFE_BOTTLES)
+        collect_life_bottles(self, 5)
         self.assertBeatable(False)  # no Good Lightning yet
         self.collect_by_name("Equipment: Good Lightning")
         self.assertBeatable(True)

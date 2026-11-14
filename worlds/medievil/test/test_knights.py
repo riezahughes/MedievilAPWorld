@@ -4,16 +4,11 @@ The lair itself stays enterable so its items can be collected.
 """
 
 from . import MedievilTestBase
-from ..Items import KNIGHT_ITEM_NAME
+from ..Items import KNIGHT_ITEM_NAME, LIFE_BOTTLE_ITEM_NAME
 from ..Options import ProgressionOptions
 
-FIVE_LIFE_BOTTLES = [
-    "Life Bottle: Dan's Crypt",
-    "Life Bottle: The Graveyard",
-    "Life Bottle: Scarecrow Fields",
-    "Life Bottle: Pools of the Ancient Dead",
-    "Life Bottle: The Time Device",
-]
+def collect_life_bottles(test: MedievilTestBase, count: int) -> None:
+    test.collect(test.get_items_by_name(LIFE_BOTTLE_ITEM_NAME)[:count])
 
 
 def knight_count(test: MedievilTestBase) -> int:
@@ -42,7 +37,7 @@ class KnightsDefaultTest(MedievilTestBase):
         self.assertEqual(len(self.get_items_by_name("Equipment: Good Lightning")), 1)
 
     def test_defeating_zarok_needs_every_knight(self) -> None:
-        self.collect_by_name(FIVE_LIFE_BOTTLES)
+        collect_life_bottles(self, 5)
         self.collect_by_name("Equipment: Good Lightning")
         self.collect_by_name("Equipment: Club")
         knights = self.get_items_by_name(KNIGHT_ITEM_NAME)
@@ -62,7 +57,7 @@ class KnightsZeroTest(MedievilTestBase):
         self.assertEqual(knight_count(self), 0)
 
     def test_zarok_needs_no_knights(self) -> None:
-        self.collect_by_name(FIVE_LIFE_BOTTLES)
+        collect_life_bottles(self, 5)
         self.collect_by_name("Equipment: Good Lightning")
         self.collect_by_name("Equipment: Club")
         self.assertTrue(self.can_reach_location("Cleared: Zaroks Lair"))
