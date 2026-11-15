@@ -44,6 +44,16 @@ class KnightsToFind(Range):
     range_end = 250
 
 
+class LifeBottlesInPool(Range):
+    """How many Life Bottles go into the item pool. Each one you receive gives Dan an extra life bottle.
+    Defeating Zarok expects 5 of them, or all of them if you pick fewer than 5."""
+
+    display_name = "Life Bottles in Pool"
+    default = 9
+    range_start = 0
+    range_end = 20
+
+
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
 
@@ -286,6 +296,7 @@ class MedievilOption(PerGameCommonOptions):
     include_chalices_in_checks: IncludeChalicesInChecksToggle
     chalice_win_count: ChaliceWinCountOption
     knights_to_find: KnightsToFind
+    life_bottles: LifeBottlesInPool
     break_ammo_limit: BreakAmmoLimit
     break_percentage_limit: BreakPercentageLimit
     traps: TrapToggle

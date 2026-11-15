@@ -66,21 +66,14 @@ class MedievilItem(Item):
         output.update({item_data.name: base_id + item_data.m_code for item_data in _keysanity_regular})
         output.update({item_data.name: base_id + item_data.m_code + KEYSANITY_UNIQUE_ID_OFFSET for item_data in _keysanity_unique})
         output.update({item_data.name: base_id + item_data.m_code for item_data in _knights})
+        output.update({item_data.name: base_id + item_data.m_code for item_data in _life_bottle_items})
         output.update({item_data.name: base_id + item_data.m_code for item_data in _progressive})
         return output
 
 
 key_item_names = {
     # life bottles
-    "Life Bottle: Dan's Crypt",
-    "Life Bottle: The Graveyard",
-    "Life Bottle: Hall of Heroes (Canny Tim)",
-    "Life Bottle: Dan's Crypt - Behind Wall",
-    "Life Bottle: Scarecrow Fields",
-    "Life Bottle: Pools of the Ancient Dead",
-    "Life Bottle: Hall of Heroes (Ravenhooves The Archer)",
-    "Life Bottle: Hall of Heroes (Dirk Steadfast)",
-    "Life Bottle: The Time Device",
+    "Life Bottle",
     # skills
     "Skill: Daring Dash"
     # Inventory Key Items
@@ -181,18 +174,10 @@ _ranged_weapons = [
     "Equipment: Lightning",
 ]
 
-_life_bottles = {
-    # life bottles
-    "Life Bottle: Dan's Crypt",
-    "Life Bottle: The Graveyard",
-    "Life Bottle: Hall of Heroes (Canny Tim)",
-    "Life Bottle: Dan's Crypt - Behind Wall",
-    "Life Bottle: Scarecrow Fields",
-    "Life Bottle: Pools of the Ancient Dead",
-    "Life Bottle: Hall of Heroes (Ravenhooves The Archer)",
-    "Life Bottle: Hall of Heroes (Dirk Steadfast)",
-    "Life Bottle: The Time Device",
-}
+LIFE_BOTTLE_ITEM_NAME = "Life Bottle"
+
+# The most life bottles Zarok's fight expects you to have (fewer if the life_bottles option puts fewer in the pool)
+ZAROK_LIFE_BOTTLES = 5
 
 
 _all_items: List[MedievilItemData] = [
@@ -250,15 +235,6 @@ _all_items: List[MedievilItemData] = [
     ("Equipment: Gold Shield", 48, MedievilItemCategory.WEAPON, False),
     ("Equipment: Dragon Armour", 49, MedievilItemCategory.WEAPON, True),
     # Progression items
-    ("Life Bottle: Dan's Crypt", 50, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: The Graveyard", 51, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Hall of Heroes (Canny Tim)", 52, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Dan's Crypt - Behind Wall", 53, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Scarecrow Fields", 54, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Pools of the Ancient Dead", 55, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Hall of Heroes (Ravenhooves The Archer)", 56, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: Hall of Heroes (Dirk Steadfast)", 57, MedievilItemCategory.PROGRESSION, True),
-    ("Life Bottle: The Time Device", 58, MedievilItemCategory.PROGRESSION, True),
     ("Skill: Daring Dash", 60, MedievilItemCategory.PROGRESSION, True),
     # Key Inventory Items
     ("Key Item: Dragon Gem - Pumpkin Serpent", 89, MedievilItemCategory.PROGRESSION, True),
@@ -390,6 +366,12 @@ _knights: List[MedievilItemData] = [
     (KNIGHT_ITEM_NAME, 180, MedievilItemCategory.KNIGHT, True),
 ]
 
+# Kept out of _all_items so BuildItemPool only adds as many as the life_bottles option asks for. It keeps the first
+# life bottle's old ID (50).
+_life_bottle_items: List[MedievilItemData] = [
+    (LIFE_BOTTLE_ITEM_NAME, 50, MedievilItemCategory.PROGRESSION, True),
+]
+
 PROGRESSIVE_SWORD = "Equipment: Progressive Sword"
 PROGRESSIVE_BOW = "Equipment: Progressive Bow"
 PROGRESSIVE_SHIELD = "Equipment: Progressive Shield"
@@ -444,6 +426,7 @@ _all_items = [MedievilItemData(row[0], row[1], row[2], row[3]) for row in _all_i
 _keysanity_regular = [MedievilItemData(*row) for row in _keysanity_regular]
 _keysanity_unique = [MedievilItemData(*row) for row in _keysanity_unique]
 _knights = [MedievilItemData(*row) for row in _knights]
+_life_bottle_items = [MedievilItemData(*row) for row in _life_bottle_items]
 _progressive = [MedievilItemData(*row) for row in _progressive]
 _keysanity_unique_names = {item_data.name for item_data in _keysanity_unique}
 
@@ -461,7 +444,7 @@ item_descriptions = {
 
 # Create a dictionary for quick lookup of item data by name
 item_dictionary: dict[str, MedievilItemData] = {
-    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights, *_progressive)
+    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights, *_life_bottle_items, *_progressive)
 }
 
 
@@ -538,6 +521,11 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
     for item_name in progressive_in_pool:
         if len(item_pool_names) < count:
             item_pool_names.append(item_name)
+
+    # Life bottles go in before knights, since Zarok's logic needs them too
+    life_bottles = options.life_bottles.value if hasattr(options, "life_bottles") else 0
+    for _ in range(min(life_bottles, count - len(item_pool_names))):
+        item_pool_names.append(LIFE_BOTTLE_ITEM_NAME)
 
     # Knights go in after everything else needed, so they never squeeze out other progression
     knights_to_find = options.knights_to_find.value if hasattr(options, "knights_to_find") else 0
