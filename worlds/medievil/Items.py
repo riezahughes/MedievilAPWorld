@@ -170,6 +170,17 @@ _weapons = [
     "Equipment: Spear",
     "Equipment: Lightning",
 ]
+
+_melee_weapons = [
+    "Equipment: Small Sword",
+    "Equipment: Broadsword",
+    "Equipment: Magic Sword",
+    "Equipment: Club",
+    "Equipment: Hammer",
+    "Equipment: Axe",
+    "Equipment: Dragon Armour"
+]
+
 _ranged_weapons = [
     "Equipment: Daggers",
     "Equipment: Axe",

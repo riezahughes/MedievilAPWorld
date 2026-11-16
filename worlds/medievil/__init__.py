@@ -457,25 +457,7 @@ class MedievilWorld(World):
             self.set_completion_rule(get_chalices_victory(max_chalice_count))
         elif self.options.goal.value == GoalOptions.BOTH:
             self.set_completion_rule(defeat_zarok_and_get_chalices_victory(max_chalice_count))
-        # Map rules
-
-        for location in self.multiworld.get_locations(self.player):
-            # Check if the location is within "Dan's Crypt" or "Locked Items DC"
-
-            """This is causing very few(0.35-0.5% fuzzer) fill errors with all(2-3) medievil games(did not test with other games)"""
-            """Should be able to get rid of this if client can stop giving any of them on new game"""
-            if location.parent_region.name in ["Dan's Crypt", "Dan's Crypt Locked Items"]:
-                add_item_rule(location, lambda item: item.name != "Equipment: Hammer")
-                add_item_rule(location, lambda item: item.name != "Equipment: Club")
-                add_item_rule(location, lambda item: item.name != "Skill: Daring Dash")
-
-            # This should not matter with correct logic
-            # if location.parent_region.name in ["Dan's Crypt Locked Items", "Cemetery Hill Locked Items", "Hilltop Mausoleum Locked Items", "Scarecrow Fields Locked Items"]:
-            #     add_item_rule(location, lambda item: item.name != "Key Item: Skull Key")
-
-            if "Chalice Reward" in location.name:
-                add_item_rule(location, lambda item: "Key Item" not in item.name)
-
+        
         # ant hill checks
         if self.options.include_ant_hill_in_checks.value == IncludeAntHillInChecksToggle.option_true:
             if self.options.progression_option.value == ProgressionOptions.OPEN:

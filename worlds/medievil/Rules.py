@@ -6,7 +6,7 @@ from typing_extensions import override
 from BaseClasses import CollectionState, Entrance, Location
 from rule_builder.rules import CanReachLocation, Has, HasAll, Rule, True_, HasAny, HasFromList, AtLeast, CanReachEntrance
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle, RuneSanityToggle
-from .Items import _weapons, _ranged_weapons, _life_bottles, KNIGHT_ITEM_NAME, progressive_groups
+from .Items import _weapons, _ranged_weapons, _life_bottles, KNIGHT_ITEM_NAME, progressive_groups, _melee_weapons
 
 if TYPE_CHECKING:
     from . import MedievilWorld
@@ -533,14 +533,16 @@ def set_runesanity_rules(self: "MedievilWorld") -> None:
             "Energy Vial: Shadow Talisman Cave - EE",
             "Book: Take the Talisman - EE",
             "Gargoyle: Outside Demon Exit- EE",
-            "Chalice: Enchanted Earth",
         ],
         ["Earth Rune: Enchanted Earth"],
     )
 
     set_rune_blocks(
         self,
-        ["Cleared: Enchanted Earth"],
+        [
+            "Cleared: Enchanted Earth",
+            "Chalice: Enchanted Earth",
+        ],
         ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"],
     )
     # The Sleeping Village
@@ -985,12 +987,22 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Energy Vial: Right at Merchant Gargoyle - PS",
             "Gold Coins: Chest at Merchant Gargoyle - PS",
             "Key Item: Dragon Gem - PS",
-            "Chalice: Pumpkin Serpent",
+            "Chalice: "
             "Cleared: Pumpkin Serpent",
             "Cleared: Zaroks Lair",
         ],
         _weapons,
     )
+
+    # Melee weapons
+    set_weapon_locations(
+            self,
+            [
+                "Chalice: Pumpkin Gorge"
+                "Chalice: Pumpkin Serpent",
+            ],
+            _melee_weapons,
+        )
 
     # Ranged weapons
     set_weapon_locations(
@@ -1069,6 +1081,7 @@ def set_shop_rules(self: "MedievilWorld") -> None:
         "Enchanted Earth": key_items("Shadow Artefact", "Shadow Talisman"),
         "The Gallows Gauntlet": weapon("Dragon Armour"),
         "Ant Hill": key_items("Witches Talisman") & (weapon("Club") | weapon("Hammer") | DARING_DASH),
+        "Pumpkin Serpent": any_weapon(_weapons)
     }
     # rune doors, only in logic with RuneSanity
     rune_rules: dict[str, Rule] = {
