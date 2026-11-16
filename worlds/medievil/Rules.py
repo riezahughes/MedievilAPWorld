@@ -6,7 +6,7 @@ from typing_extensions import override
 from BaseClasses import CollectionState, Entrance, Location
 from rule_builder.rules import CanReachLocation, Has, HasAll, Rule, True_, HasAny, HasFromList, AtLeast, CanReachEntrance
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle, RuneSanityToggle
-from .Items import _weapons, _ranged_weapons, KNIGHT_ITEM_NAME, LIFE_BOTTLE_ITEM_NAME, ZAROK_LIFE_BOTTLES, progressive_groups
+from .Items import _weapons, _ranged_weapons, KNIGHT_ITEM_NAME, LIFE_BOTTLE_ITEM_NAME, ZAROK_LIFE_BOTTLES, progressive_groups, _melee_weapons
 
 if TYPE_CHECKING:
     from . import MedievilWorld
@@ -533,14 +533,16 @@ def set_runesanity_rules(self: "MedievilWorld") -> None:
             "Energy Vial: Shadow Talisman Cave - EE",
             "Book: Take the Talisman - EE",
             "Gargoyle: Outside Demon Exit- EE",
-            "Chalice: Enchanted Earth",
         ],
         ["Earth Rune: Enchanted Earth"],
     )
 
     set_rune_blocks(
         self,
-        ["Cleared: Enchanted Earth"],
+        [
+            "Cleared: Enchanted Earth",
+            "Chalice: Enchanted Earth",
+        ],
         ["Earth Rune: Enchanted Earth", "Star Rune: Enchanted Earth"],
     )
     # The Sleeping Village
@@ -985,11 +987,30 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Energy Vial: Right at Merchant Gargoyle - PS",
             "Gold Coins: Chest at Merchant Gargoyle - PS",
             "Key Item: Dragon Gem - PS",
-            "Chalice: Pumpkin Serpent",
+            "Chalice: Sleeping Village",
+            "Chalice: The Crystal Caves",
+            "Chalice: The Lake",
+            "Chalice: Return to the Graveyard",
+            "Chalice: The Haunted Ruins",
+            "Chalice: Ghost Ship",
+            "Chalice: Asylum Grounds",
+            "Chalice: The Time Device",
             "Cleared: Pumpkin Serpent",
             "Cleared: Zaroks Lair",
         ],
         _weapons,
+    )
+
+    # Melee weapons
+    set_weapon_locations(
+        self,
+        [
+            
+            "Chalice: Pools of the Ancient Dead",
+            "Chalice: Pumpkin Gorge",
+            "Chalice: Pumpkin Serpent",
+        ],
+        _melee_weapons,
     )
 
     # Ranged weapons
@@ -1004,6 +1025,7 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Energy Vial: Left of Tree Drop - EE",
             "Energy Vial: Right of Tree Drop - EE",
             "Chalice: Enchanted Earth",
+            "Chalice: Pools of the Ancient Dead",
         ],
         _ranged_weapons,
     )
@@ -1025,7 +1047,7 @@ def set_key_item_dependencies(self: "MedievilWorld") -> None:
     if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
         self.set_rule(self.get_location("Chalice: The Haunted Ruins"), key_items("King Peregrine's Crown"))
         self.set_rule(self.get_location("Chalice: Sleeping Village"), CanReachLocation("Key Item: Landlords Bust - SV"))
-        set_weapon_locations(self, ["Chalice: The Entrance Hall"], _weapons)
+        set_weapon_locations(self, ["Chalice: The Entrance Hall"], [*_weapons, "Equipment: Chicken Drumsticks"])
         if self.options.runesanity.value == RuneSanityToggle.option_true:
             self.set_rule(self.get_location("Chalice: Ghost Ship"), Has("Moon Rune: Ghost Ship") | weapon("Club"))
     self.set_rule(self.get_location("Cleared: Ghost Ship"), weapon("Club"))
@@ -1071,6 +1093,7 @@ def set_shop_rules(self: "MedievilWorld") -> None:
         "Enchanted Earth": key_items("Shadow Artefact", "Shadow Talisman"),
         "The Gallows Gauntlet": weapon("Dragon Armour"),
         "Ant Hill": key_items("Witches Talisman") & (weapon("Club") | weapon("Hammer") | DARING_DASH),
+        "Pumpkin Serpent": any_weapon(_weapons)
     }
     # rune doors, only in logic with RuneSanity
     rune_rules: dict[str, Rule] = {
