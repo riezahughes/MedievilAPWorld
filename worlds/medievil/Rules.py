@@ -1011,7 +1011,7 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Chalice: Pumpkin Serpent",
         ],
         _melee_weapons,
-        )
+    )
 
     # Ranged weapons
     set_weapon_locations(
@@ -1047,7 +1047,7 @@ def set_key_item_dependencies(self: "MedievilWorld") -> None:
     if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
         self.set_rule(self.get_location("Chalice: The Haunted Ruins"), key_items("King Peregrine's Crown"))
         self.set_rule(self.get_location("Chalice: Sleeping Village"), CanReachLocation("Key Item: Landlords Bust - SV"))
-        set_weapon_locations(self, ["Chalice: The Entrance Hall"], _weapons | weapon("Chicken Drumsticks"))
+        set_weapon_locations(self, ["Chalice: The Entrance Hall"], [*_weapons, "Equipment: Chicken Drumsticks"])
         if self.options.runesanity.value == RuneSanityToggle.option_true:
             self.set_rule(self.get_location("Chalice: Ghost Ship"), Has("Moon Rune: Ghost Ship") | weapon("Club"))
     self.set_rule(self.get_location("Cleared: Ghost Ship"), weapon("Club"))

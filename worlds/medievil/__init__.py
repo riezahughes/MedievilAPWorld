@@ -113,7 +113,7 @@ class MedievilWorld(World):
         ):
             """We change it to include chalice or show an error needing it to be on?"""
             # self.options.include_chalices_in_checks.value = IncludeChalicesInChecksToggle.option_true
-            raise OptionError("include_chalices_in_checks must be true for goal other than Defeat Zarok")
+            raise OptionError(f"Medievil: {self.options.goal} needs include_chalices_in_checks to be on for {self.player_name}")
 
         # KeySanity locks levels on the open world map, so it only works with open progression
         if self.options.keysanity.value and self.options.progression_option.value != ProgressionOptions.OPEN:
