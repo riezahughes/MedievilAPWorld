@@ -6,7 +6,7 @@ from typing_extensions import override
 from BaseClasses import CollectionState, Entrance, Location
 from rule_builder.rules import CanReachLocation, Has, HasAll, Rule, True_, HasAny, HasFromList, AtLeast, CanReachEntrance
 from .Options import IncludeAntHillInChecksToggle, IncludeChalicesInChecksToggle, BookSanityToggle, GargoyleSanityToggle, RuneSanityToggle
-from .Items import _weapons, _ranged_weapons, _life_bottles, KNIGHT_ITEM_NAME, progressive_groups, _melee_weapons
+from .Items import _weapons, _ranged_weapons, KNIGHT_ITEM_NAME, LIFE_BOTTLE_ITEM_NAME, ZAROK_LIFE_BOTTLES, progressive_groups, _melee_weapons
 
 if TYPE_CHECKING:
     from . import MedievilWorld
@@ -1043,7 +1043,9 @@ def set_key_item_dependencies(self: "MedievilWorld") -> None:
     self.set_rule(self.get_location("Cleared: Ghost Ship"), weapon("Club"))
     self.set_rule(
         self.get_location("Cleared: Zaroks Lair"),
-        weapon("Good Lightning") & HasFromList(*_life_bottles, count=5) & Has(KNIGHT_ITEM_NAME, self.options.knights_to_find.value),
+        weapon("Good Lightning")
+        & Has(LIFE_BOTTLE_ITEM_NAME, min(ZAROK_LIFE_BOTTLES, self.options.life_bottles.value))
+        & Has(KNIGHT_ITEM_NAME, self.options.knights_to_find.value),
     )
     self.set_rule(self.get_location("Cleared: Sleeping Village"), CanReachLocation("Key Item: Landlords Bust - SV"))
     self.set_rule(self.get_location("Equipment: Dragon Armour - CC"), key_items("Dragon Gem - Pumpkin Serpent", "Dragon Gem - Inside the Asylum"))

@@ -713,6 +713,7 @@ shop_tables: List[MedievilShopData] = [
     MedievilShopData("Scarecrow Fields Chalice", "Scarecrow Fields", 0x05, merchant=1),
     # Return to the Graveyard has a second one up on the cliffs. It's last because the list is append only
     MedievilShopData("Return to the Graveyard Cliff", "Return to the Graveyard", 0x02, merchant=1),
+    MedievilShopData("Zaroks Lair", "Zaroks Lair", 0x17),
 ]
 
 # Prices of Archipelago items in gold, rolled per location. For comparison, the vanilla shop charges 40-120 for

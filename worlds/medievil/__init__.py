@@ -543,6 +543,7 @@ class MedievilWorld(World):
                 "include_chalices_in_checks": self.options.include_chalices_in_checks.value,
                 "chalice_win_count": self.options.chalice_win_count.value,
                 "knights_to_find": self.options.knights_to_find.value,
+                "life_bottles": self.options.life_bottles.value,
                 "traps": self.options.traps.value,
                 "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,
