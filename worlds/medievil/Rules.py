@@ -987,7 +987,14 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Energy Vial: Right at Merchant Gargoyle - PS",
             "Gold Coins: Chest at Merchant Gargoyle - PS",
             "Key Item: Dragon Gem - PS",
-            "Chalice: "
+            "Chalice: Sleeping Village",
+            "Chalice: The Crystal Caves",
+            "Chalice: The Lake",
+            "Chalice: Return to the Graveyard",
+            "Chalice: The Haunted Ruins",
+            "Chalice: Ghost Ship",
+            "Chalice: Asylum Grounds",
+            "Chalice: The Time Device",
             "Cleared: Pumpkin Serpent",
             "Cleared: Zaroks Lair",
         ],
@@ -996,12 +1003,14 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
 
     # Melee weapons
     set_weapon_locations(
-            self,
-            [
-                "Chalice: Pumpkin Gorge"
-                "Chalice: Pumpkin Serpent",
-            ],
-            _melee_weapons,
+        self,
+        [
+            
+            "Chalice: Pools of the Ancient Dead",
+            "Chalice: Pumpkin Gorge",
+            "Chalice: Pumpkin Serpent",
+        ],
+        _melee_weapons,
         )
 
     # Ranged weapons
@@ -1016,6 +1025,7 @@ def set_weapon_dependencies(self: "MedievilWorld") -> None:
             "Energy Vial: Left of Tree Drop - EE",
             "Energy Vial: Right of Tree Drop - EE",
             "Chalice: Enchanted Earth",
+            "Chalice: Pools of the Ancient Dead",
         ],
         _ranged_weapons,
     )
@@ -1037,7 +1047,7 @@ def set_key_item_dependencies(self: "MedievilWorld") -> None:
     if self.options.include_chalices_in_checks.value == IncludeChalicesInChecksToggle.option_true:
         self.set_rule(self.get_location("Chalice: The Haunted Ruins"), key_items("King Peregrine's Crown"))
         self.set_rule(self.get_location("Chalice: Sleeping Village"), CanReachLocation("Key Item: Landlords Bust - SV"))
-        set_weapon_locations(self, ["Chalice: The Entrance Hall"], _weapons)
+        set_weapon_locations(self, ["Chalice: The Entrance Hall"], _weapons | weapon("Chicken Drumsticks"))
         if self.options.runesanity.value == RuneSanityToggle.option_true:
             self.set_rule(self.get_location("Chalice: Ghost Ship"), Has("Moon Rune: Ghost Ship") | weapon("Club"))
     self.set_rule(self.get_location("Cleared: Ghost Ship"), weapon("Club"))
