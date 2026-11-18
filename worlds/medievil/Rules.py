@@ -1103,7 +1103,7 @@ def set_shop_rules(self: "MedievilWorld") -> None:
         "Enchanted Earth": Has("Earth Rune: Enchanted Earth"),
         "The Lake": HasAll("Time Rune: The Lake", "Chaos Rune: The Lake", "Earth Rune: The Lake"),
         "The Ghost Ship": Has("Moon Rune: Ghost Ship"),
-        "The Time Device": HasAll("Time Rune: The Time Device", "Chaos Rune: The Time Device"),
+        "The Time Device": HasAll("Time Rune: The Time Device", "Chaos Rune: The Time Device", "Earth Rune: The Time Device"),
         "Return to the Graveyard Cliff": Has("Star Rune: Return to the Graveyard"),
     }
     runesanity = self.options.runesanity.value == RuneSanityToggle.option_true
