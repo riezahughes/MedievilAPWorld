@@ -55,33 +55,33 @@ class LifeBottlesInPool(Range):
 
 
 class GoldBag1(Range):
-    """How much gold the first gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    """How much gold the first gold bag item gives. The item is named "Gold Coins (x)" with this count (1 to 1000).
     0 removes this bag from the item pool."""
 
     display_name = "Gold Bag 1"
     default = 50
     range_start = 0
-    range_end = 9999
+    range_end = 1000
 
 
 class GoldBag2(Range):
-    """How much gold the second gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    """How much gold the second gold bag item gives. The item is named "Gold Coins (x)" with this count (1 to 1000).
     0 removes this bag from the item pool."""
 
     display_name = "Gold Bag 2"
     default = 100
     range_start = 0
-    range_end = 9999
+    range_end = 1000
 
 
 class GoldBag3(Range):
-    """How much gold the third gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    """How much gold the third gold bag item gives. The item is named "Gold Coins (x)" with this count (1 to 1000).
     0 removes this bag from the item pool."""
 
     display_name = "Gold Bag 3"
     default = 150
     range_start = 0
-    range_end = 9999
+    range_end = 1000
 
 
 class GuaranteedItemsOption(ItemDict):

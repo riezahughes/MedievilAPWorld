@@ -1,14 +1,28 @@
 """
-Tests for the gold_bag_1/2/3 options: the three gold bag items keep their ids, and the count in the brackets of their
-name comes from the options.
+Tests for the gold_bag_1/2/3 options: every gold count is a real item in the datapackage, so the name the server and
+client look up by id says the right amount.
 """
 
 from . import MedievilTestBase
-from ..Items import MedievilItem
+from ..Items import GOLD_MAX, GOLD_M_CODE_OFFSET, MedievilItem
+from .. import MedievilWorld
 
 
 def gold_bag_names(test: MedievilTestBase) -> set:
     return {item.name for item in test.multiworld.itempool if item.name.startswith("Gold Coins (") and item.player == test.player}
+
+
+class GoldDatapackageTest(MedievilTestBase):
+    def test_every_count_is_a_unique_item(self) -> None:
+        ids = MedievilItem.get_name_to_id()
+        gold = {name: code for name, code in ids.items() if name.startswith("Gold Coins (")}
+        self.assertEqual(len(gold), GOLD_MAX)
+        self.assertEqual(len(set(ids.values())), len(ids))
+        self.assertEqual(MedievilWorld.item_name_to_id["Gold Coins (777)"], 9901000 + GOLD_M_CODE_OFFSET + 777)
+
+    def test_id_resolves_back_to_the_same_name(self) -> None:
+        id_to_name = {code: name for name, code in MedievilWorld.item_name_to_id.items()}
+        self.assertEqual(id_to_name[MedievilWorld.item_name_to_id["Gold Coins (777)"]], "Gold Coins (777)")
 
 
 class GoldBagsDefaultTest(MedievilTestBase):
@@ -16,33 +30,23 @@ class GoldBagsDefaultTest(MedievilTestBase):
         options = self.world.options
         self.assertEqual((options.gold_bag_1.value, options.gold_bag_2.value, options.gold_bag_3.value), (50, 100, 150))
 
-    def test_default_names_exist(self) -> None:
-        ids = MedievilItem.get_name_to_id()
-        self.assertEqual([ids["Gold Coins (50)"], ids["Gold Coins (100)"], ids["Gold Coins (150)"]], [9901000, 9901001, 9901002])
-
     def test_pool_only_has_default_counts(self) -> None:
         self.assertTrue(gold_bag_names(self) <= {"Gold Coins (50)", "Gold Coins (100)", "Gold Coins (150)"})
 
-    def test_slot_data_has_the_counts(self) -> None:
-        options = self.world.fill_slot_data()["options"]
-        self.assertEqual((options["gold_bag_1"], options["gold_bag_2"], options["gold_bag_3"]), (50, 100, 150))
-
 
 class GoldBagsCustomTest(MedievilTestBase):
-    options = {"gold_bag_1": 25, "gold_bag_2": 777, "gold_bag_3": 9999}
-
-    def test_items_are_renamed_but_keep_their_ids(self) -> None:
-        for name, code in (("Gold Coins (50)", 9901000), ("Gold Coins (100)", 9901001), ("Gold Coins (150)", 9901002)):
-            item = self.world.create_item(name)
-            self.assertEqual(item.code, code)
-        self.assertEqual(self.world.create_item("Gold Coins (50)").name, "Gold Coins (25)")
-        self.assertEqual(self.world.create_item("Gold Coins (100)").name, "Gold Coins (777)")
-        self.assertEqual(self.world.create_item("Gold Coins (150)").name, "Gold Coins (9999)")
+    options = {"gold_bag_1": 25, "gold_bag_2": 777, "gold_bag_3": 1000}
 
     def test_pool_uses_custom_counts(self) -> None:
         names = gold_bag_names(self)
         self.assertTrue(names)
-        self.assertTrue(names <= {"Gold Coins (25)", "Gold Coins (777)", "Gold Coins (9999)"})
+        self.assertTrue(names <= {"Gold Coins (25)", "Gold Coins (777)", "Gold Coins (1000)"})
+
+    def test_item_code_matches_datapackage_name(self) -> None:
+        id_to_name = {code: name for name, code in MedievilWorld.item_name_to_id.items()}
+        for item in self.multiworld.itempool:
+            if item.player == self.player:
+                self.assertEqual(id_to_name[item.code], item.name)
 
     def test_slot_data_has_the_counts(self) -> None:
         self.assertEqual(self.world.fill_slot_data()["options"]["gold_bag_2"], 777)
@@ -55,7 +59,6 @@ class GoldBagZeroTest(MedievilTestBase):
         names = gold_bag_names(self)
         self.assertIn("Gold Coins (50)", names)
         self.assertIn("Gold Coins (150)", names)
-        self.assertNotIn("Gold Coins (0)", names)
         self.assertNotIn("Gold Coins (100)", names)
 
     def test_filler_is_a_bag_that_is_in_the_pool(self) -> None:

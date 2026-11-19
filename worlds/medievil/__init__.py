@@ -8,7 +8,7 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 
-from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names, KNIGHT_ITEM_NAME, GOLD_BAG_OPTIONS, gold_bag_item_name, gold_bag_in_pool
+from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names, KNIGHT_ITEM_NAME, gold_item_names
 from .Locations import (
     MedievilLocation,
     MedievilLocationCategory,
@@ -440,16 +440,11 @@ class MedievilWorld(World):
         else:  # Default for FILLER or other categories not explicitly useful/progression
             item_classification = ItemClassification.filler
 
-        code = MedievilItem.get_name_to_id()[name]
-        if name in GOLD_BAG_OPTIONS:
-            return MedievilItem(gold_bag_item_name(name, self.options), item_classification, code, self.player, data_name=name)
-        return MedievilItem(name, item_classification, code, self.player)
+        return MedievilItem(name, item_classification, MedievilItem.get_name_to_id()[name], self.player)
 
     def get_filler_item_name(self) -> str:
-        for base_name in GOLD_BAG_OPTIONS:
-            if gold_bag_in_pool(base_name, self.options):
-                return base_name
-        return "Dagger Ammo (10)"
+        gold_names = gold_item_names(self.options)
+        return gold_names[0] if gold_names else "Dagger Ammo (10)"
 
     def set_rules(self) -> None:
         max_chalice_count = self.options.chalice_win_count.value
@@ -518,7 +513,6 @@ class MedievilWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        # By item id rather than name, since the gold bag items are renamed
         medievil_code_by_id = {item_id: item_dictionary[name].m_code for name, item_id in self.item_name_to_id.items()}
         # Create the mandatory lists to generate the player's output file
         items_id = []

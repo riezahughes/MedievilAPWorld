@@ -42,9 +42,8 @@ class MedievilItem(Item):
     category: MedievilItemCategory
     m_code: Optional[int]  # Make m_code an instance attribute for MedievilItem
 
-    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int, data_name: Optional[str] = None):
+    def __init__(self, name: str, classification: ItemClassification, code: Optional[int], player: int):
         super().__init__(name, classification, code, player)
-        name = data_name or name
         # The 'advancement' attribute is automatically handled by the parent Item class
         # if ItemClassification.progression is passed to its constructor.
         # You can explicitly set it here for clarity if you prefer, but BaseClasses.Item does this.
@@ -69,6 +68,7 @@ class MedievilItem(Item):
         output.update({item_data.name: base_id + item_data.m_code for item_data in _knights})
         output.update({item_data.name: base_id + item_data.m_code for item_data in _life_bottle_items})
         output.update({item_data.name: base_id + item_data.m_code for item_data in _progressive})
+        output.update({item_data.name: base_id + item_data.m_code for item_data in _gold_items})
         return output
 
 
@@ -194,9 +194,6 @@ ZAROK_LIFE_BOTTLES = 5
 
 _all_items: List[MedievilItemData] = [
     # Filler Items
-    ("Gold Coins (50)", 0, MedievilItemCategory.GOLD_FILLER, False),
-    ("Gold Coins (100)", 1, MedievilItemCategory.GOLD_FILLER, False),
-    ("Gold Coins (150)", 2, MedievilItemCategory.GOLD_FILLER, False),
     ("Dagger Ammo (10)", 3, MedievilItemCategory.AMMO_FILLER, False),
     ("Dagger Ammo (20)", 4, MedievilItemCategory.AMMO_FILLER, False),
     ("Broadsword Charge (20)", 5, MedievilItemCategory.AMMO_FILLER, False),
@@ -440,6 +437,16 @@ _keysanity_unique = [MedievilItemData(*row) for row in _keysanity_unique]
 _knights = [MedievilItemData(*row) for row in _knights]
 _life_bottle_items = [MedievilItemData(*row) for row in _life_bottle_items]
 _progressive = [MedievilItemData(*row) for row in _progressive]
+
+# One real item per possible gold count, so the name the server and client look up by id says the right amount.
+# The m_code is GOLD_M_CODE_OFFSET + the count, so the client can read the amount from it.
+GOLD_MAX = 1000
+GOLD_M_CODE_OFFSET = 1000
+GOLD_BAG_OPTIONS = ("gold_bag_1", "gold_bag_2", "gold_bag_3")
+_gold_items = [
+    MedievilItemData(f"Gold Coins ({count})", GOLD_M_CODE_OFFSET + count, MedievilItemCategory.GOLD_FILLER, False)
+    for count in range(1, GOLD_MAX + 1)
+]
 _keysanity_unique_names = {item_data.name for item_data in _keysanity_unique}
 
 
@@ -449,22 +456,10 @@ def level_key_names(naming: int) -> dict[str, str]:
     return {level_key_regions[item_data.m_code]: item_data.name for item_data in table}
 
 
-# The three gold bag items keep their ids; the count in the brackets is renamed from these options when the item is created
-GOLD_BAG_OPTIONS: dict[str, str] = {
-    "Gold Coins (50)": "gold_bag_1",
-    "Gold Coins (100)": "gold_bag_2",
-    "Gold Coins (150)": "gold_bag_3",
-}
-
-
-def gold_bag_in_pool(base_name: str, options) -> bool:
-    """A gold bag set to 0 is left out of the pool."""
-    return getattr(options, GOLD_BAG_OPTIONS[base_name]).value > 0
-
-
-def gold_bag_item_name(base_name: str, options) -> str:
-    """The name a gold bag item gets for this player's gold_bag_* options."""
-    return f"Gold Coins ({getattr(options, GOLD_BAG_OPTIONS[base_name]).value})"
+def gold_item_names(options) -> List[str]:
+    """The gold items in this player's pool: one per gold_bag_* option above 0."""
+    counts = [getattr(options, option_name).value for option_name in GOLD_BAG_OPTIONS]
+    return [f"Gold Coins ({count})" for count in dict.fromkeys(counts) if count > 0]
 
 
 item_descriptions = {
@@ -474,7 +469,7 @@ item_descriptions = {
 
 # Create a dictionary for quick lookup of item data by name
 item_dictionary: dict[str, MedievilItemData] = {
-    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights, *_life_bottle_items, *_progressive)
+    item_data.name: item_data for item_data in (*_all_items, *_keysanity_regular, *_keysanity_unique, *_knights, *_life_bottle_items, *_progressive, *_gold_items)
 }
 
 
@@ -497,8 +492,6 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
     # Add any guaranteed items specified in the options first
     if hasattr(options, "guaranteed_items") and options.guaranteed_items.value:
         for item_name in options.guaranteed_items.value:
-            if item_name in GOLD_BAG_OPTIONS and not gold_bag_in_pool(item_name, options):
-                continue
             if item_name in item_dictionary:
                 item_pool_names.append(item_name)
             else:
@@ -565,11 +558,10 @@ def BuildItemPool(count: int, options, level_keys: Optional[List[str]] = None) -
         item_pool_names.append(KNIGHT_ITEM_NAME)
 
     # Populate the rest of the pool with random filler items
-    filler_item_names = [
+    filler_item_names = gold_item_names(options) + [
         item_data.name
         for item_data in _all_items
-        if (item_data.category == MedievilItemCategory.GOLD_FILLER and gold_bag_in_pool(item_data.name, options))
-        or (options.ammo.value == AmmoAndChargeToggle.option_true and item_data.category == MedievilItemCategory.AMMO_FILLER)
+        if (options.ammo.value == AmmoAndChargeToggle.option_true and item_data.category == MedievilItemCategory.AMMO_FILLER)
         or (options.traps.value == TrapToggle.option_true and item_data.category == MedievilItemCategory.TRAP)
     ]
 
