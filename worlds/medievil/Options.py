@@ -35,7 +35,7 @@ class ChaliceWinCountOption(Range):
 
 
 class KnightsToFind(Range):
-    """How many Knights of Gallowmere you need to find to unlock Zarok's Lair. They're spread across the multiworld.
+    """How many Knights of Gallowmere you need to find to fight Zarok in Zarok's Lair. They're spread across the multiworld.
     Only works with open progression, it's turned off for vanilla. 0 leaves the boss open to fight at any time."""
 
     display_name = "Knights to Find"
