@@ -54,6 +54,36 @@ class LifeBottlesInPool(Range):
     range_end = 20
 
 
+class GoldBag1(Range):
+    """How much gold the first gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    0 removes this bag from the item pool."""
+
+    display_name = "Gold Bag 1"
+    default = 50
+    range_start = 0
+    range_end = 9999
+
+
+class GoldBag2(Range):
+    """How much gold the second gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    0 removes this bag from the item pool."""
+
+    display_name = "Gold Bag 2"
+    default = 100
+    range_start = 0
+    range_end = 9999
+
+
+class GoldBag3(Range):
+    """How much gold the third gold bag item gives. The item is named "Gold Coins (x)" with this count.
+    0 removes this bag from the item pool."""
+
+    display_name = "Gold Bag 3"
+    default = 150
+    range_start = 0
+    range_end = 9999
+
+
 class GuaranteedItemsOption(ItemDict):
     """Guarantees that the specified items will be in the item pool"""
 
@@ -297,6 +327,9 @@ class MedievilOption(PerGameCommonOptions):
     chalice_win_count: ChaliceWinCountOption
     knights_to_find: KnightsToFind
     life_bottles: LifeBottlesInPool
+    gold_bag_1: GoldBag1
+    gold_bag_2: GoldBag2
+    gold_bag_3: GoldBag3
     break_ammo_limit: BreakAmmoLimit
     break_percentage_limit: BreakPercentageLimit
     traps: TrapToggle

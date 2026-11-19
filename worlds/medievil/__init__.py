@@ -8,7 +8,7 @@ from Options import Toggle, OptionError
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import add_item_rule
 
-from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names, KNIGHT_ITEM_NAME
+from .Items import MedievilItem, MedievilItemCategory, item_dictionary, key_item_names, item_descriptions, BuildItemPool, level_key_names, KNIGHT_ITEM_NAME, GOLD_BAG_OPTIONS, gold_bag_item_name, gold_bag_in_pool
 from .Locations import (
     MedievilLocation,
     MedievilLocationCategory,
@@ -440,10 +440,16 @@ class MedievilWorld(World):
         else:  # Default for FILLER or other categories not explicitly useful/progression
             item_classification = ItemClassification.filler
 
-        return MedievilItem(name, item_classification, MedievilItem.get_name_to_id()[name], self.player)
+        code = MedievilItem.get_name_to_id()[name]
+        if name in GOLD_BAG_OPTIONS:
+            return MedievilItem(gold_bag_item_name(name, self.options), item_classification, code, self.player, data_name=name)
+        return MedievilItem(name, item_classification, code, self.player)
 
     def get_filler_item_name(self) -> str:
-        return "Gold (50)"  # this clearly needs looked into
+        for base_name in GOLD_BAG_OPTIONS:
+            if gold_bag_in_pool(base_name, self.options):
+                return base_name
+        return "Dagger Ammo (10)"
 
     def set_rules(self) -> None:
         max_chalice_count = self.options.chalice_win_count.value
@@ -512,7 +518,8 @@ class MedievilWorld(World):
     def fill_slot_data(self) -> Dict[str, object]:
         slot_data: Dict[str, object] = {}
 
-        name_to_medievil_code = {item.name: item.m_code for item in item_dictionary.values()}
+        # By item id rather than name, since the gold bag items are renamed
+        medievil_code_by_id = {item_id: item_dictionary[name].m_code for name, item_id in self.item_name_to_id.items()}
         # Create the mandatory lists to generate the player's output file
         items_id = []
         items_address = []
@@ -523,14 +530,14 @@ class MedievilWorld(World):
             if location.item.player == self.player:
                 # we are the receiver of the item
                 items_id.append(location.item.code)
-                items_address.append(name_to_medievil_code[location.item.name])
+                items_address.append(medievil_code_by_id[location.item.code])
 
             if location.player == self.player:
                 # we are the sender of the location check
                 locations_address.append(item_dictionary[location_dictionary[location.name].default_item].m_code)
                 locations_id.append(location.address)
                 if location.item.player == self.player:
-                    locations_target.append(name_to_medievil_code[location.item.name])
+                    locations_target.append(medievil_code_by_id[location.item.code])
                 else:
                     locations_target.append(0)
 
@@ -544,6 +551,9 @@ class MedievilWorld(World):
                 "chalice_win_count": self.options.chalice_win_count.value,
                 "knights_to_find": self.options.knights_to_find.value,
                 "life_bottles": self.options.life_bottles.value,
+                "gold_bag_1": self.options.gold_bag_1.value,
+                "gold_bag_2": self.options.gold_bag_2.value,
+                "gold_bag_3": self.options.gold_bag_3.value,
                 "traps": self.options.traps.value,
                 "ammo": self.options.ammo.value,
                 "deathlink": self.options.deathlink.value,
